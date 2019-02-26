@@ -10,7 +10,7 @@ environment:
 dependencies:
   analyzer: ^0.35.2
   build: ^1.1.1
-  meta: ^1.1.7
+  meta: ^1.1.6
   path: ^1.6.2
   source_gen: "^0.9.4"
   dio: ^2.0.14
