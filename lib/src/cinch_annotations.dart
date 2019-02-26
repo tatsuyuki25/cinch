@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 
 class ApiService {
-  const ApiService();
+
+  final String url;
+  const ApiService(this.url);
 }
 
 class BaseUrl {

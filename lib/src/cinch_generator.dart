@@ -14,6 +14,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       throw InvalidGenerationSourceError(
           '無法轉換 ${element.name}, 請確定${element.name} 為 `class`');
     }
+    
     final classElement = element as ClassElement;
     if (classElement.methods.length <= 0) {
       return null;
@@ -21,7 +22,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     var source = """
     class _\$${classElement.name} extends Service {
       _\$${classElement.name}(String baseUrl, Duration connectTimeout, Duration receiveTimeout):
-      super(baseUrl, connectTimeout, receiveTimeout);
+      super(${annotation.objectValue.getField('url').toStringValue()}, connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
     """;
 
     source += "}";
