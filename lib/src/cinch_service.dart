@@ -72,7 +72,7 @@ class Service {
   }
 
   Http _parseHttpMethod(List<dynamic> config) {
-    Iterable<Http> http = config.where((c) => c is Http);
+    Iterable<Http> http = config.where((c) => c is Http).map((c) => c as Http);
     if (http.length > 1) {
       throw Exception('Http method 設定超過一次');
     }
