@@ -33,18 +33,18 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return source;
   }
 
-  void _parseMethod(ClassElement element, String source) {
+  String _parseMethod(ClassElement element, String source) {
     var methods = element.methods.where((m) => m.returnType.isDartAsyncFuture);
     source += "var isEmpty = ${methods.isEmpty};";
     if (methods.isEmpty) {
-      return;
+      return source;
     }
     methods.forEach((m) {
       var genericType = _getGenericTypes(m.returnType).first;
       source += "var b = '${genericType.toString()}';";
       if (genericType.isDynamic) {
-        _writeDynamic(m, source);
-        return;
+        source = _writeDynamic(m, source);
+        return source;
       }
     });
   }
@@ -53,7 +53,8 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return type is ParameterizedType ? type.typeArguments : const [];
   }
 
-  void _writeDynamic(MethodElement element, String source) {
+  String _writeDynamic(MethodElement element, String source) {
     source += "var a = '${element.source.toString()}';";
+    return source;
   }
 }
