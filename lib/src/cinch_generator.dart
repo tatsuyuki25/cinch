@@ -60,7 +60,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   bool hasCinchAnnotation(MethodElement element) {
-    element.metadata.forEach((m) => _write.write("var GG = '${m.runtimeType}'"));
+    element.metadata.forEach((m) => _write.write("var GG = '${m.runtimeType}';"));
     return element.metadata.any((a) => a.runtimeType == Http);
   }
 
