@@ -56,7 +56,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       return;
     }
     for (var m in methods) {
-      if (!hasCinchAnnotation(m)) {
+      if (!_hasCinchAnnotation(m)) {
         log.warning('Method ${m.name} 沒有標記Http method');
         continue;
       }
@@ -65,6 +65,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
         _writeDynamic(m);
         continue;
       }
+      _writeNormal(m, genericType);
     }
   }
 
@@ -72,7 +73,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return type is ParameterizedType ? type.typeArguments : const [];
   }
 
-  bool hasCinchAnnotation(MethodElement element) {
+  bool _hasCinchAnnotation(MethodElement element) {
     var metadata = element.metadata.where(
         (m) => _httpChecker.isSuperTypeOf(m.computeConstantValue().type));
     if (metadata.length > 1) {
@@ -88,6 +89,17 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     _writeMethod(element);
     _write.write('{');
     _write.write('return request(${config}, ${parameters});');
+    _write.write('}');
+  }
+
+  void _writeNormal(MethodElement element, DartType returnType) {
+    var config = _getAnnotations(element);
+    var parameters = _getParameters(element);
+    _write.write('${element.returnType} ');
+    _writeMethod(element);
+    _write.write('{');
+    _write.write('return request(${config}, ${parameters})');
+    _write.write('.then((response) => ${returnType}.fromJson(response.data));');
     _write.write('}');
   }
 
@@ -107,7 +119,8 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   List<String> _getParameters(MethodElement element) {
     var parameters = element.parameters.where((p) => p.metadata.length == 1);
     return parameters
-        .map((p) => 'Pair(${p.metadata[0].toSource().substring(1)}, ${p.name})')
+        .map((p) =>
+            'const Pair(${p.metadata[0].toSource().substring(1)}, ${p.name})')
         .toList();
   }
 }
