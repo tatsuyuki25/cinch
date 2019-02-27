@@ -72,16 +72,17 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   void _writeDynamic(MethodElement element) {
     var config = _getAnnotations(element);
     var parameters = _getParameters(element);
-    var p = element.parameters[0];
-    _write.write("var name = '${p.name}';");
-    _write.write("var displayName = '${p.displayName}';");
-    _write.write("var type = '${p.type}';");
-    // _write.write('Future ');
+    _write.write('Future ');
+    _writeMethod(element);
+    _write.write('{');
+    _write.write('return request(${config}, ${parameters});');
+    _write.write('}');
   }
 
   void _writeMethod(MethodElement element) {
     _write.write('_\$${element.name}(');
-    // element.parameters.map((p) => '${p.}')
+    _write.write(element.parameters.map((p) => '${p.type} ${p.name}').join(','));
+    _write.write(')');
   }
 
   List<String> _getAnnotations(MethodElement element) {
