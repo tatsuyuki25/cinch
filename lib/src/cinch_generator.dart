@@ -7,8 +7,11 @@ import 'package:build/src/builder/build_step.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'cinch_annotations.dart';
+import 'source_write.dart';
 
 class CinchGenerator extends GeneratorForAnnotation<ApiService> {
+  Write _write = Write();
+
   @override
   generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
@@ -21,41 +24,41 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     if (classElement.methods.length <= 0) {
       return null;
     }
-    var source = """
+    _write.clear();
+    _write.write("""
     class _\$${classElement.name} extends Service {
       _\$${classElement.name}({Duration connectTimeout = const Duration(seconds: 5), 
       Duration receiveTimeout = const Duration(seconds: 10)}):
       super('${annotation.objectValue.getField('url').toStringValue()}', 
       connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
-    """;
-    source += _parseMethod(classElement, source);
-    source += "}";
-    return source;
+    """);
+    _parseMethod(classElement);
+    _write.write('}');
+    return _write.toString();
   }
 
-  String _parseMethod(ClassElement element, String source) {
+  void _parseMethod(ClassElement element) {
     var methods = element.methods.where((m) => m.returnType.isDartAsyncFuture);
-    source += "var isEmpty = ${methods.isEmpty};";
+    _write.write("var isEmpty = ${methods.isEmpty};");
     if (methods.isEmpty) {
-      return source;
+      return;
     }
     methods.forEach((m) {
       var genericType = _getGenericTypes(m.returnType).first;
-      source += "var b = '${genericType.toString()}';";
+      _write.write("var b = '${genericType.toString()}';");
+      _write.write("var isDynamic = '${genericType.isDynamic}';");
       if (genericType.isDynamic) {
-        source += _writeDynamic(m, source);
-        return source;
+        _writeDynamic(m);
+        return;
       }
     });
-    return source;
   }
 
   Iterable<DartType> _getGenericTypes(DartType type) {
     return type is ParameterizedType ? type.typeArguments : const [];
   }
 
-  String _writeDynamic(MethodElement element, String source) {
-    source += "var a = '${element.source.toString()}';";
-    return source;
+  void _writeDynamic(MethodElement element) {
+    _write.write("var a = '${element.type}';");
   }
 }
