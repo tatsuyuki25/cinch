@@ -43,10 +43,11 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       var genericType = _getGenericTypes(m.returnType).first;
       source += "var b = '${genericType.toString()}';";
       if (genericType.isDynamic) {
-        source = _writeDynamic(m, source);
+        source += _writeDynamic(m, source);
         return source;
       }
     });
+    return source;
   }
 
   Iterable<DartType> _getGenericTypes(DartType type) {
