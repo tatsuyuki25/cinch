@@ -72,14 +72,14 @@ class Service {
   }
 
   Http _parseHttpMethod(List<dynamic> config) {
-    List<Http> http = config.where((c) => c is Http);
+    Iterable<Http> http = config.where((c) => c is Http);
     if (http.length > 1) {
       throw Exception('Http method 設定超過一次');
     }
     if (http.length == 0) {
       throw Exception('請設定Http method');
     }
-    return http[0];
+    return http.first;
   }
 
   Tirple<String, Map<String, dynamic>, Map<String, dynamic>> _parseParam(
