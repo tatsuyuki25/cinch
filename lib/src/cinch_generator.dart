@@ -39,26 +39,40 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   void _parseMethod(ClassElement element) {
     var methods = element.methods.where((m) => m.returnType.isDartAsyncFuture);
-    _write.write("var isEmpty = ${methods.isEmpty};");
     if (methods.isEmpty) {
       return;
     }
-    methods.forEach((m) {
+    for (var m in methods) {
+      if (!hasCinchAnnotation(m)) {
+        log.warning('Method ${m.name} 沒有標記Http method');
+        continue;
+      }
       var genericType = _getGenericTypes(m.returnType).first;
-      _write.write("var b = '${genericType.toString()}';");
-      _write.write("var isDynamic = '${genericType.isDynamic}';");
       if (genericType.isDynamic) {
         _writeDynamic(m);
-        return;
+        continue;
       }
-    });
+    }
   }
 
   Iterable<DartType> _getGenericTypes(DartType type) {
     return type is ParameterizedType ? type.typeArguments : const [];
   }
 
+  bool hasCinchAnnotation(MethodElement element) {
+    return element.metadata.any((a) => a.runtimeType is Http);
+  }
+
   void _writeDynamic(MethodElement element) {
-    _write.write("var a = '${element.type}';");
+    var http = getHttpMethod(element);
+    _write.write("var source = '${http.toSource()}';");
+  }
+
+  ElementAnnotation getHttpMethod(MethodElement element) {
+    var metadata = element.metadata.where((m) => m.runtimeType is Http);
+    if (metadata.length > 1) {
+      throw InvalidGenerationSourceError('Http method只能設定一個');
+    }
+    return metadata.first;
   }
 }
