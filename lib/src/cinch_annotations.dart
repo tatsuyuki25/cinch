@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 
 class ApiService {
-
   final String url;
   const ApiService(this.url);
 }
@@ -24,7 +23,11 @@ class Path {
   const Path(this.value);
 }
 
-class FromUrlEncoded {}
+class _FromUrlEncoded {
+  const _FromUrlEncoded();
+}
+
+const _FromUrlEncoded fromUrlEncoded = _FromUrlEncoded();
 
 class Http {
   final String path;

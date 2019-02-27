@@ -66,7 +66,7 @@ class Service {
 
   Options _getOptions(List<dynamic> config) {
     return Options(
-        contentType: config.any((c) => c is FromUrlEncoded)
+        contentType: config.any((c) => c == fromUrlEncoded)
             ? ContentType.parse("application/x-www-form-urlencoded")
             : ContentType.text);
   }
@@ -85,7 +85,7 @@ class Service {
   Tirple<String, Map<String, dynamic>, Map<String, dynamic>> _parseParam(
       Http method, List<dynamic> config, List<Pair> params) {
     if (params.any((p) => p.first is Field) &&
-        !config.any((c) => c is FromUrlEncoded)) {
+        !config.any((c) => c == fromUrlEncoded)) {
       throw Exception('Field必須設定FromUrlEncoded');
     }
     String path = method.path;
