@@ -6,12 +6,6 @@ class ApiService {
   const ApiService(this.url);
 }
 
-class BaseUrl {
-  final url;
-  
-  const BaseUrl(this.url);
-}
-
 class Query {
   final String value;
 
