@@ -15,10 +15,7 @@ abstract class BaseService {
   @protected
   Service service;
 }
-class Test extends Service {
-  Test(String baseUrl) : super(baseUrl);
 
-}
 class Service {
   Dio _dio;
 
@@ -72,7 +69,7 @@ class Service {
   }
 
   Http _parseHttpMethod(List<dynamic> config) {
-    var http = config.where((c) => c is Http);
+    Iterable<Http> http = config.where((c) => c is Http).whereType<Http>();
     if (http.length > 1) {
       throw Exception('Http method 設定超過一次');
     }

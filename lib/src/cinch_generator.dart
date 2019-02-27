@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
@@ -30,12 +31,23 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     class _\$${classElement.name} extends Service {
       _\$${classElement.name}({Duration connectTimeout = const Duration(seconds: 5), 
       Duration receiveTimeout = const Duration(seconds: 10)}):
-      super('${annotation.objectValue.getField('url').toStringValue()}', 
+      super('${_getField(annotation.objectValue, 'url').toStringValue()}', 
       connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
     """);
     _parseMethod(classElement);
     _write.write('}');
     return _write.toString();
+  }
+
+  bool _isNull(DartObject object) => object == null || object.isNull;
+
+  DartObject _getField(DartObject object, String field) {
+    if (_isNull(object)) return null;
+    var fieldValue = object.getField(field);
+    if (!_isNull(fieldValue)) {
+      return fieldValue;
+    }
+    return _getField(object.getField('(super)'), field);
   }
 
   void _parseMethod(ClassElement element) {
