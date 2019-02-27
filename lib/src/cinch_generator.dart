@@ -81,7 +81,10 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   void _writeMethod(MethodElement element) {
     _write.write('_\$${element.name}(');
-    _write.write(element.parameters.map((p) => '${p.type} ${p.name}').join(','));
+    _write.write(element.parameters
+        .where((p) => p.metadata.length == 1)
+        .map((p) => '${p.type} ${p.name}')
+        .join(','));
     _write.write(')');
   }
 
