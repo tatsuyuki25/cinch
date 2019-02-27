@@ -28,7 +28,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       super('${annotation.objectValue.getField('url').toStringValue()}', 
       connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
     """;
-    _parseMethod(classElement, source);
+    source += _parseMethod(classElement, source);
     source += "}";
     return source;
   }
