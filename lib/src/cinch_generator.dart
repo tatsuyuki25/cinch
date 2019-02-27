@@ -62,16 +62,16 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   bool hasCinchAnnotation(MethodElement element) {
-    return element.metadata.any((m) => _httpChecker.isExactlyType(m.computeConstantValue().type));
+    return element.metadata.any((m) => _httpChecker.isSuperTypeOf(m.computeConstantValue().type));
   }
 
   void _writeDynamic(MethodElement element) {
     var http = getHttpMethod(element);
-    _write.write("var source = '${http.toSource()}';");
+    _write.write("var source = \"${http.toSource()}\";");
   }
 
   ElementAnnotation getHttpMethod(MethodElement element) {
-    var metadata = element.metadata.where((m) => _httpChecker.isExactlyType(m.computeConstantValue().type));
+    var metadata = element.metadata.where((m) => _httpChecker.isSuperTypeOf(m.computeConstantValue().type));
     if (metadata.length > 1) {
       throw InvalidGenerationSourceError('Http method只能設定一個');
     }
