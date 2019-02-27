@@ -75,6 +75,6 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   List<String> _getAnnotations(MethodElement element) {
-    return element.metadata.map((m) => m.toSource().substring(1));
+    return element.metadata.map((m) => m.toSource().substring(1)).toList();
   }
 }
