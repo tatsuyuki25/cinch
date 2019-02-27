@@ -72,7 +72,7 @@ class Service {
   }
 
   Http _parseHttpMethod(List<dynamic> config) {
-    var http = config.where((c) => c is Http).whereType<Http>();
+    var http = config.where((c) => c is Http);
     if (http.length > 1) {
       throw Exception('Http method 設定超過一次');
     }
