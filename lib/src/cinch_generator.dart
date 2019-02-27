@@ -75,7 +75,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     var p = element.parameters[0];
     _write.write("var name = '${p.name}';");
     _write.write("var displayName = '${p.displayName}';");
-    _write.write("var source = '${p.source}';");
+    _write.write("var type = '${p.type}';");
     // _write.write('Future ');
   }
 
