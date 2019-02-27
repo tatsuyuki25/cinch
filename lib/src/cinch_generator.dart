@@ -10,7 +10,9 @@ import 'cinch_annotations.dart';
 import 'source_write.dart';
 
 class CinchGenerator extends GeneratorForAnnotation<ApiService> {
-  Write _write = Write();
+  
+  var _write = Write();
+  var _httpChecker = TypeChecker.fromRuntime(Http);
 
   @override
   generateForAnnotatedElement(
@@ -60,8 +62,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   bool hasCinchAnnotation(MethodElement element) {
-    element.metadata.forEach((m) => _write.write("var GG = '${m.runtimeType}';"));
-    return element.metadata.any((a) => a.runtimeType == Http);
+    return element.metadata.any((m) => _httpChecker.isExactlyType(m.computeConstantValue().type));
   }
 
   void _writeDynamic(MethodElement element) {
@@ -70,7 +71,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   ElementAnnotation getHttpMethod(MethodElement element) {
-    var metadata = element.metadata.where((m) => m.runtimeType is Http);
+    var metadata = element.metadata.where((m) => _httpChecker.isExactlyType(m.computeConstantValue().type));
     if (metadata.length > 1) {
       throw InvalidGenerationSourceError('Http method只能設定一個');
     }
