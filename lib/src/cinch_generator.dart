@@ -35,11 +35,13 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   void _parseMethod(ClassElement element, String source) {
     var methods = element.methods.where((m) => m.returnType.isDartAsyncFuture);
+    source += "var isEmpty = ${methods.isEmpty};";
     if (methods.isEmpty) {
       return;
     }
     methods.forEach((m) {
       var genericType = _getGenericTypes(m.returnType).first;
+      source += "var b = '${genericType.toString()}';";
       if (genericType.isDynamic) {
         _writeDynamic(m, source);
         return;
