@@ -1,14 +1,80 @@
 # cinch
 
-A new Flutter package project.
+![VERSION](https://img.shields.io/badge/Version-1.0.0-blue.svg)
 
-## Getting Started
+## Usage
 
-This project is a starting point for a Dart
-[package](https://flutter.io/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+```yaml
+dependencies:
+  cinch:
+    git:
+      url: git@gitlab.program.com.tw:FlutterGroup/cinch.git
+      ref: 1.0.0
+```
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## Example
+
+- `test.dart`
+
+    ```dart
+    import 'package:cinch/cinch.dart';
+    part 'test.cinch.dart';
+    @ApiService('https://test.com/')
+    class TestApi extends _$TestApi {
+      TestApi() : super();
+
+      @Get('api/test1')
+      Future<Response> test(@Query('t1') int t1) async {
+        return _$test(t1);
+      }
+    }
+    ```
+
+- terminal 執行 `flutter packages pub run build_runner build`
+
+## 支援的Http Method
+
+- POST
+- GET
+- PUT
+- DELETE
+
+## application/x-www-form-urlencoded
+
+```dart
+  @fromUrlEncoded
+  @Post('api/test')
+  Future<WebGlobalJson<Login>> test(@Field('t1') String t1) async {
+    return _$test(t1);
+  }
+```
+
+## Path
+
+```dart
+  @fromUrlEncoded
+  @Post('api/test/{path}')
+  Future<WebGlobalJson<Login>> test(@Path('path') String path) async {
+    return _$test(path);
+  }
+```
+
+## 指定特定URL
+
+```dart
+import 'package:cinch/cinch.dart';
+part 'test.cinch.dart';
+
+class Web extends ApiService {
+  const Web() : super("https://test.com/");
+}
+
+@Web()
+class TestApi extends _$TestApi {
+  TestApi() : super();
+  @Get('api/test1')
+  Future<Response> test(@Query('t1') int t1) async {
+    return _$test(t1);
+  }
+}
+```

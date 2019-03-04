@@ -2,31 +2,35 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
-
 import 'cinch_annotations.dart';
 import 'utils.dart';
 
-typedef Future<Options> MetadataInterceptor(
-    Options options, List<dynamic> metadata);
-typedef Map<String, dynamic> DataInterceptor(List<dynamic> metadata);
-
-abstract class BaseService {
-  @protected
-  Service service;
-}
-
-class Service {
+/// 藉由build_runner實現
+///
+/// Http request service
+abstract class Service {
+  /// dio 實體
+  /// Header預設 content-encoding: gzip
+  /// [ResponseType] 預設 [ResponseType.json]
   Dio _dio;
 
+  /// URL
   final String baseUrl;
 
+  /// 連線逾時
   final Duration connectTimeout;
 
+  /// 讀取逾時
   final Duration receiveTimeout;
 
+  /// dio interceptors
   Interceptors get interceptors => _dio.interceptors;
 
+  /// [baseUrl] URL
+  /// 
+  /// [connectTimeout] 連線逾時，預設5秒
+  /// 
+  /// [receiveTimeout] 讀取逾時，預設10秒
   Service(this.baseUrl,
       {this.connectTimeout = const Duration(seconds: 5),
       this.receiveTimeout = const Duration(seconds: 10)}) {
@@ -38,6 +42,13 @@ class Service {
         responseType: ResponseType.json));
   }
 
+  /// 傳送API
+  ///
+  /// [config] function的標籤
+  ///
+  /// [params] function的參數及參數標籤
+  ///
+  /// Return [Future]
   Future request(List<dynamic> config, List<Pair> params) async {
     Http method = _parseHttpMethod(config);
     var options = _getOptions(config);
@@ -61,6 +72,11 @@ class Service {
     throw Exception('沒有支援的HTTP Method');
   }
 
+  /// 根據[config]產生 dio [Options]
+  ///
+  /// [config] function的標籤
+  ///
+  /// Return [Options]
   Options _getOptions(List<dynamic> config) {
     return Options(
         contentType: config.any((c) => c == fromUrlEncoded)
@@ -68,6 +84,9 @@ class Service {
             : ContentType.text);
   }
 
+  /// 根據[config] 解析http method
+  ///
+  /// Return [Http]
   Http _parseHttpMethod(List<dynamic> config) {
     Iterable<Http> http = config.where((c) => c is Http).whereType<Http>();
     if (http.length > 1) {
@@ -79,6 +98,9 @@ class Service {
     return http.first;
   }
 
+  /// 解析 path, query string, field
+  ///
+  /// Return [Tirple] first: path, second: query string, third: field data
   Tirple<String, Map<String, dynamic>, Map<String, dynamic>> _parseParam(
       Http method, List<dynamic> config, List<Pair> params) {
     if (params.any((p) => p.first is Field) &&
@@ -97,6 +119,10 @@ class Service {
     return Tirple(path, query, data);
   }
 
+  /// 解析 [pair] path
+  /// [path] 路徑
+  ///
+  /// Return path
   String _parsePath(String path, Pair pair) {
     var metadata = pair.first;
     if (metadata is Path) {
@@ -112,6 +138,9 @@ class Service {
     return path;
   }
 
+  /// 解析 [pair] query string
+  /// 
+  /// [query] query string 集合
   void _parseQuery(Map<String, dynamic> query, Pair pair) {
     var metadata = pair.first;
     if (metadata is Query) {
@@ -119,6 +148,9 @@ class Service {
     }
   }
 
+  /// 解析 [pair] field
+  /// 
+  /// [query] field 集合
   void _parseField(Map<String, dynamic> field, Pair pair) {
     var metadata = pair.first;
     if (metadata is Field) {
@@ -126,12 +158,11 @@ class Service {
     }
   }
 
+  /// 解析 field資料格式
+  /// 
+  /// Return 解析完的資料
   dynamic _getData(dynamic data) {
-    if (data is num) {
-      return data;
-    } else if (data is String) {
-      return data;
-    } else if (data is bool) {
+    if (data is num || data is String || data is bool) {
       return data;
     } else if (data == null) {
       return null;

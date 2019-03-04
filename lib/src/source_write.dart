@@ -1,12 +1,17 @@
+/// 原始碼寫入器
 class Write {
+
+  /// 原始碼
   String _source;
 
   Write() : _source = '';
 
+  /// 寫入[s]
   void write(String s) {
     _source += s;
   }
 
+  /// 清空原始碼
   void clear() {
     _source = '';
   }

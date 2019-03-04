@@ -9,10 +9,15 @@ import 'package:source_gen/source_gen.dart';
 import 'cinch_annotations.dart';
 import 'source_write.dart';
 
+/// 動態產生程式碼
 class CinchGenerator extends GeneratorForAnnotation<ApiService> {
+
+  /// 程式碼
   var _write = Write();
+
+  /// 檢查[Http]type
   var _httpChecker = TypeChecker.fromRuntime(Http);
-  var _listChecker = TypeChecker.fromRuntime(List);
+  /// 檢查[Response] type
   var _dioChecker = TypeChecker.fromRuntime(Response);
 
   @override
@@ -40,8 +45,12 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return _write.toString();
   }
 
+  /// 檢查[object]是否為null
   bool _isNull(DartObject object) => object == null || object.isNull;
 
+  /// 從[object]本身或父類中取得[field]欄位資料
+  /// 
+  /// Return object
   DartObject _getField(DartObject object, String field) {
     if (_isNull(object)) return null;
     var fieldValue = object.getField(field);
@@ -51,6 +60,9 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return _getField(object.getField('(super)'), field);
   }
 
+  /// 從[element] 解析是否為 cinch method
+  /// 
+  /// 只解析return type 為[Future]的method
   void _parseMethod(ClassElement element) {
     var methods = element.methods.where((m) => m.returnType.isDartAsyncFuture);
     if (methods.isEmpty) {
@@ -70,10 +82,14 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     }
   }
 
+  /// 取得type中的泛型參數
+  /// 
+  /// Return 泛型集合
   Iterable<DartType> _getGenericTypes(DartType type) {
     return type is ParameterizedType ? type.typeArguments : const [];
   }
 
+  /// [type]是否為泛型
   bool _hasGenerics(DartType type) {
     final element = type.element;
     if (element is ClassElement) {
@@ -82,6 +98,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return false;
   }
 
+  /// 取得嵌套泛型的type 字串
   List<String> _getNestedGenerics(DartType type) {
     var nested = <String>[];
     _getGenericTypes(type).forEach((t) {
@@ -95,6 +112,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return nested;
   }
 
+  /// [type]是否為嵌套泛型
   bool _hasNestedGeneric(DartType type) {
     if (_hasGenerics(type)) {
       var types = _getGenericTypes(type);
@@ -103,6 +121,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return false;
   }
 
+  /// [element]是否有標annotation
   bool _hasCinchAnnotation(MethodElement element) {
     var metadata = element.metadata.where(
         (m) => _httpChecker.isSuperTypeOf(m.computeConstantValue().type));
@@ -112,6 +131,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return metadata.length == 1;
   }
 
+  /// 寫入無須轉換的程式碼
   void _writeDynamic(MethodElement element) {
     var config = _getAnnotations(element);
     var parameters = _getParameters(element);
@@ -122,6 +142,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     _write.write('}');
   }
 
+  /// 根據[returnType] 轉換資料
   void _writeNormal(MethodElement element, DartType returnType) {
     var config = _getAnnotations(element);
     var parameters = _getParameters(element);
@@ -140,6 +161,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     _write.write('}');
   }
 
+  /// 寫入method 開頭
   void _writeMethod(MethodElement element) {
     _write.write('_\$${element.name}(');
     _write.write(element.parameters
@@ -149,10 +171,12 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     _write.write(')');
   }
 
+  /// 取得標籤
   List<String> _getAnnotations(MethodElement element) {
     return element.metadata.map((m) => m.toSource().substring(1)).toList();
   }
-
+  
+  /// 取得參數資料
   List<String> _getParameters(MethodElement element) {
     var parameters = element.parameters.where((p) => p.metadata.length == 1);
     return parameters
