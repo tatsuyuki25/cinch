@@ -96,7 +96,12 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   bool _hasNestedGeneric(DartType type) {
     if (_hasGenerics(type)) {
       var types = _getGenericTypes(type);
-      return types.any((t) => _hasGenerics(type));
+      return types.any((t) {
+        if (_hasGenerics(t)) {
+          return _getGenericTypes(t).any((it) => _hasGenerics(it));
+        }
+        return false;
+      });
     }
     return false;
   }
@@ -113,7 +118,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   void _writeDynamic(MethodElement element) {
     var config = _getAnnotations(element);
     var parameters = _getParameters(element);
-    _write.write('Future ');
+    _write.write('Future<Response> ');
     _writeMethod(element);
     _write.write('{');
     _write.write('return request(${config}, ${parameters});');
@@ -155,7 +160,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     var parameters = element.parameters.where((p) => p.metadata.length == 1);
     return parameters
         .map((p) =>
-            'const Pair(${p.metadata[0].toSource().substring(1)}, ${p.name})')
+            'Pair(${p.metadata[0].toSource().substring(1)}, ${p.name})')
         .toList();
   }
 }
