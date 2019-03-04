@@ -1,6 +1,3 @@
-
 import 'package:cinch/cinch.dart';
 
-void main() {
-
-}
+void main() {}

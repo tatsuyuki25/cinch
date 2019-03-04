@@ -41,11 +41,11 @@ class Service {
   Future request(List<dynamic> config, List<Pair> params) async {
     Http method = _parseHttpMethod(config);
     var options = _getOptions(config);
-    var parseData =_parseParam(method, config, params);
+    var parseData = _parseParam(method, config, params);
     var path = parseData.first;
     var query = parseData.second;
     var data = parseData.third;
-  
+
     if (method is Post) {
       return _dio.post(path,
           options: options, data: data, queryParameters: query);
