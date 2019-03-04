@@ -96,12 +96,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   bool _hasNestedGeneric(DartType type) {
     if (_hasGenerics(type)) {
       var types = _getGenericTypes(type);
-      return types.any((t) {
-        if (_hasGenerics(t)) {
-          return _getGenericTypes(t).any((it) => _hasGenerics(it));
-        }
-        return false;
-      });
+      return types.any((t) => _hasGenerics(t));
     }
     return false;
   }
