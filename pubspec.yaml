@@ -1,6 +1,6 @@
 name: cinch
 description: http request library
-version: 1.0.0
+version: 1.0.1
 author: tatsuyuki <tatsuyuki@program.com.tw>
 homepage: https://www.program.com.tw
 
@@ -8,8 +8,8 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  analyzer: ^0.35.2
-  build: ^1.1.1
+  analyzer: ^0.33.0
+  build: ^1.1.0
   path: ^1.6.2
   source_gen: "^0.9.4"
   dio: ^2.0.14
