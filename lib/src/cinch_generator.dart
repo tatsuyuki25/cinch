@@ -85,9 +85,11 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   List<String> _getNestedGenerics(DartType type) {
     var nested = <String>[];
     _getGenericTypes(type).forEach((t) {
-      nested.add('$t');
       if (_hasGenerics(t)) {
+        nested.add('${t.name}');
         nested.addAll(_getNestedGenerics(t));
+      } else {
+        nested.add('$t');
       }
     });
     return nested;
