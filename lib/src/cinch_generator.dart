@@ -35,9 +35,9 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     if (classElement.methods.length <= 0) {
       return null;
     }
-    _checkPrefix(element);
+    _checkPrefix(classElement);
     _write.clear();
-    var imports = element.library.imports;
+    var imports = classElement.library.imports;
     for (var i = 0; i < imports.length; i++) {
       _write.write("var a${i} = '${imports[i].name}';");
     }
