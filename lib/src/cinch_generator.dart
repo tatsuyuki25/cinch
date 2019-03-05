@@ -17,8 +17,11 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// 檢查[Http]type
   var _httpChecker = TypeChecker.fromRuntime(Http);
+
   /// 檢查[Response] type
   var _dioChecker = TypeChecker.fromRuntime(Response);
+
+  String _prefix = null;
 
   @override
   generateForAnnotatedElement(
@@ -33,12 +36,9 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       return null;
     }
     _write.clear();
-    var test = classElement.library;
-    _write.write('var t3 = "${test.imports[0].displayName}";');
-    _write.write('var t2 = "${test.prefixes[0]}";');
-    _write.write('var t4 = "${test.imports[0].prefix.name}";');
+    _checkPrefix(classElement);
     _write.write("""
-    class _\$${classElement.name} extends Service {
+    class _\$${classElement.name} extends ${_getPrefix()}Service {
       _\$${classElement.name}({Duration connectTimeout = const Duration(seconds: 5), 
       Duration receiveTimeout = const Duration(seconds: 10)}):
       super('${_getField(annotation.objectValue, 'url').toStringValue()}', 
@@ -47,6 +47,25 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     _parseMethod(classElement);
     _write.write('}');
     return _write.toString();
+  }
+
+  void _checkPrefix(ClassElement element) {
+    _prefix = null;
+    var imports = element.library.imports;
+    for (var i = 0; i < imports.length; i++) {
+      var name =imports[i].name.replaceAll(r'import ', '');
+      if (name == 'cinch') {
+        if (imports[i].prefix != null) {
+          _prefix = imports[i].prefix.name;
+        }
+        break;
+      }
+    }
+  }
+
+  /// 取得Prefix
+  String _getPrefix() {
+    return _prefix != null ? '${_prefix}.' : '';
   }
 
   /// 檢查[object]是否為null
@@ -185,7 +204,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     var parameters = element.parameters.where((p) => p.metadata.length == 1);
     return parameters
         .map((p) =>
-            'Pair(${p.metadata[0].toSource().substring(1)}, ${p.name})')
+            '${_getPrefix()}Pair(${p.metadata[0].toSource().substring(1)}, ${p.name})')
         .toList();
   }
 }
