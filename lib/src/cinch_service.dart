@@ -130,7 +130,7 @@ abstract class Service {
         throw Exception("Path的內容必須為String");
       }
       var exp = RegExp("{${metadata.value}}");
-      if (!exp.hasMatch(pair.second)) {
+      if (!exp.hasMatch(path)) {
         throw Exception("必須設置{${metadata.value}}");
       }
       path = path.replaceAll(exp, pair.second);
