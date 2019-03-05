@@ -34,7 +34,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     }
     _write.clear();
     var test = classElement.library;
-    _write.write('var t3 = "${test.prefixes[0].library.name}";');
+    _write.write('var t3 = "${test.importedLibraries[0].prefixes}";');
     _write.write("""
     class _\$${classElement.name} extends Service {
       _\$${classElement.name}({Duration connectTimeout = const Duration(seconds: 5), 
