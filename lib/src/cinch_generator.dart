@@ -11,17 +11,14 @@ import 'source_write.dart';
 
 /// 動態產生程式碼
 class CinchGenerator extends GeneratorForAnnotation<ApiService> {
+
   /// 程式碼
   var _write = Write();
 
   /// 檢查[Http]type
   var _httpChecker = TypeChecker.fromRuntime(Http);
-
   /// 檢查[Response] type
   var _dioChecker = TypeChecker.fromRuntime(Response);
-
-  // import cinch 別名
-  String _prefix = null;
 
   @override
   generateForAnnotatedElement(
@@ -35,14 +32,15 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     if (classElement.methods.length <= 0) {
       return null;
     }
-    _checkPrefix(classElement);
     _write.clear();
-    var imports = classElement.library.imports;
-    for (var i = 0; i < imports.length; i++) {
-      _write.write("var a${i} = '${imports[i].name}';");
-    }
+    var test = classElement.library;
+    _write.write('var t3 = "${test.imports[0].name}";');
+    _write.write('var t2 = "${test.prefixes[0].name}";');
+    _write.write('var t1 = "${test.prefixes[0].librarySource.fullName}";');
+    _write.write('var t4 = "${test.imports[0].prefix.name}";');
+    _write.write('var t5 = "${test.prefixes[0].library.displayName}";');
     _write.write("""
-    class _\$${classElement.name} extends ${_getPrefix()}Service {
+    class _\$${classElement.name} extends Service {
       _\$${classElement.name}({Duration connectTimeout = const Duration(seconds: 5), 
       Duration receiveTimeout = const Duration(seconds: 10)}):
       super('${_getField(annotation.objectValue, 'url').toStringValue()}', 
@@ -53,29 +51,11 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return _write.toString();
   }
 
-  void _checkPrefix(ClassElement element) {
-    _prefix = null;
-    var imports = element.library.imports;
-    for (var i = 0; i < imports.length; i++) {
-      if (imports[i].name == 'cinch') {
-        if (imports[i].prefix != null) {
-          _prefix = imports[i].prefix.name;
-        }
-        break;
-      }
-    }
-  }
-
-  /// 取得Prefix
-  String _getPrefix() {
-    return _prefix != null ? '${_prefix}.' : '';
-  }
-
   /// 檢查[object]是否為null
   bool _isNull(DartObject object) => object == null || object.isNull;
 
   /// 從[object]本身或父類中取得[field]欄位資料
-  ///
+  /// 
   /// Return object
   DartObject _getField(DartObject object, String field) {
     if (_isNull(object)) return null;
@@ -87,7 +67,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   /// 從[element] 解析是否為 cinch method
-  ///
+  /// 
   /// 只解析return type 為[Future]的method
   void _parseMethod(ClassElement element) {
     var methods = element.methods.where((m) => m.returnType.isDartAsyncFuture);
@@ -109,7 +89,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   /// 取得type中的泛型參數
-  ///
+  /// 
   /// Return 泛型集合
   Iterable<DartType> _getGenericTypes(DartType type) {
     return type is ParameterizedType ? type.typeArguments : const [];
@@ -177,7 +157,8 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     _write.write('{');
     _write.write('return request($config, $parameters)');
     if (_hasNestedGeneric(returnType)) {
-      _write.write('.then((response) => ${returnType}.'
+      _write.write(
+          '.then((response) => ${returnType}.'
           'fromNestedGenericJson(response.data, ${_getNestedGenerics(returnType)}));');
     } else {
       _write
@@ -200,13 +181,13 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   List<String> _getAnnotations(MethodElement element) {
     return element.metadata.map((m) => m.toSource().substring(1)).toList();
   }
-
+  
   /// 取得參數資料
   List<String> _getParameters(MethodElement element) {
     var parameters = element.parameters.where((p) => p.metadata.length == 1);
     return parameters
         .map((p) =>
-            '${_getPrefix()}Pair(${p.metadata[0].toSource().substring(1)}, ${p.name})')
+            'Pair(${p.metadata[0].toSource().substring(1)}, ${p.name})')
         .toList();
   }
 }
