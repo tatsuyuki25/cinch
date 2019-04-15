@@ -1,6 +1,6 @@
 # cinch
 
-![VERSION](https://img.shields.io/badge/Version-1.0.0-blue.svg)
+![VERSION](https://img.shields.io/badge/Version-1.0.5-blue.svg)
 
 ## Usage
 
@@ -9,7 +9,7 @@ dependencies:
   cinch:
     git:
       url: git@gitlab.program.com.tw:FlutterGroup/cinch.git
-      ref: 1.0.0
+      ref: 1.0.5
 ```
 
 ## Example
