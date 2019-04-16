@@ -7,9 +7,10 @@
 ```yaml
 dependencies:
   cinch:
-    git:
-      url: git@gitlab.program.com.tw:FlutterGroup/cinch.git
-      ref: 1.0.5
+    hosted:
+      name: cinch
+      url: http://172.16.65.36:8080
+    version: ^1.0.5
 ```
 
 ## Example
