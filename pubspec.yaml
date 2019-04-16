@@ -2,7 +2,8 @@ name: cinch
 description: http request library
 version: 1.0.5
 author: tatsuyuki <tatsuyuki@program.com.tw>
-homepage: https://www.program.com.tw
+homepage: https://gitlab.program.com.tw/FlutterGroup/cinch
+publish_to: http://172.16.65.36:8080
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
