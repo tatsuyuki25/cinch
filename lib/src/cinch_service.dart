@@ -42,6 +42,11 @@ abstract class Service {
         responseType: ResponseType.json));
   }
 
+  /// 更改Url
+  void setBaseUrl(String url) {
+    _dio.options.baseUrl = url;
+  }
+
   /// 傳送API
   ///
   /// [config] function的標籤

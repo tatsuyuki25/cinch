@@ -1,3 +1,3 @@
-## [0.0.1] - TODO: Add release date.
+## 1.0.6 
 
-* TODO: Describe initial release.
+- 增加修改URL功能
