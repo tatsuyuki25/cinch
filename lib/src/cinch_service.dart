@@ -26,6 +26,9 @@ abstract class Service {
   /// dio interceptors
   Interceptors get interceptors => _dio.interceptors;
 
+  /// dio httpClientAdapter
+  HttpClientAdapter get httpClientAdapter => _dio.httpClientAdapter;
+
   /// [baseUrl] URL
   /// 
   /// [connectTimeout] 連線逾時，預設5秒
