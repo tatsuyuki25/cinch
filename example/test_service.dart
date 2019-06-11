@@ -1,0 +1,34 @@
+import 'package:cinch/cinch.dart';
+
+part 'test_service.cinch.dart';
+
+@ApiService('http://localhost:8080/')
+class TestService extends _$TestService {
+  @Post('upload')
+  @multipart
+  Future<Response> upload(@Part('file') UploadFileInfo file) {
+    return _$upload(file);
+  }
+
+  @Post('multiUpload')
+  @multipart
+  Future<Response> multiUpload(@Part('flag') int flag,
+  @partMap Map<String, UploadFileInfo> file) {
+    return _$multiUpload(flag, file);
+  }
+}
+
+class Response {
+  final int retCode;
+
+  final String errMsg;
+
+  Response.fromJson(Map<String, dynamic> json)
+      : retCode = json['retCode'],
+        errMsg = json['errMsg'];
+
+  @override
+  String toString() {
+    return 'retCode: $retCode, errMsg: $errMsg';
+  }
+}

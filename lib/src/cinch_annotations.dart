@@ -19,6 +19,21 @@ class Field {
   const Field(this.value);
 }
 
+/// Multipart 資料
+class Part {
+  final String value;
+
+  const Part(this.value);
+}
+
+/// Multipart 資料 [Map]形式
+class _PartMap {
+  const _PartMap();
+}
+
+/// Multipart 資料 [Map]形式
+const _PartMap partMap = _PartMap();
+
 /// 路徑格式化
 class Path {
   final String value;
@@ -26,13 +41,19 @@ class Path {
   const Path(this.value);
 }
 
-
-class _FromUrlEncoded {
-  const _FromUrlEncoded();
+class _FormUrlEncoded {
+  const _FormUrlEncoded();
 }
 
 /// application/x-www-form-urlencoded
-const _FromUrlEncoded fromUrlEncoded = _FromUrlEncoded();
+const _FormUrlEncoded formUrlEncoded = _FormUrlEncoded();
+
+class _Multipart {
+  const _Multipart();
+}
+
+/// multipart/form-data
+const _Multipart multipart = _Multipart();
 
 class Http {
   final String path;

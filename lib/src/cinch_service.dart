@@ -30,9 +30,9 @@ abstract class Service {
   HttpClientAdapter get httpClientAdapter => _dio.httpClientAdapter;
 
   /// [baseUrl] URL
-  /// 
+  ///
   /// [connectTimeout] 連線逾時，預設5秒
-  /// 
+  ///
   /// [receiveTimeout] 讀取逾時，預設10秒
   Service(this.baseUrl,
       {this.connectTimeout = const Duration(seconds: 5),
@@ -67,7 +67,9 @@ abstract class Service {
 
     if (method is Post) {
       return _dio.post(path,
-          options: options, data: data, queryParameters: query);
+          options: options,
+          data: _hasMultipart(config) ? FormData.from(data) : data,
+          queryParameters: query);
     } else if (method is Get) {
       return _dio.get(path, options: options, queryParameters: query);
     } else if (method is Put) {
@@ -80,6 +82,16 @@ abstract class Service {
     throw Exception('沒有支援的HTTP Method');
   }
 
+  /// 是否為application/x-www-form-urlencoded
+  bool _hasFormUrlEncoded(List<dynamic> config) {
+    return config.any((c) => c == formUrlEncoded);
+  }
+
+  /// 是否為`Mulitpart`
+  bool _hasMultipart(List<dynamic> config) {
+    return config.any((c) => c == multipart);
+  }
+
   /// 根據[config]產生 dio [Options]
   ///
   /// [config] function的標籤
@@ -87,9 +99,9 @@ abstract class Service {
   /// Return [Options]
   Options _getOptions(List<dynamic> config) {
     return Options(
-        contentType: config.any((c) => c == fromUrlEncoded)
+        contentType: _hasFormUrlEncoded(config)
             ? ContentType.parse("application/x-www-form-urlencoded")
-            : ContentType.text);
+            : null);
   }
 
   /// 根據[config] 解析http method
@@ -106,15 +118,32 @@ abstract class Service {
     return http.first;
   }
 
-  /// 解析 path, query string, field
+  /// 驗證`method`的`meta`是否正確設置
+  void _verifedConfig(List<dynamic> config, List<Pair> params) {
+    var hasField = params.any((p) => p.first is Field);
+    var hasFormUrlEncoded = _hasFormUrlEncoded(config);
+    var hasPart = params.any((p) => p.first is Part || p.first == partMap);
+    var hasMultipart = _hasMultipart(config);
+    if (hasField && hasPart) {
+      throw Exception('Field跟Part一個API只能則一設置');
+    }
+    if (hasFormUrlEncoded && hasMultipart) {
+      throw Exception('FormUrlEncoded跟Multipart一個API只能則一設置');
+    }
+    if (hasField && !hasFormUrlEncoded) {
+      throw Exception('Field必須設定FormUrlEncoded');
+    }
+    if (hasPart && !hasMultipart) {
+      throw Exception('Part必須設定multipart');
+    }
+  }
+
+  /// 解析 path, query string, post data
   ///
-  /// Return [Tirple] first: path, second: query string, third: field data
+  /// Return [Tirple] first: path, second: query string, third: post data
   Tirple<String, Map<String, dynamic>, Map<String, dynamic>> _parseParam(
       Http method, List<dynamic> config, List<Pair> params) {
-    if (params.any((p) => p.first is Field) &&
-        !config.any((c) => c == fromUrlEncoded)) {
-      throw Exception('Field必須設定FromUrlEncoded');
-    }
+    _verifedConfig(config, params);
     String path = method.path;
     var query = <String, dynamic>{};
     var data = <String, dynamic>{};
@@ -122,7 +151,7 @@ abstract class Service {
     params.forEach((pair) {
       path = _parsePath(path, pair);
       _parseQuery(query, pair);
-      _parseField(data, pair);
+      _parseFormData(data, pair);
     });
     return Tirple(path, query, data);
   }
@@ -147,7 +176,7 @@ abstract class Service {
   }
 
   /// 解析 [pair] query string
-  /// 
+  ///
   /// [query] query string 集合
   void _parseQuery(Map<String, dynamic> query, Pair pair) {
     var metadata = pair.first;
@@ -157,20 +186,25 @@ abstract class Service {
   }
 
   /// 解析 [pair] field
-  /// 
+  ///
   /// [query] field 集合
-  void _parseField(Map<String, dynamic> field, Pair pair) {
+  void _parseFormData(Map<String, dynamic> form, Pair pair) {
     var metadata = pair.first;
-    if (metadata is Field) {
-      field[pair.first.value] = _getData(pair.second);
+    if (metadata is Field || metadata is Part) {
+      form[pair.first.value] = _getData(pair.second);
+    } else if (metadata == partMap) {
+      form.addAll(pair.second);
     }
   }
 
   /// 解析 field資料格式
-  /// 
+  ///
   /// Return 解析完的資料
   dynamic _getData(dynamic data) {
-    if (data is num || data is String || data is bool) {
+    if (data is num ||
+        data is String ||
+        data is bool ||
+        data is UploadFileInfo) {
       return data;
     } else if (data == null) {
       return null;
