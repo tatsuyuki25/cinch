@@ -28,6 +28,7 @@ abstract class Service {
 
   /// dio httpClientAdapter
   HttpClientAdapter get httpClientAdapter => _dio.httpClientAdapter;
+  set httpClientAdapter(HttpClientAdapter adapter) => _dio.httpClientAdapter = adapter;
 
   /// [baseUrl] URL
   ///

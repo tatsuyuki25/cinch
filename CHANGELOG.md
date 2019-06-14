@@ -1,3 +1,7 @@
+## 1.1.1
+
+- 增加設置`httpClientAdapter`功能
+
 ## 1.1.0 
 
 ### Fix
