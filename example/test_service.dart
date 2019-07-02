@@ -19,13 +19,14 @@ class TestService extends _$TestService {
 }
 
 class Response {
-  final int retCode;
-
-  final String errMsg;
 
   Response.fromJson(Map<String, dynamic> json)
       : retCode = json['retCode'],
         errMsg = json['errMsg'];
+        
+  final int retCode;
+
+  final String errMsg;
 
   @override
   String toString() {

@@ -1,29 +1,26 @@
 
 /// API標籤 
 class ApiService {
-  final String url;
   const ApiService(this.url);
+  final String url;
 }
 
 /// Http Query
 class Query {
-  final String value;
-
   const Query(this.value);
+  final String value;
 }
 
 /// Http Field 搭配 fromUrlEncoded使用
 class Field {
-  final String value;
-
   const Field(this.value);
+  final String value;
 }
 
 /// Multipart 資料
 class Part {
-  final String value;
-
   const Part(this.value);
+  final String value;
 }
 
 /// Multipart 資料 [Map]形式
@@ -36,9 +33,8 @@ const _PartMap partMap = _PartMap();
 
 /// 路徑格式化
 class Path {
-  final String value;
-
   const Path(this.value);
+  final String value;
 }
 
 class _FormUrlEncoded {
@@ -56,8 +52,8 @@ class _Multipart {
 const _Multipart multipart = _Multipart();
 
 class Http {
-  final String path;
   const Http(this.path);
+  final String path;
 }
 
 /// Http Post

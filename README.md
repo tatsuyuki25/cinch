@@ -1,6 +1,6 @@
 # cinch
 
-![VERSION](https://img.shields.io/badge/Version-1.1.1-blue.svg)
+![VERSION](https://img.shields.io/badge/Version-1.1.2-blue.svg)
 
 ## Usage
 
@@ -10,7 +10,7 @@ dependencies:
     hosted:
       name: cinch
       url: http://172.16.65.36:8080
-    version: ^1.1.1
+    version: ^1.1.2
 ```
 
 ## Example
@@ -29,7 +29,7 @@ dependencies:
         return _$test(t1);
       }
     }
-    ```
+```
 
 - terminal 執行 `flutter packages pub run build_runner build`
 

@@ -1,3 +1,7 @@
+## 1.1.2
+
+- 修改程式碼符合code style及lint
+
 ## 1.1.1
 
 - 增加設置`httpClientAdapter`功能

@@ -2,7 +2,6 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
-import 'package:build/src/builder/build_step.dart';
 import 'package:dio/dio.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -11,49 +10,46 @@ import 'source_write.dart';
 
 /// 動態產生程式碼
 class CinchGenerator extends GeneratorForAnnotation<ApiService> {
-
   /// 程式碼
-  var _write = Write();
+  final _write = Write();
 
   /// 檢查[Http]type
-  var _httpChecker = TypeChecker.fromRuntime(Http);
+  final _httpChecker = const TypeChecker.fromRuntime(Http);
 
   /// 檢查[Response] type
-  var _dioChecker = TypeChecker.fromRuntime(Response);
+  final _dioChecker = const TypeChecker.fromRuntime(Response);
 
-  String _prefix = null;
+  String _prefix;
 
   @override
-  generateForAnnotatedElement(
+  dynamic generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
-    if (element is! ClassElement) {
-      throw InvalidGenerationSourceError(
-          '無法轉換 ${element.name}, 請確定${element.name} 為 `class`');
-    }
-
-    final classElement = element as ClassElement;
-    if (classElement.methods.length <= 0) {
-      return null;
-    }
-    _write.clear();
-    _checkPrefix(classElement);
-    _write.write("""
-    class _\$${classElement.name} extends ${_getPrefix()}Service {
-      _\$${classElement.name}({Duration connectTimeout = const Duration(seconds: 5), 
+    if (element is ClassElement) {
+      if (element.methods.isEmpty) {
+        return null;
+      }
+      _write.clear();
+      _checkPrefix(element);
+      _write.write("""
+    class _\$${element.name} extends ${_getPrefix()}Service {
+      _\$${element.name}({Duration connectTimeout = const Duration(seconds: 5), 
       Duration receiveTimeout = const Duration(seconds: 10)}):
       super('${_getField(annotation.objectValue, 'url').toStringValue()}', 
       connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
     """);
-    _parseMethod(classElement);
-    _write.write('}');
-    return _write.toString();
+      _parseMethod(element);
+      _write.write('}');
+      return _write.toString();
+    }
+    throw InvalidGenerationSourceError(
+        '無法轉換 ${element.name}, 請確定${element.name} 為 `class`');
   }
 
   void _checkPrefix(ClassElement element) {
     _prefix = null;
-    var imports = element.library.imports;
+    final imports = element.library.imports;
     for (var i = 0; i < imports.length; i++) {
-      var name =imports[i].toString().replaceAll(r'import ', '');
+      final name = imports[i].toString().replaceAll(r'import ', '');
       if (name == 'cinch') {
         if (imports[i].prefix != null) {
           _prefix = imports[i].prefix.name;
@@ -65,18 +61,20 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// 取得Prefix
   String _getPrefix() {
-    return _prefix != null ? '${_prefix}.' : '';
+    return _prefix != null ? '$_prefix.' : '';
   }
 
   /// 檢查[object]是否為null
   bool _isNull(DartObject object) => object == null || object.isNull;
 
   /// 從[object]本身或父類中取得[field]欄位資料
-  /// 
+  ///
   /// Return object
   DartObject _getField(DartObject object, String field) {
-    if (_isNull(object)) return null;
-    var fieldValue = object.getField(field);
+    if (_isNull(object)) {
+      return null;
+    }
+    final fieldValue = object.getField(field);
     if (!_isNull(fieldValue)) {
       return fieldValue;
     }
@@ -84,10 +82,10 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   /// 從[element] 解析是否為 cinch method
-  /// 
+  ///
   /// 只解析return type 為[Future]的method
   void _parseMethod(ClassElement element) {
-    var methods = element.methods.where((m) => m.returnType.isDartAsyncFuture);
+    final methods = element.methods.where((m) => m.returnType.isDartAsyncFuture);
     if (methods.isEmpty) {
       return;
     }
@@ -96,7 +94,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
         log.warning('Method ${m.name} 沒有標記Http method');
         continue;
       }
-      var genericType = _getGenericTypes(m.returnType).first;
+      final genericType = _getGenericTypes(m.returnType).first;
       if (genericType.isDynamic || _dioChecker.isExactlyType(genericType)) {
         _writeDynamic(m);
         continue;
@@ -106,7 +104,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   /// 取得type中的泛型參數
-  /// 
+  ///
   /// Return 泛型集合
   Iterable<DartType> _getGenericTypes(DartType type) {
     return type is ParameterizedType ? type.typeArguments : const [];
@@ -123,7 +121,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// 取得嵌套泛型的type 字串
   List<String> _getNestedGenerics(DartType type) {
-    var nested = <String>[];
+    final nested = <String>[];
     _getGenericTypes(type).forEach((t) {
       if (_hasGenerics(t)) {
         nested.add('${t.name}');
@@ -138,7 +136,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   /// [type]是否為嵌套泛型
   bool _hasNestedGeneric(DartType type) {
     if (_hasGenerics(type)) {
-      var types = _getGenericTypes(type);
+      final types = _getGenericTypes(type);
       return types.any((t) => _hasGenerics(t));
     }
     return false;
@@ -146,7 +144,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// [element]是否有標annotation
   bool _hasCinchAnnotation(MethodElement element) {
-    var metadata = element.metadata.where(
+    final metadata = element.metadata.where(
         (m) => _httpChecker.isSuperTypeOf(m.computeConstantValue().type));
     if (metadata.length > 1) {
       throw InvalidGenerationSourceError('Http method只能設定一個');
@@ -156,30 +154,29 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// 寫入無須轉換的程式碼
   void _writeDynamic(MethodElement element) {
-    var config = _getAnnotations(element);
-    var parameters = _getParameters(element);
+    final config = _getAnnotations(element);
+    final parameters = _getParameters(element);
     _write.write('Future<Response> ');
     _writeMethod(element);
     _write.write('{');
-    _write.write('return request(${config}, ${parameters});');
+    _write.write('return request($config, $parameters);');
     _write.write('}');
   }
 
   /// 根據[returnType] 轉換資料
   void _writeNormal(MethodElement element, DartType returnType) {
-    var config = _getAnnotations(element);
-    var parameters = _getParameters(element);
+    final config = _getAnnotations(element);
+    final parameters = _getParameters(element);
     _write.write('${element.returnType} ');
     _writeMethod(element);
     _write.write('{');
-    _write.write('return request($config, $parameters)');
+    _write.write('return request(<dynamic>$config, $parameters)');
     if (_hasNestedGeneric(returnType)) {
-      _write.write(
-          '.then((response) => ${returnType}.'
+      _write.write('.then((dynamic response) => $returnType.'
           'fromNestedGenericJson(response.data, ${_getNestedGenerics(returnType)}));');
     } else {
-      _write
-          .write('.then((response) => ${returnType}.fromJson(response.data));');
+      _write.write(
+          '.then((dynamic response) => $returnType.fromJson(response.data));');
     }
     _write.write('}');
   }
@@ -196,15 +193,30 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// 取得標籤
   List<String> _getAnnotations(MethodElement element) {
-    return element.metadata.map((m) => m.toSource().substring(1)).toList();
+    return element.metadata.map((m) {
+      if (m.element is ConstructorElement) {
+        return 'const ${m.toSource().substring(1)}';
+      } 
+      return m.toSource().substring(1);
+    }).toList();
   }
-  
+
   /// 取得參數資料
   List<String> _getParameters(MethodElement element) {
-    var parameters = element.parameters.where((p) => p.metadata.length == 1);
-    return parameters
-        .map((p) =>
-            '${_getPrefix()}Pair(${p.metadata[0].toSource().substring(1)}, ${p.name})')
-        .toList();
+    final parameters = element.parameters.where((p) => p.metadata.length == 1);
+    return parameters.map((p) {
+      final element = p.metadata[0].element;
+      String firstType;
+      String firstValue;
+      if (element is ConstructorElement) {
+        firstType = element.enclosingElement.name;
+        firstValue = 'const ${p.metadata[0].toSource().substring(1)}';
+      } else {
+        firstType = 'dynamic';
+        firstValue = p.metadata[0].toSource().substring(1);
+      }
+      return '${_getPrefix()}Pair<$firstType,'
+          '${p.type}>($firstValue, ${p.name})';
+    }).toList();
   }
 }

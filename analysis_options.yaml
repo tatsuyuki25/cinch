@@ -1,0 +1,190 @@
+# 程式碼分析規則
+# 規則細節可以看: http://dart-lang.github.io/linter/lints/
+# 使用 `flutter analyze` 執行分析
+
+analyzer:
+  strong-mode:
+    implicit-dynamic: false
+  errors:
+    # 可選參數中有標`required`時卻沒有輸入顯示錯誤
+    missing_required_param: error
+    # 需要`return`的卻沒有返回資料時警告
+    missing_return: warning
+    # todo允許在程式碼中
+    todo: ignore
+    # 使用stream或future不需要import dart:async
+    sdk_version_async_exported_from_core: ignore
+  exclude:
+    - 'test/**'
+linter:
+  rules:
+    # 必須寫上回傳型別
+    - always_declare_return_types
+    # 流程控制必須換行
+    - always_put_control_body_on_new_line
+    # 標示為require或有給預設值的參數才需要使用assert判斷是否不是null
+    - always_require_non_null_named_parameters
+    # 繼承的參數或方法必須標示override
+    - annotate_overrides
+    # 不使用 as
+    - avoid_as
+    # bool不要在三元判斷式中給值
+    - avoid_bool_literals_in_conditional_expressions
+    # 無須建立只有static方法的類別
+    - avoid_classes_with_only_static_members
+    # else不得為空
+    - avoid_empty_else
+    # const屬性使用get替代
+    - avoid_field_initializers_in_const_classes
+    # forEach不要寫成lambda形式
+    - avoid_function_literals_in_foreach_calls
+    # 參數init不要直接給null
+    - avoid_init_to_null
+    # 重載equals操作符時不要檢查null
+    - avoid_null_checks_in_equality_operators
+    # import不要使用到lib path
+    - avoid_relative_lib_imports
+    # override方法時，參數名禁止變更
+    - avoid_renaming_method_parameters
+    # setter不要寫void
+    - avoid_return_types_on_setters
+    # void方法不要回傳null
+    - avoid_returning_null_for_void
+    # io有提供sync方法，必須使用而不是用await
+    - avoid_slow_async_io
+    # 不要使用已存在的型別名字
+    - avoid_types_as_parameter_names
+    # 建構子不要有沒有使用到的參數
+    - avoid_unused_constructor_parameters
+    # async 方法不要使用void
+    - avoid_void_async
+    # await只能使用在future上
+    - await_only_futures
+    # class跟typedef必須使用大陀峰命名方式
+    - camel_case_types
+    # 使用subscription必須伴隨cancel
+    - cancel_subscriptions
+    # finally在有catch時不要有任何流程控制出現，例如return
+    - control_flow_in_finally
+    # import順序必須按照命名及package來排序
+    - directives_ordering
+    # catch內不能沒有任何操作，如果還是需要有空block的話，必須這樣寫`catch(_) { }`或是在block內註解說明
+    - empty_catches
+    # 建構子不要空block
+    - empty_constructor_bodies
+    # 禁止空的if
+    - empty_statements
+    # 使用flutter的todo風格，see: https://dart-lang.github.io/linter/lints/flutter_style_todos.html
+    - flutter_style_todos
+    # hash跟equals必須同時重載
+    - hash_and_equals
+    # import package不要用到lib/src
+    - implementation_imports
+    # list泛型不要判斷是否判斷不同的型別
+    - iterable_contains_unrelated_type
+    # library命名必須使用底線串接，不得使用-串接
+    - library_names
+    # import 給於別名時必須使用全小寫，單字之間使用底線分隔
+    - library_prefixes
+    # 禁止remove不同型別的資料
+    - list_remove_unrelated_type
+    # 在List中的字串必須使用+來串接
+    - no_adjacent_strings_in_list
+    # 在switch case中不要判斷重複的值
+    - no_duplicate_case_values
+    # 非const的參數命名使用小駝峰
+    - non_constant_identifier_names
+    # override屬性的型別必須一樣
+    - overridden_fields
+    # 公開的方法與類別必須加上註解
+    - package_api_docs
+    # package name必須全小寫並使用底線串接單字
+    - package_names
+    # 使用library關鍵字引用必須符合規則 ： https://dart-lang.github.io/linter/lints/package_prefixed_library_names.html
+    - package_prefixed_library_names
+    # 字串換行不要使用`+`來串接，直接換行既可
+    - prefer_adjacent_string_concatenation
+    # 方法的參數驗證不要在block內，而是使用`：`: https://dart-lang.github.io/linter/lints/prefer_asserts_in_initializer_lists.html
+    - prefer_asserts_in_initializer_lists
+    # List, Map等collection的初始化不要用List()，而是使用`[]`或`{}`做初始化
+    - prefer_collection_literals
+    # 判斷null時複值使用`??=`，不要使用if 判斷
+    - prefer_conditional_assignment
+    # const建構值有參數時可以不使用const初始化，沒有參數時必須使用const初始化：https://dart-lang.github.io/linter/lints/prefer_const_constructors.html
+    - prefer_const_constructors
+    # 使用immutable標記class時，建構子必須為const
+    - prefer_const_constructors_in_immutables
+    # const 跟 final 不能混用
+    - prefer_const_declarations
+    # 參數裡面的collection必須使用const初始化
+    - prefer_const_literals_to_create_immutables
+    # 使用contains來判斷是否包含值，不要使用indexOf
+    - prefer_contains
+    # 方法參數預設值使用`=`，不要用`:`
+    - prefer_equal_for_default_values
+    # 後面沒有再需要改動的屬性必須使用final
+    - prefer_final_fields
+    # 後面沒有再需要改動的屬性必須使用final
+    - prefer_final_locals
+    # 如果有單行操作並且也只有單參數發方法時使用forEach效能較好:https://dart-lang.github.io/linter/lints/prefer_foreach.html
+    - prefer_foreach
+    # 避免使用單名做方法別名：https://dart-lang.github.io/linter/lints/prefer_generic_function_type_aliases.html
+    - prefer_generic_function_type_aliases
+    # 建構子針對屬性複值使用`Point(this.x, this.y);`，在參數為可選時允許忽略此條規則
+    - prefer_initializing_formals
+    # list不要用length判斷是否為空，使用`isEmpty`
+    - prefer_is_empty
+    # list不用使用'!isEmpty()'做反向判斷，使用`isNotEmpty`
+    - prefer_is_not_empty
+    # list使用`whereType`來篩選特定型別
+    - prefer_iterable_whereType
+    # 非特殊情況下使用單引號來建立字串：https://dart-lang.github.io/linter/lints/prefer_single_quotes.html
+    - prefer_single_quotes
+    # 使用`var`的變數必須給定初始值
+    - prefer_typing_uninitialized_variables
+    # 不要使用Null來標記空參數，使用void：https://dart-lang.github.io/linter/lints/prefer_void_to_null.html
+    - prefer_void_to_null
+    # 使用getter時不要return同名的變數，避免stack爆掉
+    - recursive_getters
+    # function跟class使用`///`來寫註解，不要用`//` or `/**`
+    - slash_for_doc_comments
+    # 建構子必須在最上面
+    - sort_constructors_first
+    # library排序
+    - sort_pub_dependencies
+    # 沒有名字的建構子必須在最上面
+    - sort_unnamed_constructors_first
+    # 重載equals時必須判斷型別
+    - test_types_in_equals
+    # finally中不能拋出錯誤
+    - throw_in_finally
+    # 建構子初始化屬性不需再指定型別
+    - type_init_formals
+    # 字串中使用變數用`{}`包起來
+    - unnecessary_brace_in_string_interps
+    # 使用const初始化參數只要一個就好，不需要前後都加上
+    - unnecessary_const
+    # getter跟setter中如果沒有特別的操作就不要使用，直接將屬性公開既可
+    - unnecessary_getters_setters
+    # 現在無須使用new來建構
+    - unnecessary_new
+    # 用`??=`不要給null
+    - unnecessary_null_aware_assignments
+    # `??`不要給null
+    - unnecessary_null_in_if_null_operators
+    # override的方法內如果只有super就無須重載
+    - unnecessary_overrides
+    # 正常使用`=`的時候，非必要無須使用`()`
+    - unnecessary_parenthesis
+    # 沒有明確意義的程式碼不要使用: https://dart-lang.github.io/linter/lints/unnecessary_statements.html
+    - unnecessary_statements
+    # 方法內使用屬性時，非必要無須加上`this`
+    - unnecessary_this
+    # 在型別確定的時候，判斷不同型別是否相等是無效的
+    - unrelated_type_equality_checks
+    # 使用完整的4byte來表示flutter顏色
+    - use_full_hex_values_for_flutter_colors
+    # 在catch中如果要拋出已捕捉的錯誤，請使用`rethrow`
+    - use_rethrow_when_possible
+    # 驗證正則是否正確，錯誤的正則會導致拋出error
+    - valid_regexps

@@ -13,17 +13,21 @@ class _$TestService extends Service {
       : super('http://localhost:8080/',
             connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
   Future<Response> _$upload(UploadFileInfo file) {
-    return request([Post('upload'), multipart], [Pair(Part('file'), file)])
-        .then((response) => Response.fromJson(response.data));
+    return request(<dynamic>[
+      const Post('upload'),
+      multipart
+    ], [
+      Pair<Part, UploadFileInfo>(const Part('file'), file)
+    ]).then((dynamic response) => Response.fromJson(response.data));
   }
 
   Future<Response> _$multiUpload(int flag, Map<String, UploadFileInfo> file) {
-    return request([
-      Post('multiUpload'),
+    return request(<dynamic>[
+      const Post('multiUpload'),
       multipart
     ], [
-      Pair(Part('flag'), flag),
-      Pair(partMap, file)
-    ]).then((response) => Response.fromJson(response.data));
+      Pair<Part, int>(const Part('flag'), flag),
+      Pair<dynamic, Map<String, UploadFileInfo>>(partMap, file)
+    ]).then((dynamic response) => Response.fromJson(response.data));
   }
 }

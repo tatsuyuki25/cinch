@@ -1,9 +1,9 @@
 name: cinch
 description: http request library
-version: 1.1.1
+version: 1.1.2
 author: tatsuyuki <tatsuyuki@program.com.tw>
 homepage: https://gitlab.program.com.tw/FlutterGroup/cinch
-publish_to: http://172.16.65.36:8080
+publish_to: http://10.0.0.55:8083
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -16,6 +16,6 @@ dependencies:
   dio: ^2.1.7
 
 dev_dependencies:
-  build_test: ^0.10.8
+  source_gen_test: ^0.1.0+3
   test: ^1.6.4
-  build_runner: ^1.5.2
+  build_runner: ^1.6.1
