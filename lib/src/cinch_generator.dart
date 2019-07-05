@@ -159,7 +159,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     _write.write('Future<Response> ');
     _writeMethod(element);
     _write.write('{');
-    _write.write('return request($config, $parameters);');
+    _write.write('return request(<dynamic>$config, $parameters);');
     _write.write('}');
   }
 

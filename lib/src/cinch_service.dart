@@ -47,6 +47,10 @@ abstract class Service {
   HttpClientAdapter get httpClientAdapter => _dio.httpClientAdapter;
   set httpClientAdapter(HttpClientAdapter adapter) => _dio.httpClientAdapter = adapter;
 
+  /// dio transformer
+  Transformer get transformer => _dio.transformer;
+  set transformer(Transformer transformer) => _dio.transformer = transformer;
+
   /// 更改Url
   void setBaseUrl(String url) {
     _dio.options.baseUrl = url;
