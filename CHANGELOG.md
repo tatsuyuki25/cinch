@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 1.1.4+1
+
+- 更新dio
+
 ## 1.1.4
 
 - 修復未加上`<dynamic>`問題

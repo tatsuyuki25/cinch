@@ -10,7 +10,7 @@ dependencies:
     hosted:
       name: cinch
       url: http://10.0.0.55:8083
-    version: ^1.1.4
+    version: ^1.1.4+1
 ```
 
 ## Example
