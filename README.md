@@ -1,6 +1,6 @@
 # cinch
 
-![VERSION](https://img.shields.io/badge/Version-1.1.4-blue.svg)
+![VERSION](https://img.shields.io/badge/Version-1.2.0-blue.svg)
 
 ## Usage
 
@@ -10,7 +10,7 @@ dependencies:
     hosted:
       name: cinch
       url: http://10.0.0.55:8083
-    version: ^1.1.4+1
+    version: ^1.2.0
 ```
 
 ## Example
@@ -87,14 +87,14 @@ class TestApi extends _$TestApi {
 class TestService extends _$TestService {
   @Post('upload')
   @multipart
-  Future<Response> upload(@Part('file') UploadFileInfo file) {
+  Future<Response> upload(@Part('file') MultipartFile file) {
     return _$upload(file);
   }
 }
 
 void test() {
-  service.upload(UploadFileInfo(File('/path/file.txt'), '上傳名稱.txt'));
-  service.upload(UploadFileInfo.fromBytes(bytes, '上傳名稱.txt'));
+  service.upload(MultipartFile.fromFileSync('/path/file.txt', filename: '上傳名稱.txt'));
+  service.upload(MultipartFile.fromBytes(bytes, filename: '上傳名稱.txt'));
 }
 ```
 
@@ -106,24 +106,24 @@ class TestService extends _$TestService {
   @Post('multiUpload')
   @multipart
   Future<Response> multiUpload(@Part('flag') int flag,
-  @partMap Map<String, UploadFileInfo> file) {
+  @partMap Map<String, MultipartFile> file) {
     return _$multiUpload(flag, file);
   }
 }
 
 void test() {
   service.multiUpload(88, {
-    "file0": UploadFileInfo(
-        File('/Users/liaojianxun/Downloads/Resume.docx'), 'test0.docx'),
-    "file1": UploadFileInfo(
-        File('/Users/liaojianxun/Downloads/Resume.docx'), 'test1.docx')
+    "file0": MultipartFile.fromFileSync(
+        '/Users/liaojianxun/Downloads/Resume.docx', filename: 'test0.docx'),
+    "file1": MultipartFile.fromFileSync(
+        '/Users/liaojianxun/Downloads/Resume.docx', filename: 'test1.docx')
   });
   
   /// 也能使用`dart`新功能，在block中直接迴圈使用
   service.multiUpload(99, {
     for (var i = 0; i < 5; i++)
-      "file$i": UploadFileInfo(
-          File('/Users/liaojianxun/Downloads/Resume.docx'), 'test$i.docx'),
+      "file$i": MultipartFile.fromFileSync(
+          '/Users/liaojianxun/Downloads/Resume.docx', filename: 'test$i.docx'),
   });
 }
 ```

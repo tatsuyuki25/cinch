@@ -72,20 +72,20 @@ abstract class Service {
     final data = parseData.third;
 
     if (method is Post) {
-      // ignore: strong_mode_implicit_dynamic_method
+      // ignore: implicit_dynamic_method
       return _dio.post(path,
           options: options,
-          data: _hasMultipart(config) ? FormData.from(data) : data,
+          data: _hasMultipart(config) ? FormData.fromMap(data) : data,
           queryParameters: query);
     } else if (method is Get) {
-      // ignore: strong_mode_implicit_dynamic_method
+      // ignore: implicit_dynamic_method
       return _dio.get(path, options: options, queryParameters: query);
     } else if (method is Put) {
-      // ignore: strong_mode_implicit_dynamic_method
+      // ignore: implicit_dynamic_method
       return _dio.put(path,
           options: options, data: data, queryParameters: query);
     } else if (method is Delete) {
-      // ignore: strong_mode_implicit_dynamic_method
+      // ignore: implicit_dynamic_method
       return _dio.delete(path,
           options: options, data: data, queryParameters: query);
     }
@@ -110,7 +110,7 @@ abstract class Service {
   Options _getOptions(List<dynamic> config) {
     return Options(
         contentType: _hasFormUrlEncoded(config)
-            ? ContentType.parse('application/x-www-form-urlencoded')
+            ? Headers.formUrlEncodedContentType
             : null);
   }
 
@@ -214,7 +214,7 @@ abstract class Service {
     if (data is num ||
         data is String ||
         data is bool ||
-        data is UploadFileInfo) {
+        data is MultipartFile) {
       return data;
     } else if (data == null) {
       return null;

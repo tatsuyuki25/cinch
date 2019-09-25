@@ -122,14 +122,14 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   /// 取得嵌套泛型的type 字串
   List<String> _getNestedGenerics(DartType type) {
     final nested = <String>[];
-    _getGenericTypes(type).forEach((t) {
+    for (var t in _getGenericTypes(type)) {
       if (_hasGenerics(t)) {
         nested.add('${t.name}');
         nested.addAll(_getNestedGenerics(t));
       } else {
         nested.add('$t');
       }
-    });
+    }
     return nested;
   }
 

@@ -6,14 +6,14 @@ part 'test_service.cinch.dart';
 class TestService extends _$TestService {
   @Post('upload')
   @multipart
-  Future<Response> upload(@Part('file') UploadFileInfo file) {
+  Future<Response> upload(@Part('file') MultipartFile file) {
     return _$upload(file);
   }
 
   @Post('multiUpload')
   @multipart
   Future<Response> multiUpload(@Part('flag') int flag,
-  @partMap Map<String, UploadFileInfo> file) {
+  @partMap Map<String, MultipartFile> file) {
     return _$multiUpload(flag, file);
   }
 }
