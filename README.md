@@ -1,6 +1,6 @@
 # cinch
 
-![VERSION](https://img.shields.io/badge/Version-1.2.0-blue.svg)
+![VERSION](https://img.shields.io/badge/Version-1.3.0-blue.svg)
 
 ## Usage
 
@@ -72,6 +72,26 @@ class Web extends ApiService {
 
 @Web()
 class TestApi extends _$TestApi {
+  TestApi() : super();
+  @Get('api/test1')
+  Future<Response> test(@Query('t1') int t1) async {
+    return _$test(t1);
+  }
+}
+```
+或
+```dart
+import 'package:cinch/cinch.dart';
+part 'test.cinch.dart';
+
+class Web with ApiUrlMixin {
+  @override
+  String get url => 'https://test.com/';
+  
+}
+
+@ApiService.emptyUrl()
+class TestApi extends _$TestApi with Web {
   TestApi() : super();
   @Get('api/test1')
   Future<Response> test(@Query('t1') int t1) async {

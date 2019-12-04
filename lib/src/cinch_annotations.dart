@@ -2,6 +2,7 @@
 /// API標籤 
 class ApiService {
   const ApiService(this.url);
+  const ApiService.emptyUrl(): this('');
   final String url;
 }
 

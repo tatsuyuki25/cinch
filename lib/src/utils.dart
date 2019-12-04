@@ -15,3 +15,9 @@ class Tirple<F, S, T> {
   final S second;
   final T third;
 }
+
+/// 動態設定URL
+mixin ApiUrlMixin {
+
+  String get url;
+}

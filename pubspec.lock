@@ -7,7 +7,7 @@ packages:
       name: analyzer
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.38.1"
+    version: "0.38.5"
   args:
     dependency: transitive
     description:
@@ -35,7 +35,7 @@ packages:
       name: build
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.2"
   build_config:
     dependency: transitive
     description:
@@ -154,7 +154,7 @@ packages:
       name: dio
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.7"
   fixnum:
     dependency: transitive
     description:
@@ -168,7 +168,7 @@ packages:
       name: front_end
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.1.23"
+    version: "0.1.27"
   glob:
     dependency: transitive
     description:
@@ -238,7 +238,7 @@ packages:
       name: kernel
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.3.23"
+    version: "0.3.27"
   logging:
     dependency: transitive
     description:
@@ -371,7 +371,7 @@ packages:
       name: source_gen
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.9.4+4"
+    version: "0.9.4+6"
   source_gen_test:
     dependency: "direct dev"
     description:

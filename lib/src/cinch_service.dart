@@ -19,7 +19,7 @@ abstract class Service {
       {this.connectTimeout = const Duration(seconds: 5),
       this.receiveTimeout = const Duration(seconds: 10)}) {
     _dio = Dio(BaseOptions(
-        baseUrl: baseUrl,
+        baseUrl: _getInitialUrl(),
         connectTimeout: connectTimeout.inMilliseconds,
         receiveTimeout: receiveTimeout.inMilliseconds,
         headers: <String, dynamic>{HttpHeaders.contentEncodingHeader: 'gzip'},
@@ -54,6 +54,17 @@ abstract class Service {
   /// 更改Url
   void setBaseUrl(String url) {
     _dio.options.baseUrl = url;
+  }
+
+  String _getInitialUrl() {
+    if (baseUrl.isNotEmpty) {
+      return baseUrl;
+    }
+    if (this is ApiUrlMixin) {
+      // ignore: avoid_as
+      return (this as ApiUrlMixin).url;
+    }
+    throw Exception('url 沒有設定！');
   }
 
   /// 傳送API

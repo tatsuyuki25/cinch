@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 1.3.0
+
+-- 增加ApiUrlMixin
+
 ## 1.2.0
 
 - 更新dio
