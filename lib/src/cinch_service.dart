@@ -8,7 +8,7 @@ import 'utils.dart';
 /// 藉由build_runner實現
 ///
 /// Http request service
-abstract class Service {
+abstract class Service implements ApiUrlMixin {
 
   /// [baseUrl] URL
   ///
@@ -51,6 +51,9 @@ abstract class Service {
   Transformer get transformer => _dio.transformer;
   set transformer(Transformer transformer) => _dio.transformer = transformer;
 
+  @override
+  String get url => '';
+
   /// 更改Url
   void setBaseUrl(String url) {
     _dio.options.baseUrl = url;
@@ -59,10 +62,8 @@ abstract class Service {
   String _getInitialUrl() {
     if (baseUrl.isNotEmpty) {
       return baseUrl;
-    }
-    if (this is ApiUrlMixin) {
-      // ignore: avoid_as
-      return (this as ApiUrlMixin).url;
+    } else if (url.isNotEmpty) {
+      return url;
     }
     throw Exception('url 沒有設定！');
   }

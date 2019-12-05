@@ -1,8 +1,12 @@
 # Cinch changelog
 
+## 1.3.1
+
+- Service 繼承 ApiUrlMixin
+
 ## 1.3.0
 
--- 增加ApiUrlMixin
+- 增加ApiUrlMixin
 
 ## 1.2.0
 
