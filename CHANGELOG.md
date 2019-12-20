@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 1.3.2
+
+- 增加`ApiService.uncheckUrl()` 忽略Url檢查
+
 ## 1.3.1
 
 - Service 繼承 ApiUrlMixin

@@ -21,7 +21,7 @@ packages:
       name: async
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "2.3.0"
+    version: "2.4.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -49,49 +49,49 @@ packages:
       name: build_daemon
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.2"
   build_resolvers:
     dependency: transitive
     description:
       name: build_resolvers
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "1.0.8"
+    version: "1.2.1"
   build_runner:
     dependency: "direct dev"
     description:
       name: build_runner
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "1.7.1"
+    version: "1.7.2"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "4.1.0"
+    version: "4.3.0"
   build_test:
     dependency: transitive
     description:
       name: build_test
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.10.9"
+    version: "0.10.11"
   built_collection:
     dependency: transitive
     description:
       name: built_collection
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "4.2.2"
+    version: "4.3.0"
   built_value:
     dependency: transitive
     description:
       name: built_value
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "6.7.1"
+    version: "7.0.0"
   charcode:
     dependency: transitive
     description:
@@ -112,7 +112,7 @@ packages:
       name: code_builder
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "3.2.0"
+    version: "3.2.1"
   collection:
     dependency: transitive
     description:
@@ -127,13 +127,20 @@ packages:
       url: "http://10.0.0.55:8083"
     source: hosted
     version: "2.1.1"
+  coverage:
+    dependency: transitive
+    description:
+      name: coverage
+      url: "http://10.0.0.55:8083"
+    source: hosted
+    version: "0.13.3+3"
   crypto:
     dependency: transitive
     description:
       name: crypto
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.4"
   csslib:
     dependency: transitive
     description:
@@ -147,7 +154,7 @@ packages:
       name: dart_style
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "1.2.10"
+    version: "1.3.3"
   dio:
     dependency: "direct main"
     description:
@@ -161,7 +168,7 @@ packages:
       name: fixnum
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.10.9"
+    version: "0.10.11"
   front_end:
     dependency: transitive
     description:
@@ -175,7 +182,7 @@ packages:
       name: glob
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "1.1.7"
+    version: "1.2.0"
   graphs:
     dependency: transitive
     description:
@@ -189,7 +196,7 @@ packages:
       name: html
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.14.0+2"
+    version: "0.14.0+3"
   http:
     dependency: transitive
     description:
@@ -252,14 +259,14 @@ packages:
       name: matcher
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.12.5"
+    version: "0.12.6"
   meta:
     dependency: transitive
     description:
       name: meta
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "1.1.7"
+    version: "1.1.8"
   mime:
     dependency: transitive
     description:
@@ -274,6 +281,20 @@ packages:
       url: "http://10.0.0.55:8083"
     source: hosted
     version: "1.0.2"
+  node_interop:
+    dependency: transitive
+    description:
+      name: node_interop
+      url: "http://10.0.0.55:8083"
+    source: hosted
+    version: "1.0.3"
+  node_io:
+    dependency: transitive
+    description:
+      name: node_io
+      url: "http://10.0.0.55:8083"
+    source: hosted
+    version: "1.0.1+2"
   node_preamble:
     dependency: transitive
     description:
@@ -308,7 +329,7 @@ packages:
       name: pedantic
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "1.8.0+1"
+    version: "1.9.0"
   pool:
     dependency: transitive
     description:
@@ -336,7 +357,7 @@ packages:
       name: quiver
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "2.0.5"
+    version: "2.1.2+1"
   shelf:
     dependency: transitive
     description:
@@ -378,7 +399,7 @@ packages:
       name: source_gen_test
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.1.0+5"
+    version: "0.1.0+6"
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -420,7 +441,7 @@ packages:
       name: stream_transform
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.0.19"
+    version: "0.0.20"
   string_scanner:
     dependency: transitive
     description:
@@ -441,21 +462,21 @@ packages:
       name: test
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "1.6.11"
+    version: "1.9.4"
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.2.8"
+    version: "0.2.11"
   test_core:
     dependency: transitive
     description:
       name: test_core
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.2.9+2"
+    version: "0.2.15"
   timing:
     dependency: transitive
     description:
@@ -476,21 +497,21 @@ packages:
       name: vm_service
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.4"
   watcher:
     dependency: transitive
     description:
       name: watcher
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "0.9.7+12"
+    version: "0.9.7+13"
   web_socket_channel:
     dependency: transitive
     description:
       name: web_socket_channel
       url: "http://10.0.0.55:8083"
     source: hosted
-    version: "1.0.15"
+    version: "1.1.0"
   yaml:
     dependency: transitive
     description:
@@ -499,4 +520,4 @@ packages:
     source: hosted
     version: "2.2.0"
 sdks:
-  dart: ">2.4.0 <3.0.0"
+  dart: ">=2.6.0 <3.0.0"

@@ -1,6 +1,6 @@
 # cinch
 
-![VERSION](https://img.shields.io/badge/Version-1.3.0-blue.svg)
+![VERSION](https://img.shields.io/badge/Version-1.3.2-blue.svg)
 
 ## Usage
 
@@ -10,7 +10,7 @@ dependencies:
     hosted:
       name: cinch
       url: http://10.0.0.55:8083
-    version: ^1.2.0
+    version: ^1.3.2
 ```
 
 ## Example
@@ -79,7 +79,9 @@ class TestApi extends _$TestApi {
   }
 }
 ```
+
 或
+
 ```dart
 import 'package:cinch/cinch.dart';
 part 'test.cinch.dart';

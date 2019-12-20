@@ -8,34 +8,38 @@ class _$TestService extends Service {
       Duration receiveTimeout = const Duration(seconds: 10)})
       : super('http://localhost:8080/',
             connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
-  Future<Response> _$upload(UploadFileInfo file) {
-    return request([Post('upload'), multipart], [Pair(Part('file'), file)])
-        .then((response) => Response.fromJson(response.data));
-  }
-
-  Future<Response> _$multiUpload(int flag, Map<String, UploadFileInfo> file) {
-    return request([
-      Post('multiUpload'),
+  Future<Response> _$upload(MultipartFile file) {
+    return request(<dynamic>[
+      const Post('upload'),
       multipart
     ], [
-      Pair(Part('flag'), flag),
-      Pair(partMap, file)
-    ]).then((response) => Response.fromJson(response.data));
+      Pair<Part, MultipartFile>(const Part('file'), file)
+    ]).then((dynamic response) => Response.fromJson(response.data));
+  }
+
+  Future<Response> _$multiUpload(int flag, Map<String, MultipartFile> file) {
+    return request(<dynamic>[
+      const Post('multiUpload'),
+      multipart
+    ], [
+      Pair<Part, int>(const Part('flag'), flag),
+      Pair<dynamic, Map<String, MultipartFile>>(partMap, file)
+    ]).then((dynamic response) => Response.fromJson(response.data));
   }
 }
 ''')
 @ApiService('http://localhost:8080/')
-class TestService{
+class TestService {
   @Post('upload')
   @multipart
-  Future<Response> upload(@Part('file') UploadFileInfo file) async {
+  Future<Response> upload(@Part('file') MultipartFile file) async {
     return null;
   }
 
   @Post('multiUpload')
   @multipart
   Future<Response> multiUpload(@Part('flag') int flag,
-  @partMap Map<String, UploadFileInfo> file) async {
+  @partMap Map<String, MultipartFile> file) async {
     return null;
   }
 }

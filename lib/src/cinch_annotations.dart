@@ -2,7 +2,10 @@
 /// API標籤 
 class ApiService {
   const ApiService(this.url);
+  /// 空的url
   const ApiService.emptyUrl(): this('');
+  /// 不檢查url
+  const ApiService.uncheckUrl(): this('InitialUrl不檢查');
   final String url;
 }
 

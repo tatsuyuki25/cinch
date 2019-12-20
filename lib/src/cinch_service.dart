@@ -9,7 +9,6 @@ import 'utils.dart';
 ///
 /// Http request service
 abstract class Service implements ApiUrlMixin {
-
   /// [baseUrl] URL
   ///
   /// [connectTimeout] 連線逾時，預設5秒
@@ -45,7 +44,8 @@ abstract class Service implements ApiUrlMixin {
 
   /// dio httpClientAdapter
   HttpClientAdapter get httpClientAdapter => _dio.httpClientAdapter;
-  set httpClientAdapter(HttpClientAdapter adapter) => _dio.httpClientAdapter = adapter;
+  set httpClientAdapter(HttpClientAdapter adapter) =>
+      _dio.httpClientAdapter = adapter;
 
   /// dio transformer
   Transformer get transformer => _dio.transformer;
@@ -59,6 +59,7 @@ abstract class Service implements ApiUrlMixin {
     _dio.options.baseUrl = url;
   }
 
+  /// 取得初始Url
   String _getInitialUrl() {
     if (baseUrl.isNotEmpty) {
       return baseUrl;
@@ -231,7 +232,9 @@ abstract class Service implements ApiUrlMixin {
     } else if (data == null) {
       return null;
     } else if (data is List) {
-      return data.map<dynamic>((dynamic e) => e == null ? null : _getData(e)).toList();
+      return data
+          .map<dynamic>((dynamic e) => e == null ? null : _getData(e))
+          .toList();
     } else {
       return data.toJson();
     }
