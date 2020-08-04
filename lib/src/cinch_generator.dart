@@ -85,7 +85,8 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   ///
   /// 只解析return type 為[Future]的method
   void _parseMethod(ClassElement element) {
-    final methods = element.methods.where((m) => m.returnType.isDartAsyncFuture);
+    final methods =
+        element.methods.where((m) => m.returnType.isDartAsyncFuture);
     if (methods.isEmpty) {
       return;
     }
@@ -124,7 +125,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     final nested = <String>[];
     for (var t in _getGenericTypes(type)) {
       if (_hasGenerics(t)) {
-        nested.add('${t.name}');
+        nested.add('${t.element.displayName}');
         nested.addAll(_getNestedGenerics(t));
       } else {
         nested.add('$t');
@@ -196,7 +197,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return element.metadata.map((m) {
       if (m.element is ConstructorElement) {
         return 'const ${m.toSource().substring(1)}';
-      } 
+      }
       return m.toSource().substring(1);
     }).toList();
   }

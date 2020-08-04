@@ -16,6 +16,9 @@ class TestService extends _$TestService {
   @partMap Map<String, MultipartFile> file) {
     return _$multiUpload(flag, file);
   }
+
+  @Post('generic')
+  Future<Global<List<String>>> generic();
 }
 
 class Response {
@@ -31,5 +34,13 @@ class Response {
   @override
   String toString() {
     return 'retCode: $retCode, errMsg: $errMsg';
+  }
+}
+
+class Global<T> {
+  T data;
+
+  Global.fromNestedGenericJson(Map<String, dynamic> json, List<Type> types) {
+
   }
 }

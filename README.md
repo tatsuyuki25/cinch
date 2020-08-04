@@ -1,6 +1,6 @@
 # cinch
 
-![VERSION](https://img.shields.io/badge/Version-1.3.2-blue.svg)
+![VERSION](https://img.shields.io/badge/Version-1.3.5-blue.svg)
 
 ## Usage
 
@@ -9,8 +9,8 @@ dependencies:
   cinch:
     hosted:
       name: cinch
-      url: http://10.0.0.55:8083
-    version: ^1.3.2
+      url: http://pub.program.com.tw:8080
+    version: ^1.3.6
 ```
 
 ## Example

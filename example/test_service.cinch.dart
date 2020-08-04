@@ -30,4 +30,10 @@ class _$TestService extends Service {
       Pair<dynamic, Map<String, MultipartFile>>(partMap, file)
     ]).then((dynamic response) => Response.fromJson(response.data));
   }
+
+  Future<Global<List<String>>> _$generic() {
+    return request(<dynamic>[const Post('generic')], []).then(
+        (dynamic response) => Global<List<String>>.fromNestedGenericJson(
+            response.data, [List, String]));
+  }
 }

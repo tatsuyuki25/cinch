@@ -86,20 +86,20 @@ abstract class Service implements ApiUrlMixin {
 
     if (method is Post) {
       // ignore: implicit_dynamic_method
-      return _dio.post(path,
+      return _dio.post<dynamic>(path,
           options: options,
           data: _hasMultipart(config) ? FormData.fromMap(data) : data,
           queryParameters: query);
     } else if (method is Get) {
       // ignore: implicit_dynamic_method
-      return _dio.get(path, options: options, queryParameters: query);
+      return _dio.get<dynamic>(path, options: options, queryParameters: query);
     } else if (method is Put) {
       // ignore: implicit_dynamic_method
-      return _dio.put(path,
+      return _dio.put<dynamic>(path,
           options: options, data: data, queryParameters: query);
     } else if (method is Delete) {
       // ignore: implicit_dynamic_method
-      return _dio.delete(path,
+      return _dio.delete<dynamic>(path,
           options: options, data: data, queryParameters: query);
     }
     throw Exception('沒有支援的HTTP Method');
