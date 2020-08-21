@@ -1,6 +1,6 @@
 # cinch
 
-![VERSION](https://pub.dartlang.org/packages/cinch)
+[![Pub](https://img.shields.io/pub/v/cinch.svg?style=flat-square)](https://pub.dartlang.org/packages/cinch)
 
 ## Usage
 
