@@ -38,8 +38,8 @@ class TestService {
 
   @Post('multiUpload')
   @multipart
-  Future<Response> multiUpload(@Part('flag') int flag,
-  @partMap Map<String, MultipartFile> file) async {
+  Future<Response> multiUpload(
+      @Part('flag') int flag, @partMap Map<String, MultipartFile> file) async {
     return null;
   }
 }

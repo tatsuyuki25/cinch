@@ -1,5 +1,13 @@
 # Cinch changelog
 
+## 1.3.8
+
+- fix analysis issue
+
+## 1.3.7
+
+- support js
+
 ## 1.3.6
 
 - 擴大支援範圍

@@ -6,7 +6,7 @@
 
 ```yaml
 dependencies:
-  cinch: ^1.3.6
+  cinch: ^1.3.8
 ```
 
 ## Example

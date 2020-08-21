@@ -12,21 +12,20 @@ class TestService extends _$TestService {
 
   @Post('multiUpload')
   @multipart
-  Future<Response> multiUpload(@Part('flag') int flag,
-  @partMap Map<String, MultipartFile> file) {
+  Future<Response> multiUpload(
+      @Part('flag') int flag, @partMap Map<String, MultipartFile> file) {
     return _$multiUpload(flag, file);
   }
 
   @Post('generic')
-  Future<Global<List<String>>> generic();
+  Future<Global<List<String>>> generic() => _$generic();
 }
 
 class Response {
-
   Response.fromJson(Map<String, dynamic> json)
       : retCode = json['retCode'],
         errMsg = json['errMsg'];
-        
+
   final int retCode;
 
   final String errMsg;
@@ -40,7 +39,5 @@ class Response {
 class Global<T> {
   T data;
 
-  Global.fromNestedGenericJson(Map<String, dynamic> json, List<Type> types) {
-
-  }
+  Global.fromNestedGenericJson(Map<String, dynamic> json, List<Type> types) {}
 }

@@ -6,7 +6,6 @@ class Pair<F, S> {
   final S second;
 }
 
-
 ///內含三個資料
 class Tirple<F, S, T> {
   const Tirple(this.first, this.second, this.third);
@@ -18,6 +17,5 @@ class Tirple<F, S, T> {
 
 /// 動態設定URL
 mixin ApiUrlMixin {
-
   String get url;
 }

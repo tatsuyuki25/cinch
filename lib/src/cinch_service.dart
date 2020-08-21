@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'cinch_annotations.dart';
 import 'utils.dart';
@@ -21,7 +18,7 @@ abstract class Service implements ApiUrlMixin {
         baseUrl: _getInitialUrl(),
         connectTimeout: connectTimeout.inMilliseconds,
         receiveTimeout: receiveTimeout.inMilliseconds,
-        headers: <String, dynamic>{HttpHeaders.contentEncodingHeader: 'gzip'},
+        headers: <String, dynamic>{Headers.contentEncodingHeader: 'gzip'},
         responseType: ResponseType.json));
   }
 
@@ -131,7 +128,7 @@ abstract class Service implements ApiUrlMixin {
   ///
   /// Return [Http]
   Http _parseHttpMethod(List<dynamic> config) {
-    final Iterable<Http> http = config.whereType<Http>();
+    final http = config.whereType<Http>();
     if (http.length > 1) {
       throw Exception('Http method 設定超過一次');
     }
@@ -167,7 +164,7 @@ abstract class Service implements ApiUrlMixin {
   Tirple<String, Map<String, dynamic>, Map<String, dynamic>> _parseParam(
       Http method, List<dynamic> config, List<Pair> params) {
     _verifedConfig(config, params);
-    String path = method.path;
+    var path = method.path;
     final query = <String, dynamic>{};
     final data = <String, dynamic>{};
 

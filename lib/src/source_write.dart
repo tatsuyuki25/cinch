@@ -1,6 +1,5 @@
 /// 原始碼寫入器
 class Write {
-
   Write() : _source = '';
 
   /// 原始碼
