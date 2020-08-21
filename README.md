@@ -1,16 +1,12 @@
 # cinch
 
-![VERSION](https://img.shields.io/badge/Version-1.3.5-blue.svg)
+![VERSION](https://pub.dartlang.org/packages/cinch)
 
 ## Usage
 
 ```yaml
 dependencies:
-  cinch:
-    hosted:
-      name: cinch
-      url: http://pub.program.com.tw:8080
-    version: ^1.3.6
+  cinch: ^1.3.6
 ```
 
 ## Example
@@ -148,4 +144,30 @@ void test() {
           '/Users/liaojianxun/Downloads/Resume.docx', filename: 'test$i.docx'),
   });
 }
+```
+
+## License
+
+```license
+MIT License
+
+Copyright (c) 2020 tatsuyuki
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
