@@ -2,10 +2,10 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
+import 'package:cinch/cinch.dart';
 import 'package:dio/dio.dart';
 import 'package:source_gen/source_gen.dart';
 
-import 'cinch_annotations.dart';
 import 'source_write.dart';
 
 /// 動態產生程式碼
@@ -128,7 +128,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
         nested.add('${t.element.displayName}');
         nested.addAll(_getNestedGenerics(t));
       } else {
-        nested.add('$t');
+        nested.add('${t.nonStarString()}');
       }
     }
     return nested;
@@ -168,16 +168,16 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   void _writeNormal(MethodElement element, DartType returnType) {
     final config = _getAnnotations(element);
     final parameters = _getParameters(element);
-    _write.write('${element.returnType} ');
+    _write.write('${element.returnType.nonStarString()} ');
     _writeMethod(element);
     _write.write('{');
     _write.write('return request(<dynamic>$config, $parameters)');
     if (_hasNestedGeneric(returnType)) {
-      _write.write('.then((dynamic response) => $returnType.'
+      _write.write('.then((dynamic response) => ${returnType.nonStarString()}.'
           'fromNestedGenericJson(response.data, ${_getNestedGenerics(returnType)}));');
     } else {
       _write.write(
-          '.then((dynamic response) => $returnType.fromJson(response.data));');
+          '.then((dynamic response) => ${returnType.nonStarString()}.fromJson(response.data));');
     }
     _write.write('}');
   }
@@ -187,7 +187,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     _write.write('_\$${element.name}(');
     _write.write(element.parameters
         .where((p) => p.metadata.length == 1)
-        .map((p) => '${p.type} ${p.name}')
+        .map((p) => '${p.type.nonStarString()} ${p.name}')
         .join(','));
     _write.write(')');
   }
@@ -217,7 +217,14 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
         firstValue = p.metadata[0].toSource().substring(1);
       }
       return '${_getPrefix()}Pair<$firstType,'
-          '${p.type}>($firstValue, ${p.name})';
+          '${p.type.nonStarString()}>($firstValue, ${p.name})';
     }).toList();
+  }
+}
+
+extension DartTypeExt on DartType {
+
+  String nonStarString() {
+    return toString().replaceAll('*', '');
   }
 }

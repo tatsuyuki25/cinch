@@ -1,6 +1,6 @@
 builders:
-  cinch:
-    import: "package:cinch/builder.dart"
+  cinch_gen:
+    import: "package:cinch_gen/cinch_gen.dart"
     builder_factories: ["cinch"]
     build_extensions: {".dart": [".cinch.dart"]}
     auto_apply: root_package

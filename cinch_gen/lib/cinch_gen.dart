@@ -1,4 +1,4 @@
-library cinch.builder;
+library cinch_gen.builder;
 
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';

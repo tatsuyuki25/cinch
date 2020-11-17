@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 1.4.0
+
+- Separate generate pub `cinch_gen`
+
 ## 1.3.8
 
 - fix analysis issue

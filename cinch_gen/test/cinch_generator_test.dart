@@ -1,5 +1,5 @@
 @TestOn('vm')
-import 'package:cinch/src/cinch_generator.dart';
+import 'package:cinch_gen/src/cinch_generator.dart';
 import 'package:path/path.dart' as p;
 import 'package:source_gen_test/source_gen_test.dart';
 import 'package:test/test.dart';

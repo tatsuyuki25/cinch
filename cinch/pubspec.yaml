@@ -1,0 +1,14 @@
+name: cinch
+description: cinch is powerful http client for dart, support native and js, http client using dio.
+version: 1.4.0
+repository: https://github.com/tatsuyuki25/cinch
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  dio: ^3.0.10
+
+dev_dependencies:
+  test: ^1.15.3
+  build_runner: ^1.10.0
