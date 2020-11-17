@@ -6,7 +6,10 @@
 
 ```yaml
 dependencies:
-  cinch: ^1.3.8
+  cinch: ^1.4.0
+
+dev_dependencies:
+  cinch_gen: ^1.0.0
 ```
 
 ## Example
@@ -29,7 +32,7 @@ dependencies:
 
 - terminal 執行 `flutter packages pub run build_runner build`
 
-## 支援的Http Method
+## Support Http Method
 
 - POST
 - GET
@@ -56,7 +59,7 @@ dependencies:
   }
 ```
 
-## 指定特定URL
+## URL
 
 ```dart
 import 'package:cinch/cinch.dart';
@@ -76,7 +79,7 @@ class TestApi extends _$TestApi {
 }
 ```
 
-或
+Or
 
 ```dart
 import 'package:cinch/cinch.dart';
@@ -98,7 +101,7 @@ class TestApi extends _$TestApi with Web {
 }
 ```
 
-## 上傳檔案 Multipart
+## Multipart
 
 ```dart
 @ApiService('http://localhost:8080/')
@@ -116,7 +119,7 @@ void test() {
 }
 ```
 
-- 如果有多欄位需要上傳， 可以搭配 `partMap` 使用
+- Or use `partMap`
 
 ```dart
 @ApiService('http://localhost:8080/')
@@ -132,16 +135,15 @@ class TestService extends _$TestService {
 void test() {
   service.multiUpload(88, {
     "file0": MultipartFile.fromFileSync(
-        '/Users/liaojianxun/Downloads/Resume.docx', filename: 'test0.docx'),
+        '/Downloads/Resume.docx', filename: 'test0.docx'),
     "file1": MultipartFile.fromFileSync(
-        '/Users/liaojianxun/Downloads/Resume.docx', filename: 'test1.docx')
+        '/Downloads/Resume.docx', filename: 'test1.docx')
   });
   
-  /// 也能使用`dart`新功能，在block中直接迴圈使用
   service.multiUpload(99, {
     for (var i = 0; i < 5; i++)
       "file$i": MultipartFile.fromFileSync(
-          '/Users/liaojianxun/Downloads/Resume.docx', filename: 'test$i.docx'),
+          '/Downloads/Resume.docx', filename: 'test$i.docx'),
   });
 }
 ```
