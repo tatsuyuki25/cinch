@@ -73,7 +73,8 @@ abstract class Service implements ApiUrlMixin {
   /// [params] function的參數及參數標籤
   ///
   /// Return [Future]
-  Future request(List<dynamic> config, List<Pair> params) async {
+  Future<Response<dynamic>> request(
+      List<dynamic> config, List<Pair> params) async {
     final method = _parseHttpMethod(config);
     final options = _getOptions(config);
     final parseData = _parseParam(method, config, params);
