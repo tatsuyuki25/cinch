@@ -223,7 +223,6 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 }
 
 extension DartTypeExt on DartType {
-
   String nonStarString() {
     return toString().replaceAll('*', '');
   }

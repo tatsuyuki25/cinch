@@ -9,7 +9,7 @@ dependencies:
   cinch: ^1.4.1
 
 dev_dependencies:
-  cinch_gen: ^1.0.0
+  cinch_gen: ^1.0.1
 ```
 
 ## Example

@@ -1,6 +1,6 @@
 name: cinch_gen
 description: cinch is powerful http client for dart, support native and js, http client using dio.
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/tatsuyuki25/cinch
 
 environment:
@@ -10,7 +10,7 @@ dependencies:
   # 不使用`0.38.3`，有BUG
   analyzer: ">=0.38.4 <0.41.0"
   build: ">=1.2.2 <2.0.0"
-  cinch: ^1.4.0
+  cinch: ^1.4.1
   path: ">=1.6.4 <2.0.0"
   source_gen: ">=0.9.4+6 <1.0.0"
   dio: ^3.0.10
