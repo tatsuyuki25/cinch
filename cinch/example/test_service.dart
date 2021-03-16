@@ -37,7 +37,7 @@ class Response {
 }
 
 class Global<T> {
-  T data;
+  T? data;
 
   Global.fromNestedGenericJson(Map<String, dynamic> json, List<Type> types) {}
 }

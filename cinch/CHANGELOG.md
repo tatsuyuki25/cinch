@@ -1,5 +1,13 @@
 # Cinch changelog
 
+## 2.0.0-nullsafety.1
+
+- Fix README.md
+
+## 2.0.0-nullsafety.0
+
+- Support nullsafety
+
 ## 1.4.1
 
 - Fix return type to `Response`
