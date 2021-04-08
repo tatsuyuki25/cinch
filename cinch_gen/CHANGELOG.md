@@ -1,5 +1,9 @@
 # cinch_gen changelog
 
+## 2.0.0-nullsafety.2
+
+- Update pub
+
 ## 2.0.0-nullsafety.1
 
 - Fix non nullsafety code
