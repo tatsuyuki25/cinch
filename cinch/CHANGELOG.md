@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 2.0.0-nullsafety.2
+
+- Update library
+
 ## 2.0.0-nullsafety.1
 
 - Fix README.md

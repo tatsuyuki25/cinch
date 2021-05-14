@@ -19,7 +19,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   /// 檢查[Response] type
   final _dioChecker = const TypeChecker.fromRuntime(Response);
 
-  String _prefix;
+  String? _prefix;
 
   @override
   dynamic generateForAnnotatedElement(
@@ -66,18 +66,18 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   /// 檢查[object]是否為null
-  bool _isNull(DartObject object) => object == null || object.isNull;
+  bool _isNull(DartObject? object) => object == null || object.isNull;
 
   /// 從[object]本身或父類中取得[field]欄位資料
   ///
   /// Return object
-  DartObject _getField(DartObject object, String field) {
+  DartObject? _getField(DartObject? object, String field) {
     if (_isNull(object) || object == null) {
       return null;
     }
     final fieldValue = object.getField(field);
     if (!_isNull(fieldValue)) {
-      return fieldValue;
+      return fieldValue!;
     }
     return _getField(object.getField('(super)'), field);
   }
@@ -146,8 +146,13 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// [element]是否有標annotation
   bool _hasCinchAnnotation(MethodElement element) {
-    final metadata = element.metadata.where(
-        (m) => _httpChecker.isSuperTypeOf(m.computeConstantValue()?.type));
+    final metadata = element.metadata.where((m) {
+      final type = m.computeConstantValue()?.type;
+      if (type != null) {
+        return _httpChecker.isSuperTypeOf(type);
+      }
+      return false;
+    });
     if (metadata.length > 1) {
       throw InvalidGenerationSourceError('Http method只能設定一個');
     }

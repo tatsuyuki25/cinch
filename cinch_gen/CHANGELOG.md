@@ -1,5 +1,9 @@
 # cinch_gen changelog
 
+## 2.0.0-nullsafety.3
+
+- 更新至2.12.0
+
 ## 2.0.0-nullsafety.2
 
 - Update pub
