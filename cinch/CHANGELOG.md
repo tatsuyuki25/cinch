@@ -1,5 +1,10 @@
 # Cinch changelog
 
+## 2.0.0
+
+- Support Nullsafety
+- Update Dio version
+
 ## 1.4.1
 
 - Fix return type to `Response`

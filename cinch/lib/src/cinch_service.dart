@@ -25,7 +25,7 @@ abstract class Service implements ApiUrlMixin {
   /// dio 實體
   /// Header預設 content-encoding: gzip
   /// [ResponseType] 預設 [ResponseType.json]
-  Dio _dio;
+  late Dio _dio;
 
   /// URL
   final String baseUrl;

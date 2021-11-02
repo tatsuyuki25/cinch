@@ -33,14 +33,14 @@ class TestService {
   @Post('upload')
   @multipart
   Future<Response> upload(@Part('file') MultipartFile file) async {
-    return null;
+    return Future.value();
   }
 
   @Post('multiUpload')
   @multipart
   Future<Response> multiUpload(
       @Part('flag') int flag, @partMap Map<String, MultipartFile> file) async {
-    return null;
+    return Future.value();
   }
 }
 
