@@ -6,10 +6,10 @@
 
 ```yaml
 dependencies:
-  cinch: ^2.0.0-nullsafety.2
+  cinch: ^2.0.0
 
 dev_dependencies:
-  cinch_gen: ^2.0.0-nullsafety.3
+  cinch_gen: ^2.0.0
 ```
 
 ## Example
@@ -30,7 +30,13 @@ dev_dependencies:
     }
 ```
 
-- terminal 執行 `flutter packages pub run build_runner build`
+### Flutter Project
+
+- terminal run `flutter packages pub run build_runner build`
+
+### Dart Project
+
+- terminal run `pub run build_runner build`
 
 ## Support Http Method
 
