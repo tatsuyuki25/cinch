@@ -1,20 +1,9 @@
 # cinch_gen changelog
 
-## 2.0.0-nullsafety.3
+## 2.0.0
 
-- 更新至2.12.0
-
-## 2.0.0-nullsafety.2
-
-- Update pub
-
-## 2.0.0-nullsafety.1
-
-- Fix non nullsafety code
-
-## 2.0.0-nullsafety.0
-
-- Support nullsafety
+- Support Nullsafety
+- Update analyzer to 2.0.0
 
 ## 1.0.1
 

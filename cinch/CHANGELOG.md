@@ -1,16 +1,9 @@
 # Cinch changelog
 
-## 2.0.0-nullsafety.2
+## 2.0.0
 
-- Update library
-
-## 2.0.0-nullsafety.1
-
-- Fix README.md
-
-## 2.0.0-nullsafety.0
-
-- Support nullsafety
+- Support Nullsafety
+- Update Dio version
 
 ## 1.4.1
 
