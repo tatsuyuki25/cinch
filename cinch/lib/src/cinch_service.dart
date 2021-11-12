@@ -100,7 +100,7 @@ abstract class Service implements ApiUrlMixin {
       return _dio.delete<dynamic>(path,
           options: options, data: data, queryParameters: query);
     }
-    throw Exception('沒有支援的HTTP Method');
+    throw Exception('沒有支援的HTTP Method');
   }
 
   /// 是否為application/x-www-form-urlencoded

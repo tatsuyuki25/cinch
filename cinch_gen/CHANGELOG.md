@@ -1,5 +1,13 @@
 # cinch_gen changelog
 
+## 2.1.1
+
+- Fix List Type not gen.
+
+## 2.1.0
+
+- Support List Type
+
 ## 2.0.0
 
 - Support Nullsafety

@@ -181,6 +181,8 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     if (_hasNestedGeneric(returnType)) {
       _write.write('.then((dynamic response) => ${returnType.nonStarString()}.'
           'fromNestedGenericJson(response.data, ${_getNestedGenerics(returnType)}));');
+    } else if (returnType.isDartCoreList) {
+      _writeListReturn(returnType);
     } else {
       _write.write(
           '.then((dynamic response) => ${returnType.nonStarString()}.fromJson(response.data));');
@@ -196,6 +198,28 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
         .map((p) => '${p.type.nonStarString()} ${p.name}')
         .join(','));
     _write.write(')');
+  }
+
+  void _writeListReturn(DartType returnType) {
+    final genericType = _getGenericTypes(returnType);
+    if (genericType.isNotEmpty) {
+      final clazz = genericType.first.element;
+      if (clazz != null && clazz is ClassElement) {
+        log.warning('class getNamedConstructor: ${clazz.getNamedConstructor('fromJson')}');
+        final type = genericType.first.nonStarString();
+        if (clazz.getNamedConstructor('fromJson') != null) {          
+          _write.write(
+              '.then((dynamic response) => ${returnType.nonStarString()}.from(response.data.map((json)=> $type.fromJson(json))));');
+          return;
+        } else {
+          _write.write(
+              '.then((dynamic response) => ${returnType.nonStarString()}.from(response.data));');
+          return;
+        }
+      }
+    }
+    _write.write(
+        '.then((dynamic response) => ${returnType.nonStarString()}.fromJson(response.data));');
   }
 
   /// 取得標籤

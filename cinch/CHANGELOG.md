@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 2.0.1
+
+- remove char
+
 ## 2.0.0
 
 - Support Nullsafety
