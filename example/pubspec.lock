@@ -119,7 +119,7 @@ packages:
       path: "../cinch_gen"
       relative: true
     source: path
-    version: "2.1.0"
+    version: "2.1.1"
   cli_util:
     dependency: transitive
     description:

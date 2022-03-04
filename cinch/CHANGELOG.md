@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 2.1.0
+
+- Query and Field support List data and keepNull
+
 ## 2.0.1
 
 - remove char

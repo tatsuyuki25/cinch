@@ -12,20 +12,23 @@ class ApiService {
 
 /// Http Query
 class Query {
-  const Query(this.value);
+  const Query(this.value, {this.keepNull = false});
   final String value;
+  final bool keepNull;
 }
 
 /// Http Field 搭配 fromUrlEncoded使用
 class Field {
-  const Field(this.value);
+  const Field(this.value, {this.keepNull = false});
   final String value;
+  final bool keepNull;
 }
 
 /// Multipart 資料
 class Part {
-  const Part(this.value);
+  const Part(this.value, {this.keepNull = false});
   final String value;
+  final bool keepNull;
 }
 
 /// Multipart 資料 [Map]形式

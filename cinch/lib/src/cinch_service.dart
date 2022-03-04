@@ -202,7 +202,18 @@ abstract class Service implements ApiUrlMixin {
   void _parseQuery(Map<String, dynamic> query, Pair pair) {
     final dynamic metadata = pair.first;
     if (metadata is Query) {
-      query[pair.first.value] = pair.second;
+      final dynamic first = pair.first.value;
+      final dynamic second = pair.second;
+      if (second == null && !metadata.keepNull) {
+        return;
+      }
+      if (first is String && first.endsWith('[]') && second is List) {
+        for (var value in second) {
+          query[first] = value;
+        }
+      } else {
+        query[pair.first.value] = pair.second;
+      }
     }
   }
 
@@ -212,7 +223,18 @@ abstract class Service implements ApiUrlMixin {
   void _parseFormData(Map<String, dynamic> form, Pair pair) {
     final dynamic metadata = pair.first;
     if (metadata is Field || metadata is Part) {
-      form[pair.first.value] = _getData(pair.second);
+      final dynamic first = pair.first.value;
+      final dynamic second = pair.second;
+      if (second == null && !metadata.keepNull) {
+        return;
+      }
+      if (first is String && first.endsWith('[]') && second is List) {
+        for (var value in second) {
+          form[first] = _getData(value);
+        }
+      } else {
+        form[first] = _getData(second);
+      }
     } else if (metadata == partMap) {
       form.addAll(pair.second);
     }
