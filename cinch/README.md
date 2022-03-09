@@ -6,10 +6,10 @@
 
 ```yaml
 dependencies:
-  cinch: ^2.1.0
+  cinch: ^2.1.1
 
 dev_dependencies:
-  cinch_gen: ^2.1.0
+  cinch_gen: ^2.1.1
 ```
 
 ## Example

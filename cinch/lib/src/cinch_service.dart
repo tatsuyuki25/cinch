@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:meta/meta.dart';
+
 import 'cinch_annotations.dart';
 import 'utils.dart';
 
@@ -14,7 +16,7 @@ abstract class Service implements ApiUrlMixin {
   Service(this.baseUrl,
       {this.connectTimeout = const Duration(seconds: 5),
       this.receiveTimeout = const Duration(seconds: 10)}) {
-    _dio = Dio(BaseOptions(
+    dio = Dio(BaseOptions(
         baseUrl: _getInitialUrl(),
         connectTimeout: connectTimeout.inMilliseconds,
         receiveTimeout: receiveTimeout.inMilliseconds,
@@ -25,7 +27,8 @@ abstract class Service implements ApiUrlMixin {
   /// dio 實體
   /// Header預設 content-encoding: gzip
   /// [ResponseType] 預設 [ResponseType.json]
-  late Dio _dio;
+  @visibleForTesting
+  late Dio dio;
 
   /// URL
   final String baseUrl;
@@ -37,23 +40,23 @@ abstract class Service implements ApiUrlMixin {
   final Duration receiveTimeout;
 
   /// dio interceptors
-  Interceptors get interceptors => _dio.interceptors;
+  Interceptors get interceptors => dio.interceptors;
 
   /// dio httpClientAdapter
-  HttpClientAdapter get httpClientAdapter => _dio.httpClientAdapter;
+  HttpClientAdapter get httpClientAdapter => dio.httpClientAdapter;
   set httpClientAdapter(HttpClientAdapter adapter) =>
-      _dio.httpClientAdapter = adapter;
+      dio.httpClientAdapter = adapter;
 
   /// dio transformer
-  Transformer get transformer => _dio.transformer;
-  set transformer(Transformer transformer) => _dio.transformer = transformer;
+  Transformer get transformer => dio.transformer;
+  set transformer(Transformer transformer) => dio.transformer = transformer;
 
   @override
   String get url => '';
 
   /// 更改Url
   void setBaseUrl(String url) {
-    _dio.options.baseUrl = url;
+    dio.options.baseUrl = url;
   }
 
   /// 取得初始Url
@@ -84,20 +87,20 @@ abstract class Service implements ApiUrlMixin {
 
     if (method is Post) {
       // ignore: implicit_dynamic_method
-      return _dio.post<dynamic>(path,
+      return dio.post<dynamic>(path,
           options: options,
           data: _hasMultipart(config) ? FormData.fromMap(data) : data,
           queryParameters: query);
     } else if (method is Get) {
       // ignore: implicit_dynamic_method
-      return _dio.get<dynamic>(path, options: options, queryParameters: query);
+      return dio.get<dynamic>(path, options: options, queryParameters: query);
     } else if (method is Put) {
       // ignore: implicit_dynamic_method
-      return _dio.put<dynamic>(path,
+      return dio.put<dynamic>(path,
           options: options, data: data, queryParameters: query);
     } else if (method is Delete) {
       // ignore: implicit_dynamic_method
-      return _dio.delete<dynamic>(path,
+      return dio.delete<dynamic>(path,
           options: options, data: data, queryParameters: query);
     }
     throw Exception('沒有支援的HTTP Method');
