@@ -111,7 +111,7 @@ abstract class Service implements ApiUrlMixin {
     return config.any((dynamic c) => c == formUrlEncoded);
   }
 
-  /// 是否為`Mulitpart`
+  /// 是否為`Multipart`
   bool _hasMultipart(List<dynamic> config) {
     return config.any((dynamic c) => c == multipart);
   }
@@ -143,7 +143,7 @@ abstract class Service implements ApiUrlMixin {
   }
 
   /// 驗證`method`的`meta`是否正確設置
-  void _verifedConfig(List<dynamic> config, List<Pair> params) {
+  void _verifiedConfig(List<dynamic> config, List<Pair> params) {
     final hasField = params.any((p) => p.first is Field);
     final hasFormUrlEncoded = _hasFormUrlEncoded(config);
     final hasPart = params.any((p) => p.first is Part || p.first == partMap);
@@ -154,9 +154,6 @@ abstract class Service implements ApiUrlMixin {
     if (hasFormUrlEncoded && hasMultipart) {
       throw Exception('FormUrlEncoded跟Multipart一個API只能則一設置');
     }
-    if (hasField && !hasFormUrlEncoded) {
-      throw Exception('Field必須設定FormUrlEncoded');
-    }
     if (hasPart && !hasMultipart) {
       throw Exception('Part必須設定multipart');
     }
@@ -164,10 +161,10 @@ abstract class Service implements ApiUrlMixin {
 
   /// 解析 path, query string, post data
   ///
-  /// Return [Tirple] first: path, second: query string, third: post data
-  Tirple<String, Map<String, dynamic>, Map<String, dynamic>> _parseParam(
+  /// Return [Triple] first: path, second: query string, third: post data
+  Triple<String, Map<String, dynamic>, Map<String, dynamic>> _parseParam(
       Http method, List<dynamic> config, List<Pair> params) {
-    _verifedConfig(config, params);
+    _verifiedConfig(config, params);
     var path = method.path;
     final query = <String, dynamic>{};
     final data = <String, dynamic>{};
@@ -177,7 +174,7 @@ abstract class Service implements ApiUrlMixin {
       _parseQuery(query, pair);
       _parseFormData(data, pair);
     }
-    return Tirple(path, query, data);
+    return Triple(path, query, data);
   }
 
   /// 解析 [pair] path

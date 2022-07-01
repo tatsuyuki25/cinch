@@ -1,5 +1,10 @@
 # Cinch changelog
 
+## 2.2.0
+
+- update dio
+- remove check Field and FormUrlEncoded
+
 ## 2.1.1
 
 - dio with test public

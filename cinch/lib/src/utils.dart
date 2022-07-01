@@ -7,8 +7,8 @@ class Pair<F, S> {
 }
 
 ///內含三個資料
-class Tirple<F, S, T> {
-  const Tirple(this.first, this.second, this.third);
+class Triple<F, S, T> {
+  const Triple(this.first, this.second, this.third);
 
   final F first;
   final S second;

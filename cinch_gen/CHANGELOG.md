@@ -1,5 +1,9 @@
 # cinch_gen changelog
 
+## 2.1.2
+
+- update plugin
+
 ## 2.1.1
 
 - Fix List Type not gen.
