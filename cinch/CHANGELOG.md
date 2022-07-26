@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 2.2.1
+
+- Fix List type Field & Query.
+
 ## 2.2.0
 
 - update dio

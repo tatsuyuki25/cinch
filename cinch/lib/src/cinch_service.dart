@@ -208,8 +208,9 @@ abstract class Service implements ApiUrlMixin {
         return;
       }
       if (first is String && first.endsWith('[]') && second is List) {
-        for (var value in second) {
-          query[first] = value;
+        final listKey = first.substring(0, first.lastIndexOf('['));
+        for (int i = 0; i < second.length; i++) {
+          query['$listKey[$i]'] = _getData(second[i]);
         }
       } else {
         query[pair.first.value] = pair.second;
@@ -229,8 +230,9 @@ abstract class Service implements ApiUrlMixin {
         return;
       }
       if (first is String && first.endsWith('[]') && second is List) {
-        for (var value in second) {
-          form[first] = _getData(value);
+        final listKey = first.substring(0, first.lastIndexOf('['));
+        for (int i = 0; i < second.length; i++) {
+          form['$listKey[$i]'] = _getData(second[i]);
         }
       } else {
         form[first] = _getData(second);
