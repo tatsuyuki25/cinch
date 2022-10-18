@@ -1,9 +1,17 @@
+import 'dart:ffi';
+
 import 'package:cinch/cinch.dart';
 
-part 'test_service.cinch.dart';
+part 'example2_service.cinch.dart';
 
-@ApiService('http://localhost:8080/')
-class TestService extends _$TestService {
+@ApiService('https://test.com/api')
+class Example2Service extends _$Example2Service {
+  @Get('json/area-yb2.json')
+  Future<List<Example>> getArea(@FfiNative('GG') int test,
+      {@Query('type') String? type, int? type2}) {
+    return _$getArea('2');
+  }
+
   @Post('upload')
   @multipart
   Future<Response> upload(@Part('file') MultipartFile file) {
@@ -19,6 +27,11 @@ class TestService extends _$TestService {
 
   @Post('generic')
   Future<Global<List<String>>> generic() => _$generic();
+}
+
+class Example {
+  Example.fromJson(dynamic json) : value = json['value'];
+  final String value;
 }
 
 class Response {

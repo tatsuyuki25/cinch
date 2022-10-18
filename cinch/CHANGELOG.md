@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 2.2.2-dev
+
+- Add Super Class with param.
+
 ## 2.2.1
 
 - Fix List type Field & Query.

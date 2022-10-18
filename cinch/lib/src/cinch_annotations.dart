@@ -10,29 +10,33 @@ class ApiService {
   final String url;
 }
 
+class Parameter {
+  const Parameter();
+}
+
 /// Http Query
-class Query {
+class Query extends Parameter {
   const Query(this.value, {this.keepNull = false});
   final String value;
   final bool keepNull;
 }
 
 /// Http Field 搭配 fromUrlEncoded使用
-class Field {
+class Field extends Parameter {
   const Field(this.value, {this.keepNull = false});
   final String value;
   final bool keepNull;
 }
 
 /// Multipart 資料
-class Part {
+class Part extends Parameter {
   const Part(this.value, {this.keepNull = false});
   final String value;
   final bool keepNull;
 }
 
 /// Multipart 資料 [Map]形式
-class _PartMap {
+class _PartMap extends Parameter {
   const _PartMap();
 }
 
@@ -40,7 +44,7 @@ class _PartMap {
 const _PartMap partMap = _PartMap();
 
 /// 路徑格式化
-class Path {
+class Path extends Parameter {
   const Path(this.value);
   final String value;
 }

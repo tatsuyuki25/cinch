@@ -1,5 +1,9 @@
 # cinch_gen changelog
 
+## 2.2.0-dev
+
+- update plugin
+
 ## 2.1.2
 
 - update plugin

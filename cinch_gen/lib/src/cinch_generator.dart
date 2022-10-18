@@ -3,9 +3,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:cinch/cinch.dart';
-import 'package:dio/dio.dart';
 import 'package:source_gen/source_gen.dart';
-
 import 'source_write.dart';
 
 /// 動態產生程式碼
@@ -16,8 +14,14 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   /// 檢查[Http]type
   final _httpChecker = const TypeChecker.fromRuntime(Http);
 
+  /// 檢查[Parameter]type
+  final _parameterChecker = const TypeChecker.fromRuntime(Parameter);
+
   /// 檢查[Response] type
   final _dioChecker = const TypeChecker.fromRuntime(Response);
+
+  /// 檢查[MultipartFile] type
+  final _multipartFileChecker = const TypeChecker.fromRuntime(MultipartFile);
 
   String? _prefix;
 
@@ -47,13 +51,13 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   void _checkPrefix(ClassElement element) {
     _prefix = null;
-    final imports = element.library.imports;
+    final imports = element.library.libraryImports;
     for (var i = 0; i < imports.length; i++) {
-      final name = imports[i].toString().replaceAll(r'import ', '');
+      final name = imports[i].importedLibrary?.name;
       if (name == 'cinch') {
         final p = imports[i].prefix;
         if (p != null) {
-          _prefix = p.name;
+          _prefix = p.element.name;
         }
         break;
       }
@@ -114,7 +118,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// [type]是否為泛型
   bool _hasGenerics(DartType type) {
-    final element = type.element;
+    final element = type.element2;
     if (element is ClassElement) {
       return element.typeParameters.isNotEmpty;
     }
@@ -126,7 +130,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     final nested = <String>[];
     for (var t in _getGenericTypes(type)) {
       if (_hasGenerics(t)) {
-        nested.add('${t.element?.displayName}');
+        nested.add('${t.element2?.displayName}');
         nested.addAll(_getNestedGenerics(t));
       } else {
         nested.add('${t.nonStarString()}');
@@ -193,21 +197,32 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   /// 寫入method 開頭
   void _writeMethod(MethodElement element) {
     _write.write('_\$${element.name}(');
-    _write.write(element.parameters
-        .where((p) => p.metadata.length == 1)
-        .map((p) => '${p.type.nonStarString()} ${p.name}')
-        .join(','));
+    _write.write(
+        element.parameters.where((p) => p.metadata.length == 1).where((p) {
+      final type = p.metadata[0].computeConstantValue()?.type;
+      if (type != null) {
+        return _parameterChecker.isSuperTypeOf(type);
+      }
+      return false;
+    }).map((p) {
+      String prefix = '';
+      if (_multipartFileChecker.isExactlyType(p.type)) {
+        prefix = _getPrefix();
+      }
+      return '$prefix${p.type.nonStarString()} ${p.name}';
+    }).join(','));
     _write.write(')');
   }
 
   void _writeListReturn(DartType returnType) {
     final genericType = _getGenericTypes(returnType);
     if (genericType.isNotEmpty) {
-      final clazz = genericType.first.element;
+      final clazz = genericType.first.element2;
       if (clazz != null && clazz is ClassElement) {
-        log.warning('class getNamedConstructor: ${clazz.getNamedConstructor('fromJson')}');
+        log.warning(
+            'class getNamedConstructor: ${clazz.getNamedConstructor('fromJson')}');
         final type = genericType.first.nonStarString();
-        if (clazz.getNamedConstructor('fromJson') != null) {          
+        if (clazz.getNamedConstructor('fromJson') != null) {
           _write.write(
               '.then((dynamic response) => ${returnType.nonStarString()}.from(response.data.map((json)=> $type.fromJson(json))));');
           return;
@@ -234,13 +249,20 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// 取得參數資料
   List<String> _getParameters(MethodElement element) {
-    final parameters = element.parameters.where((p) => p.metadata.length == 1);
+    final parameters =
+        element.parameters.where((p) => p.metadata.length == 1).where((p) {
+      final type = p.metadata[0].computeConstantValue()?.type;
+      if (type != null) {
+        return _parameterChecker.isSuperTypeOf(type);
+      }
+      return false;
+    });
     return parameters.map((p) {
       final element = p.metadata[0].element;
       String firstType;
       String firstValue;
       if (element is ConstructorElement) {
-        firstType = element.enclosingElement.name;
+        firstType = '${_getPrefix()}${element.enclosingElement3.name}';
         firstValue = 'const ${p.metadata[0].toSource().substring(1)}';
       } else {
         firstType = 'dynamic';

@@ -1,12 +1,12 @@
 
-import 'package:cinch/cinch.dart';
+import 'package:cinch/cinch.dart' as gg;
 
 part 'example_service.cinch.dart';
 
-@ApiService('https://test.com/api')
+@gg.ApiService('https://test.com/api')
 class ExampleService extends _$ExampleService {
-  @Get('json/area-yb2.json')
-  Future<List<Example>> getArea({@Query('type') String? type}) {
+  @gg.Get('json/area-yb2.json')
+  Future<List<Example>> getArea({@gg.Query('type') String? type}) {
     return _$getArea('2');
   }
 }
