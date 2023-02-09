@@ -118,7 +118,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// [type]是否為泛型
   bool _hasGenerics(DartType type) {
-    final element = type.element2;
+    final element = type.element;
     if (element is ClassElement) {
       return element.typeParameters.isNotEmpty;
     }
@@ -130,7 +130,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     final nested = <String>[];
     for (var t in _getGenericTypes(type)) {
       if (_hasGenerics(t)) {
-        nested.add('${t.element2?.displayName}');
+        nested.add('${t.element?.displayName}');
         nested.addAll(_getNestedGenerics(t));
       } else {
         nested.add('${t.nonStarString()}');
@@ -217,7 +217,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   void _writeListReturn(DartType returnType) {
     final genericType = _getGenericTypes(returnType);
     if (genericType.isNotEmpty) {
-      final clazz = genericType.first.element2;
+      final clazz = genericType.first.element;
       if (clazz != null && clazz is ClassElement) {
         log.warning(
             'class getNamedConstructor: ${clazz.getNamedConstructor('fromJson')}');
@@ -262,7 +262,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       String firstType;
       String firstValue;
       if (element is ConstructorElement) {
-        firstType = '${_getPrefix()}${element.enclosingElement3.name}';
+        firstType = '${_getPrefix()}${element.enclosingElement.name}';
         firstValue = 'const ${p.metadata[0].toSource().substring(1)}';
       } else {
         firstType = 'dynamic';

@@ -1,6 +1,6 @@
 # Cinch changelog
 
-## 2.2.2-dev
+## 2.2.2
 
 - Add Super Class with param.
 
