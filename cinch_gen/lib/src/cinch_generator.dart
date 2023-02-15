@@ -37,16 +37,19 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       _write.write("""
     class _\$${element.name} extends ${_getPrefix()}Service {
       _\$${element.name}({Duration connectTimeout = const Duration(seconds: 5), 
-      Duration receiveTimeout = const Duration(seconds: 10)}):
+      Duration receiveTimeout = const Duration(seconds: 10),
+      Duration sendTimeout = const Duration(seconds: 10),
+      ValidateStatus? validateStatus}):
       super('${_getField(annotation.objectValue, 'url')?.toStringValue()}', 
-      connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
+      connectTimeout: connectTimeout, receiveTimeout: receiveTimeout,
+      sendTimeout: sendTimeout, validateStatus: validateStatus);
     """);
       _parseMethod(element);
       _write.write('}');
       return _write.toString();
     }
     throw InvalidGenerationSourceError(
-        '無法轉換 ${element.name}, 請確定${element.name} 為 `class`');
+        'transform fail ${element.name}, please check ${element.name} is `class`');
   }
 
   void _checkPrefix(ClassElement element) {
@@ -97,7 +100,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     }
     for (var m in methods) {
       if (!_hasCinchAnnotation(m)) {
-        log.warning('Method ${m.name} 沒有標記Http method');
+        log.warning('Method ${m.name} not tag Http method');
         continue;
       }
       final genericType = _getGenericTypes(m.returnType).first;
@@ -158,7 +161,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       return false;
     });
     if (metadata.length > 1) {
-      throw InvalidGenerationSourceError('Http method只能設定一個');
+      throw InvalidGenerationSourceError('Http method only set one time.');
     }
     return metadata.length == 1;
   }

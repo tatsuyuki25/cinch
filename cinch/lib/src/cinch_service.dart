@@ -10,34 +10,50 @@ import 'utils.dart';
 abstract class Service implements ApiUrlMixin {
   /// [baseUrl] URL
   ///
-  /// [connectTimeout] 連線逾時，預設5秒
+  /// [connectTimeout] default 5 seconds.
   ///
-  /// [receiveTimeout] 讀取逾時，預設10秒
+  /// [receiveTimeout] default 10 seconds.
+  ///
+  /// [sendTimeout] default 10 seconds.
   Service(this.baseUrl,
       {this.connectTimeout = const Duration(seconds: 5),
-      this.receiveTimeout = const Duration(seconds: 10)}) {
+      this.receiveTimeout = const Duration(seconds: 10),
+      this.sendTimeout = const Duration(seconds: 10),
+      this.validateStatus}) {
     dio = Dio(BaseOptions(
         baseUrl: _getInitialUrl(),
-        connectTimeout: connectTimeout.inMilliseconds,
-        receiveTimeout: receiveTimeout.inMilliseconds,
+        connectTimeout: connectTimeout,
+        receiveTimeout: receiveTimeout,
+        sendTimeout: sendTimeout,
+        validateStatus: validateStatus,
         headers: <String, dynamic>{Headers.contentEncodingHeader: 'gzip'},
         responseType: ResponseType.json));
   }
 
-  /// dio 實體
-  /// Header預設 content-encoding: gzip
-  /// [ResponseType] 預設 [ResponseType.json]
+  /// The dio object
+  ///
+  /// By default add header `content-encoding: gzip`
+  ///
+  /// [ResponseType] default set [ResponseType.json]
   @visibleForTesting
   late Dio dio;
 
   /// URL
   final String baseUrl;
 
-  /// 連線逾時
+  /// connect timeout
   final Duration connectTimeout;
 
-  /// 讀取逾時
+  /// receive timeout
   final Duration receiveTimeout;
+
+  /// send timeout
+  final Duration sendTimeout;
+
+  /// `validateStatus` defines whether the request is successful for a given
+  /// HTTP response status code. If `validateStatus` returns `true` ,
+  /// the request will be perceived as successful; otherwise, considered as failed.
+  final ValidateStatus? validateStatus;
 
   /// dio interceptors
   Interceptors get interceptors => dio.interceptors;
@@ -66,7 +82,7 @@ abstract class Service implements ApiUrlMixin {
     } else if (url.isNotEmpty) {
       return url;
     }
-    throw Exception('url 沒有設定！');
+    throw Exception('Url not set!');
   }
 
   /// 傳送API
@@ -103,7 +119,7 @@ abstract class Service implements ApiUrlMixin {
       return dio.delete<dynamic>(path,
           options: options, data: data, queryParameters: query);
     }
-    throw Exception('沒有支援的HTTP Method');
+    throw Exception('Unsupported HTTP Method: $method');
   }
 
   /// 是否為application/x-www-form-urlencoded
@@ -134,10 +150,10 @@ abstract class Service implements ApiUrlMixin {
   Http _parseHttpMethod(List<dynamic> config) {
     final http = config.whereType<Http>();
     if (http.length > 1) {
-      throw Exception('Http method 設定超過一次');
+      throw Exception('Only one http method can be set.');
     }
     if (http.isEmpty) {
-      throw Exception('請設定Http method');
+      throw Exception('Http method must be set.');
     }
     return http.first;
   }
@@ -149,13 +165,14 @@ abstract class Service implements ApiUrlMixin {
     final hasPart = params.any((p) => p.first is Part || p.first == partMap);
     final hasMultipart = _hasMultipart(config);
     if (hasField && hasPart) {
-      throw Exception('Field跟Part一個API只能則一設置');
+      throw Exception('Only one of them can be set between Field and Part.');
     }
     if (hasFormUrlEncoded && hasMultipart) {
-      throw Exception('FormUrlEncoded跟Multipart一個API只能則一設置');
+      throw Exception(
+          'Only one of them can be set between FormUrlEncoded and Multipart.');
     }
     if (hasPart && !hasMultipart) {
-      throw Exception('Part必須設定multipart');
+      throw Exception('Part must be set multipart');
     }
   }
 
@@ -185,11 +202,11 @@ abstract class Service implements ApiUrlMixin {
     final dynamic metadata = pair.first;
     if (metadata is Path) {
       if (pair.second is! String) {
-        throw Exception('Path的內容必須為String');
+        throw Exception('Path must be String');
       }
       final exp = RegExp('{${metadata.value}}');
       if (!exp.hasMatch(path)) {
-        throw Exception('必須設置{${metadata.value}}');
+        throw Exception('must be set {${metadata.value}}');
       }
       path = path.replaceAll(exp, pair.second);
     }

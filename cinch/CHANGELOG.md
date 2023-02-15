@@ -1,5 +1,13 @@
 # Cinch changelog
 
+## 3.0.0-dev.2
+
+- Service Add params `sendTimeout` and `validateStatus`.
+
+## 3.0.0-dev
+
+- Update dio to 5.0.0
+
 ## 2.2.2
 
 - Add Super Class with param.
