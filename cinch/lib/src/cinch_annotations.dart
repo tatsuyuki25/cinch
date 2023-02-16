@@ -1,3 +1,5 @@
+import 'package:cinch/cinch.dart';
+
 /// API標籤
 class ApiService {
   const ApiService(this.url);
@@ -64,26 +66,38 @@ class _Multipart {
 const _Multipart multipart = _Multipart();
 
 class Http {
-  const Http(this.path);
+  const Http(this.path, {this.validateStatus = const []});
+
+  /// http path.
   final String path;
+
+  /// `validateStatus` defines whether the request is successful for a given
+  /// HTTP response status code.
+  ///
+  /// If set this, [Service.validateStatus] will be ignored.
+  final List<int> validateStatus;
 }
 
 /// Http Post
 class Post extends Http {
-  const Post(String path) : super(path);
+  const Post(String path, {List<int> validateStatus = const []})
+      : super(path, validateStatus: validateStatus);
 }
 
 /// Http Get
 class Get extends Http {
-  const Get(String path) : super(path);
+  const Get(String path, {List<int> validateStatus = const []})
+      : super(path, validateStatus: validateStatus);
 }
 
 /// Http Put
 class Put extends Http {
-  const Put(String path) : super(path);
+  const Put(String path, {List<int> validateStatus = const []})
+      : super(path, validateStatus: validateStatus);
 }
 
 /// Http Delete
 class Delete extends Http {
-  const Delete(String path) : super(path);
+  const Delete(String path, {List<int> validateStatus = const []})
+      : super(path, validateStatus: validateStatus);
 }

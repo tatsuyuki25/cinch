@@ -95,7 +95,7 @@ abstract class Service implements ApiUrlMixin {
   Future<Response<dynamic>> request(
       List<dynamic> config, List<Pair> params) async {
     final method = _parseHttpMethod(config);
-    final options = _getOptions(config);
+    final options = _getOptions(config, method);
     final parseData = _parseParam(method, config, params);
     final path = parseData.first;
     final query = parseData.second;
@@ -134,14 +134,17 @@ abstract class Service implements ApiUrlMixin {
 
   /// 根據[config]產生 dio [Options]
   ///
-  /// [config] function的標籤
-  ///
   /// Return [Options]
-  Options _getOptions(List<dynamic> config) {
+  Options _getOptions(List<dynamic> config, Http method) {
+    ValidateStatus? validateStatus;
+    if (method.validateStatus.isNotEmpty) {
+      validateStatus = (status) => method.validateStatus.contains(status);
+    }
     return Options(
-        contentType: _hasFormUrlEncoded(config)
-            ? Headers.formUrlEncodedContentType
-            : null);
+      contentType:
+          _hasFormUrlEncoded(config) ? Headers.formUrlEncodedContentType : null,
+      validateStatus: validateStatus,
+    );
   }
 
   /// 根據[config] 解析http method

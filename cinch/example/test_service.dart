@@ -1,3 +1,5 @@
+// ignore_for_file: empty_constructor_bodies, avoid_unused_constructor_parameters
+
 import 'package:cinch/cinch.dart';
 
 part 'test_service.cinch.dart';
@@ -37,7 +39,6 @@ class Response {
 }
 
 class Global<T> {
-
   Global.fromNestedGenericJson(Map<String, dynamic> json, List<Type> types) {}
   T? data;
 }

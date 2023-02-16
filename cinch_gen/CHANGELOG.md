@@ -1,12 +1,10 @@
 # cinch_gen changelog
 
-## 3.0.0-dev.2
+## 3.0.0
 
+- Update dio to 5.0.0
+- Http method add `validateStatus`.
 - Service Add params `sendTimeout` and `validateStatus`.
-
-## 3.0.0-dev
-
-- update dio to 5.0.0
 
 ## 2.2.0
 

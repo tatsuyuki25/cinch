@@ -26,8 +26,6 @@ linter:
     - always_require_non_null_named_parameters
     # 繼承的參數或方法必須標示override
     - annotate_overrides
-    # 不使用 as
-    - avoid_as
     # bool不要在三元判斷式中給值
     - avoid_bool_literals_in_conditional_expressions
     # 無須建立只有static方法的類別

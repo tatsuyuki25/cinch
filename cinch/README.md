@@ -6,10 +6,10 @@
 
 ```yaml
 dependencies:
-  cinch: ^3.0.0-dev.2
+  cinch: ^3.0.0
 
 dev_dependencies:
-  cinch_gen: ^3.0.0-dev.2
+  cinch_gen: ^3.0.0
 ```
 
 ## Example
@@ -152,6 +152,23 @@ void test() {
           '/Downloads/Resume.docx', filename: 'test$i.docx'),
   });
 }
+```
+
+## ValidateStatus
+
+```dart
+    import 'package:cinch/cinch.dart';
+    part 'test.cinch.dart';
+    @ApiService('https://test.com/')
+    class TestApi extends _$TestApi {
+      TestApi() : super(validateStatus: (status) => status == 404);
+
+      /// If set validateStatus in method, constructor validateStatus will be ignored.
+      @Get('api/test1', validateStatus: [403])
+      Future<Response> test(@Query('t1') int t1) async {
+        return _$test(t1);
+      }
+    }
 ```
 
 ## License
