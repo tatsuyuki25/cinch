@@ -3,8 +3,6 @@
 # 使用 `flutter analyze` 執行分析
 
 analyzer:
-  strong-mode:
-    implicit-dynamic: false
   errors:
     # 可選參數中有標`required`時卻沒有輸入顯示錯誤
     missing_required_param: error
@@ -22,8 +20,6 @@ linter:
     - always_declare_return_types
     # 流程控制必須換行
     - always_put_control_body_on_new_line
-    # 標示為require或有給預設值的參數才需要使用assert判斷是否不是null
-    - always_require_non_null_named_parameters
     # 繼承的參數或方法必須標示override
     - annotate_overrides
     # bool不要在三元判斷式中給值
@@ -118,8 +114,6 @@ linter:
     - prefer_const_literals_to_create_immutables
     # 使用contains來判斷是否包含值，不要使用indexOf
     - prefer_contains
-    # 方法參數預設值使用`=`，不要用`:`
-    - prefer_equal_for_default_values
     # 後面沒有再需要改動的屬性必須使用final
     - prefer_final_fields
     # 後面沒有再需要改動的屬性必須使用final

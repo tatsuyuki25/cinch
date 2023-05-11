@@ -93,13 +93,13 @@ abstract class Service implements ApiUrlMixin {
   ///
   /// Return [Future]
   Future<Response<dynamic>> request(
-      List<dynamic> config, List<Pair> params) async {
+      List<dynamic> config, List<(dynamic, dynamic)> params) async {
     final method = _parseHttpMethod(config);
     final options = _getOptions(config, method);
     final parseData = _parseParam(method, config, params);
-    final path = parseData.first;
-    final query = parseData.second;
-    final data = parseData.third;
+    final path = parseData.$1;
+    final query = parseData.$2;
+    final data = parseData.$3;
 
     if (method is Post) {
       // ignore: implicit_dynamic_method
@@ -162,10 +162,10 @@ abstract class Service implements ApiUrlMixin {
   }
 
   /// 驗證`method`的`meta`是否正確設置
-  void _verifiedConfig(List<dynamic> config, List<Pair> params) {
-    final hasField = params.any((p) => p.first is Field);
+  void _verifiedConfig(List<dynamic> config, List<(dynamic, dynamic)> params) {
+    final hasField = params.any((p) => p.$1 is Field);
     final hasFormUrlEncoded = _hasFormUrlEncoded(config);
-    final hasPart = params.any((p) => p.first is Part || p.first == partMap);
+    final hasPart = params.any((p) => p.$1 is Part || p.$2 == partMap);
     final hasMultipart = _hasMultipart(config);
     if (hasField && hasPart) {
       throw Exception('Only one of them can be set between Field and Part.');
@@ -182,8 +182,8 @@ abstract class Service implements ApiUrlMixin {
   /// 解析 path, query string, post data
   ///
   /// Return [Triple] first: path, second: query string, third: post data
-  Triple<String, Map<String, dynamic>, Map<String, dynamic>> _parseParam(
-      Http method, List<dynamic> config, List<Pair> params) {
+  (String, Map<String, dynamic>, Map<String, dynamic>) _parseParam(
+      Http method, List<dynamic> config, List<(dynamic, dynamic)> params) {
     _verifiedConfig(config, params);
     var path = method.path;
     final query = <String, dynamic>{};
@@ -194,24 +194,24 @@ abstract class Service implements ApiUrlMixin {
       _parseQuery(query, pair);
       _parseFormData(data, pair);
     }
-    return Triple(path, query, data);
+    return (path, query, data);
   }
 
   /// 解析 [pair] path
   /// [path] 路徑
   ///
   /// Return path
-  String _parsePath(String path, Pair pair) {
-    final dynamic metadata = pair.first;
+  String _parsePath(String path, (dynamic, dynamic) pair) {
+    final dynamic metadata = pair.$1;
     if (metadata is Path) {
-      if (pair.second is! String) {
+      if (pair.$2 is! String) {
         throw Exception('Path must be String');
       }
       final exp = RegExp('{${metadata.value}}');
       if (!exp.hasMatch(path)) {
         throw Exception('must be set {${metadata.value}}');
       }
-      path = path.replaceAll(exp, pair.second);
+      path = path.replaceAll(exp, pair.$2);
     }
     return path;
   }
@@ -219,11 +219,11 @@ abstract class Service implements ApiUrlMixin {
   /// 解析 [pair] query string
   ///
   /// [query] query string 集合
-  void _parseQuery(Map<String, dynamic> query, Pair pair) {
-    final dynamic metadata = pair.first;
+  void _parseQuery(Map<String, dynamic> query, (dynamic, dynamic) pair) {
+    final dynamic metadata = pair.$1;
     if (metadata is Query) {
-      final dynamic first = pair.first.value;
-      final dynamic second = pair.second;
+      final dynamic first = pair.$1.value;
+      final dynamic second = pair.$2;
       if (second == null && !metadata.keepNull) {
         return;
       }
@@ -233,7 +233,7 @@ abstract class Service implements ApiUrlMixin {
           query['$listKey[$i]'] = _getData(second[i]);
         }
       } else {
-        query[pair.first.value] = pair.second;
+        query[pair.$1.value] = pair.$2;
       }
     }
   }
@@ -241,11 +241,11 @@ abstract class Service implements ApiUrlMixin {
   /// 解析 [pair] field
   ///
   /// [query] field 集合
-  void _parseFormData(Map<String, dynamic> form, Pair pair) {
-    final dynamic metadata = pair.first;
+  void _parseFormData(Map<String, dynamic> form, (dynamic, dynamic) pair) {
+    final dynamic metadata = pair.$1;
     if (metadata is Field || metadata is Part) {
-      final dynamic first = pair.first.value;
-      final dynamic second = pair.second;
+      final dynamic first = pair.$1.value;
+      final dynamic second = pair.$2;
       if (second == null && !metadata.keepNull) {
         return;
       }
@@ -258,7 +258,7 @@ abstract class Service implements ApiUrlMixin {
         form[first] = _getData(second);
       }
     } else if (metadata == partMap) {
-      form.addAll(pair.second);
+      form.addAll(pair.$2);
     }
   }
 

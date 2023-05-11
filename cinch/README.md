@@ -6,11 +6,16 @@
 
 ```yaml
 dependencies:
-  cinch: ^3.0.0
+  cinch: ^4.0.0-dev
 
 dev_dependencies:
-  cinch_gen: ^3.0.0
+  cinch_gen: ^4.0.0-dev
 ```
+
+### Migration
+
+- 3.X.X to 4.0.0
+  - run `flutter packages pub run build_runner build`
 
 ## Example
 

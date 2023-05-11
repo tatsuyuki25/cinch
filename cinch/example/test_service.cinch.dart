@@ -17,7 +17,7 @@ class _$TestService extends Service {
       const Post('upload'),
       multipart
     ], [
-      Pair<Part, MultipartFile>(const Part('file'), file)
+      (const Part('file'), file)
     ]).then((dynamic response) => Response.fromJson(response.data));
   }
 
@@ -26,8 +26,8 @@ class _$TestService extends Service {
       const Post('multiUpload'),
       multipart
     ], [
-      Pair<Part, int>(const Part('flag'), flag),
-      Pair<dynamic, Map<String, MultipartFile>>(partMap, file)
+      (const Part('flag'), flag),
+      (partMap, file)
     ]).then((dynamic response) => Response.fromJson(response.data));
   }
 

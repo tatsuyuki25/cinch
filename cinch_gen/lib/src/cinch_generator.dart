@@ -39,7 +39,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       _\$${element.name}({Duration connectTimeout = const Duration(seconds: 5), 
       Duration receiveTimeout = const Duration(seconds: 10),
       Duration sendTimeout = const Duration(seconds: 10),
-      ValidateStatus? validateStatus}):
+      ${_getPrefix()}ValidateStatus? validateStatus}):
       super('${_getField(annotation.objectValue, 'url')?.toStringValue()}', 
       connectTimeout: connectTimeout, receiveTimeout: receiveTimeout,
       sendTimeout: sendTimeout, validateStatus: validateStatus);
@@ -104,7 +104,8 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
         continue;
       }
       final genericType = _getGenericTypes(m.returnType).first;
-      if (genericType.isDynamic || _dioChecker.isExactlyType(genericType)) {
+      if (genericType is DynamicType ||
+          _dioChecker.isExactlyType(genericType)) {
         _writeDynamic(m);
         continue;
       }
@@ -262,17 +263,13 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     });
     return parameters.map((p) {
       final element = p.metadata[0].element;
-      String firstType;
       String firstValue;
       if (element is ConstructorElement) {
-        firstType = '${_getPrefix()}${element.enclosingElement.name}';
         firstValue = 'const ${p.metadata[0].toSource().substring(1)}';
       } else {
-        firstType = 'dynamic';
         firstValue = p.metadata[0].toSource().substring(1);
       }
-      return '${_getPrefix()}Pair<$firstType,'
-          '${p.type.nonStarString()}>($firstValue, ${p.name})';
+      return '($firstValue, ${p.name})';
     }).toList();
   }
 }

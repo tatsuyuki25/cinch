@@ -1,13 +1,17 @@
-import 'dart:ffi';
-
 import 'package:cinch/cinch.dart';
 
 part 'example2_service.cinch.dart';
 
+class OtherAnnotation {
+  const OtherAnnotation(this.value);
+
+  final String value;
+}
+
 @ApiService('https://test.com/api')
 class Example2Service extends _$Example2Service {
   @Get('json/area-yb2.json')
-  Future<List<Example>> getArea(@FfiNative('GG') int test,
+  Future<List<Example>> getArea(@OtherAnnotation('GG') int test,
       {@Query('type') String? type, int? type2}) {
     return _$getArea('2');
   }
@@ -50,7 +54,6 @@ class Response {
 }
 
 class Global<T> {
-
   Global.fromNestedGenericJson(Map<String, dynamic> json, List<Type> types) {}
   T? data;
 }

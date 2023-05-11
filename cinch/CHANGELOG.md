@@ -1,5 +1,11 @@
 # Cinch changelog
 
+## 4.0.0-dev
+
+- Update Dart SDK to 3.0.0
+- *BREAK CHANGE*:
+  - Remove `Pair`、`Triple`。
+
 ## 3.0.0
 
 - Update dio to 5.0.0

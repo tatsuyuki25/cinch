@@ -9,14 +9,19 @@ part of 'example2_service.dart';
 class _$Example2Service extends Service {
   _$Example2Service(
       {Duration connectTimeout = const Duration(seconds: 5),
-      Duration receiveTimeout = const Duration(seconds: 10)})
+      Duration receiveTimeout = const Duration(seconds: 10),
+      Duration sendTimeout = const Duration(seconds: 10),
+      ValidateStatus? validateStatus})
       : super('https://test.com/api',
-            connectTimeout: connectTimeout, receiveTimeout: receiveTimeout);
+            connectTimeout: connectTimeout,
+            receiveTimeout: receiveTimeout,
+            sendTimeout: sendTimeout,
+            validateStatus: validateStatus);
   Future<List<Example>> _$getArea(String? type) {
     return request(<dynamic>[
       const Get('json/area-yb2.json')
     ], [
-      Pair<Query, String?>(const Query('type'), type)
+      (const Query('type'), type)
     ]).then((dynamic response) => List<Example>.from(
         response.data.map((json) => Example.fromJson(json))));
   }
@@ -26,7 +31,7 @@ class _$Example2Service extends Service {
       const Post('upload'),
       multipart
     ], [
-      Pair<Part, MultipartFile>(const Part('file'), file)
+      (const Part('file'), file)
     ]).then((dynamic response) => Response.fromJson(response.data));
   }
 
@@ -35,8 +40,8 @@ class _$Example2Service extends Service {
       const Post('multiUpload'),
       multipart
     ], [
-      Pair<Part, int>(const Part('flag'), flag),
-      Pair<dynamic, Map<String, MultipartFile>>(partMap, file)
+      (const Part('flag'), flag),
+      (partMap, file)
     ]).then((dynamic response) => Response.fromJson(response.data));
   }
 
