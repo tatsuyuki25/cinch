@@ -6,16 +6,16 @@
 
 ```yaml
 dependencies:
-  cinch: ^4.0.0-dev
+  cinch: ^4.0.0
 
 dev_dependencies:
-  cinch_gen: ^4.0.0-dev
+  cinch_gen: ^4.0.0
 ```
 
 ### Migration
 
 - 3.X.X to 4.0.0
-  - run `flutter packages pub run build_runner build`
+  - run `dart run build_runner build`
 
 ## Example
 
@@ -35,13 +35,9 @@ dev_dependencies:
     }
 ```
 
-### Flutter Project
+### Build
 
-- terminal run `flutter packages pub run build_runner build`
-
-### Dart Project
-
-- terminal run `pub run build_runner build`
+- terminal run `dart run build_runner build`
 
 ## Support Http Method
 

@@ -1,6 +1,6 @@
 # cinch_gen changelog
 
-## 4.0.0-dev
+## 4.0.0
 
 - Update Dart SDK to 3.0.0
 - *BREAK CHANGE*:

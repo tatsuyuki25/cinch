@@ -6,10 +6,10 @@
 
 ```yaml
 dependencies:
-  cinch: ^3.0.0
+  cinch: ^4.0.0
 
 dev_dependencies:
-  cinch_gen: ^3.0.0
+  cinch_gen: ^4.0.0
 ```
 
 ## Example
@@ -30,13 +30,9 @@ dev_dependencies:
     }
 ```
 
-### Flutter Project
+### Build
 
-- terminal run `flutter packages pub run build_runner build`
-
-### Dart Project
-
-- terminal run `pub run build_runner build`
+- terminal run `dart run build_runner build`
 
 ## Support Http Method
 
