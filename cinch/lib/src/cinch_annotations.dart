@@ -51,6 +51,12 @@ class Path extends Parameter {
   final String value;
 }
 
+/// Http Header
+class Header extends Parameter {
+  const Header(this.value);
+  final String value;
+}
+
 class _FormUrlEncoded {
   const _FormUrlEncoded();
 }

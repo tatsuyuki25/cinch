@@ -6,10 +6,10 @@
 
 ```yaml
 dependencies:
-  cinch: ^4.0.0
+  cinch: ^4.1.0
 
 dev_dependencies:
-  cinch_gen: ^4.0.0
+  cinch_gen: ^4.1.0
 ```
 
 ### Migration
@@ -168,6 +168,21 @@ void test() {
       @Get('api/test1', validateStatus: [403])
       Future<Response> test(@Query('t1') int t1) async {
         return _$test(t1);
+      }
+    }
+```
+
+## Header
+
+```dart
+    import 'package:cinch/cinch.dart';
+    part 'test.cinch.dart';
+    @ApiService('https://test.com/')
+    class TestApi extends _$TestApi {
+
+      @Get('api/test1')
+      Future<Response> test(@Header(HttpHeaders.authorizationHeader) String token) async {
+        return _$test(token);
       }
     }
 ```

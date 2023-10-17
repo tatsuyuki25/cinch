@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 4.1.0
+
+- Add Header annotation
+
 ## 4.0.0
 
 - Update Dart SDK to 3.0.0
