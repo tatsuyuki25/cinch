@@ -10,8 +10,6 @@ analyzer:
     missing_return: warning
     # todo允許在程式碼中
     todo: ignore
-    # 使用stream或future不需要import dart:async
-    sdk_version_async_exported_from_core: ignore
   exclude:
     - 'test/**'
 linter:
@@ -74,14 +72,10 @@ linter:
     - hash_and_equals
     # import package不要用到lib/src
     - implementation_imports
-    # list泛型不要判斷是否判斷不同的型別
-    - iterable_contains_unrelated_type
     # library命名必須使用底線串接，不得使用-串接
     - library_names
     # import 給於別名時必須使用全小寫，單字之間使用底線分隔
     - library_prefixes
-    # 禁止remove不同型別的資料
-    - list_remove_unrelated_type
     # 在List中的字串必須使用+來串接
     - no_adjacent_strings_in_list
     # 在switch case中不要判斷重複的值

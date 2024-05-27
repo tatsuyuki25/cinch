@@ -6,10 +6,10 @@
 
 ```yaml
 dependencies:
-  cinch: ^4.1.0
+  cinch: ^4.1.1
 
 dev_dependencies:
-  cinch_gen: ^4.1.0
+  cinch_gen: ^4.1.1
 ```
 
 ### Migration

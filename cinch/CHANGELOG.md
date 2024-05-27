@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 4.1.1
+
+- Updated package versions.
+
 ## 4.1.0
 
 - Add Header annotation
