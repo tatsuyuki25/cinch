@@ -16,6 +16,10 @@ class Parameter {
   const Parameter();
 }
 
+class Body extends Parameter {
+  const Body();
+}
+
 /// Http Query
 class Query extends Parameter {
   const Query(this.value, {this.keepNull = false});

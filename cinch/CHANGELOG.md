@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 4.2.0-dev.1
+
+- Add Body.
+
 ## 4.1.1
 
 - Updated package versions.

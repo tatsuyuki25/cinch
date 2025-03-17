@@ -100,6 +100,7 @@ abstract class Service implements ApiUrlMixin {
     final headers = parseData.$2;
     final query = parseData.$3;
     final data = parseData.$4;
+    final body = parseData.$5;
 
     final options = _getOptions(config, method, headers);
 
@@ -107,7 +108,7 @@ abstract class Service implements ApiUrlMixin {
       // ignore: implicit_dynamic_method
       return dio.post<dynamic>(path,
           options: options,
-          data: _hasMultipart(config) ? FormData.fromMap(data) : data,
+          data: _hasMultipart(config) ? FormData.fromMap(data) : body ?? data,
           queryParameters: query);
     } else if (method is Get) {
       // ignore: implicit_dynamic_method
@@ -115,11 +116,11 @@ abstract class Service implements ApiUrlMixin {
     } else if (method is Put) {
       // ignore: implicit_dynamic_method
       return dio.put<dynamic>(path,
-          options: options, data: data, queryParameters: query);
+          options: options, data: body ?? data, queryParameters: query);
     } else if (method is Delete) {
       // ignore: implicit_dynamic_method
       return dio.delete<dynamic>(path,
-          options: options, data: data, queryParameters: query);
+          options: options, data: body ?? data, queryParameters: query);
     }
     throw Exception('Unsupported HTTP Method: $method');
   }
@@ -186,22 +187,31 @@ abstract class Service implements ApiUrlMixin {
   /// 解析 path, query string, post data
   ///
   /// Return path, headers, query string, post data
-  (String, Map<String, dynamic>, Map<String, dynamic>, Map<String, dynamic>)
-      _parseParam(
-          Http method, List<dynamic> config, List<(dynamic, dynamic)> params) {
+  (
+    String,
+    Map<String, dynamic>,
+    Map<String, dynamic>,
+    Map<String, dynamic>,
+    dynamic
+  ) _parseParam(
+      Http method, List<dynamic> config, List<(dynamic, dynamic)> params) {
     _verifiedConfig(config, params);
     var path = method.path;
     final query = <String, dynamic>{};
     final data = <String, dynamic>{};
     final headers = <String, dynamic>{};
+    dynamic body;
 
     for (var pair in params) {
       path = _parsePath(path, pair);
       _parseQuery(query, pair);
       _parseFormData(data, pair);
       _parseHeader(headers, pair);
+      if (data.isEmpty) {
+        body = _parseBody(data, pair);
+      }
     }
-    return (path, headers, query, data);
+    return (path, headers, query, data, body);
   }
 
   /// 解析 [pair] path
@@ -273,6 +283,13 @@ abstract class Service implements ApiUrlMixin {
       }
     } else if (metadata == partMap) {
       form.addAll(pair.$2);
+    }
+  }
+
+  dynamic _parseBody(dynamic data, (dynamic, dynamic) pair) {
+    final dynamic metadata = pair.$1;
+    if (metadata is Body) {
+      return _getData(pair.$2);
     }
   }
 
