@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'cinch_annotations.dart';
 import 'utils.dart';
 
-/// 藉由build_runner實現
+/// Implemented via build_runner
 ///
 /// Http request service
 abstract class Service implements ApiUrlMixin {
@@ -32,66 +32,66 @@ abstract class Service implements ApiUrlMixin {
 
   /// The dio object
   ///
-  /// By default add header `content-encoding: gzip`
+  /// By default, adds the header `content-encoding: gzip`
   ///
-  /// [ResponseType] default set [ResponseType.json]
+  /// [ResponseType] is set to [ResponseType.json] by default
   @visibleForTesting
   late Dio dio;
 
   /// URL
   final String baseUrl;
 
-  /// connect timeout
+  /// Connection timeout
   final Duration connectTimeout;
 
-  /// receive timeout
+  /// Receive timeout
   final Duration receiveTimeout;
 
-  /// send timeout
+  /// Send timeout
   final Duration sendTimeout;
 
   /// `validateStatus` defines whether the request is successful for a given
-  /// HTTP response status code. If `validateStatus` returns `true` ,
-  /// the request will be perceived as successful; otherwise, considered as failed.
+  /// HTTP response status code. If `validateStatus` returns `true`,
+  /// the request will be perceived as successful; otherwise, it will be considered failed.
   final ValidateStatus? validateStatus;
 
-  /// dio interceptors
+  /// Dio interceptors
   Interceptors get interceptors => dio.interceptors;
 
-  /// dio httpClientAdapter
+  /// Dio httpClientAdapter
   HttpClientAdapter get httpClientAdapter => dio.httpClientAdapter;
   set httpClientAdapter(HttpClientAdapter adapter) =>
       dio.httpClientAdapter = adapter;
 
-  /// dio transformer
+  /// Dio transformer
   Transformer get transformer => dio.transformer;
   set transformer(Transformer transformer) => dio.transformer = transformer;
 
   @override
   String get url => '';
 
-  /// 更改Url
+  /// Change the base URL
   void setBaseUrl(String url) {
     dio.options.baseUrl = url;
   }
 
-  /// 取得初始Url
+  /// Get the initial URL
   String _getInitialUrl() {
     if (baseUrl.isNotEmpty) {
       return baseUrl;
     } else if (url.isNotEmpty) {
       return url;
     }
-    throw Exception('Url not set!');
+    throw Exception('URL not set!');
   }
 
-  /// 傳送API
+  /// Send an API request
   ///
-  /// [config] function的標籤
+  /// [config] Function's metadata
   ///
-  /// [params] function的參數及參數標籤
+  /// [params] Function's parameters and their metadata
   ///
-  /// Return [Future]
+  /// Returns [Future]
   Future<Response<dynamic>> request(
       List<dynamic> config, List<(dynamic, dynamic)> params) async {
     final method = _parseHttpMethod(config);
@@ -125,19 +125,19 @@ abstract class Service implements ApiUrlMixin {
     throw Exception('Unsupported HTTP Method: $method');
   }
 
-  /// 是否為application/x-www-form-urlencoded
+  /// Checks if the content type is application/x-www-form-urlencoded
   bool _hasFormUrlEncoded(List<dynamic> config) {
     return config.any((dynamic c) => c == formUrlEncoded);
   }
 
-  /// 是否為`Multipart`
+  /// Checks if the content type is `Multipart`
   bool _hasMultipart(List<dynamic> config) {
     return config.any((dynamic c) => c == multipart);
   }
 
-  /// 根據[config]產生 dio [Options]
+  /// Generates dio [Options] based on [config]
   ///
-  /// Return [Options]
+  /// Returns [Options]
   Options _getOptions(
       List<dynamic> config, Http method, Map<String, dynamic> headers) {
     ValidateStatus? validateStatus;
@@ -152,21 +152,21 @@ abstract class Service implements ApiUrlMixin {
     );
   }
 
-  /// 根據[config] 解析http method
+  /// Parses the HTTP method from [config]
   ///
-  /// Return [Http]
+  /// Returns [Http]
   Http _parseHttpMethod(List<dynamic> config) {
     final http = config.whereType<Http>();
     if (http.length > 1) {
-      throw Exception('Only one http method can be set.');
+      throw Exception('Only one HTTP method can be set.');
     }
     if (http.isEmpty) {
-      throw Exception('Http method must be set.');
+      throw Exception('HTTP method must be set.');
     }
     return http.first;
   }
 
-  /// 驗證`method`的`meta`是否正確設置
+  /// Validates if the `method` metadata is correctly set
   void _verifiedConfig(List<dynamic> config, List<(dynamic, dynamic)> params) {
     final hasField = params.any((p) => p.$1 is Field);
     final hasFormUrlEncoded = _hasFormUrlEncoded(config);
@@ -180,13 +180,13 @@ abstract class Service implements ApiUrlMixin {
           'Only one of them can be set between FormUrlEncoded and Multipart.');
     }
     if (hasPart && !hasMultipart) {
-      throw Exception('Part must be set multipart');
+      throw Exception('Part must be set as multipart.');
     }
   }
 
-  /// 解析 path, query string, post data
+  /// Parses path, query string, and post data
   ///
-  /// Return path, headers, query string, post data
+  /// Returns path, headers, query string, post data
   (
     String,
     Map<String, dynamic>,
@@ -214,19 +214,19 @@ abstract class Service implements ApiUrlMixin {
     return (path, headers, query, data, body);
   }
 
-  /// 解析 [pair] path
-  /// [path] 路徑
+  /// Parses [pair] path
+  /// [path] Path
   ///
-  /// Return path
+  /// Returns path
   String _parsePath(String path, (dynamic, dynamic) pair) {
     final dynamic metadata = pair.$1;
     if (metadata is Path) {
       if (pair.$2 is! String) {
-        throw Exception('Path must be String');
+        throw Exception('Path must be a String');
       }
       final exp = RegExp('{${metadata.value}}');
       if (!exp.hasMatch(path)) {
-        throw Exception('must be set {${metadata.value}}');
+        throw Exception('Must set {${metadata.value}}');
       }
       path = path.replaceAll(exp, pair.$2);
     }
@@ -240,9 +240,9 @@ abstract class Service implements ApiUrlMixin {
     }
   }
 
-  /// 解析 [pair] query string
+  /// Parses [pair] query string
   ///
-  /// [query] query string 集合
+  /// [query] Query string collection
   void _parseQuery(Map<String, dynamic> query, (dynamic, dynamic) pair) {
     final dynamic metadata = pair.$1;
     if (metadata is Query) {
@@ -262,9 +262,9 @@ abstract class Service implements ApiUrlMixin {
     }
   }
 
-  /// 解析 [pair] field
+  /// Parses [pair] field
   ///
-  /// [query] field 集合
+  /// [query] Field collection
   void _parseFormData(Map<String, dynamic> form, (dynamic, dynamic) pair) {
     final dynamic metadata = pair.$1;
     if (metadata is Field || metadata is Part) {
@@ -293,9 +293,9 @@ abstract class Service implements ApiUrlMixin {
     }
   }
 
-  /// 解析 field資料格式
+  /// Parses field data format
   ///
-  /// Return 解析完的資料
+  /// Returns the parsed data
   dynamic _getData(dynamic data) {
     if (data is num ||
         data is String ||

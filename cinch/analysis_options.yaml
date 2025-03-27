@@ -84,8 +84,6 @@ linter:
     - non_constant_identifier_names
     # override屬性的型別必須一樣
     - overridden_fields
-    # 公開的方法與類別必須加上註解
-    - package_api_docs
     # package name必須全小寫並使用底線串接單字
     - package_names
     # 使用library關鍵字引用必須符合規則 ： https://dart-lang.github.io/linter/lints/package_prefixed_library_names.html

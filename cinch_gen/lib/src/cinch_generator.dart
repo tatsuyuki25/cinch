@@ -54,7 +54,8 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   void _checkPrefix(ClassElement element) {
     _prefix = null;
-    final imports = element.library.libraryImports;
+    final compilationUnit = element.library.definingCompilationUnit;
+    final imports = compilationUnit.libraryImports;
     for (var i = 0; i < imports.length; i++) {
       final name = imports[i].importedLibrary?.name;
       if (name == 'cinch') {

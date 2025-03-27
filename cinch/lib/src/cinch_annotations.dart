@@ -1,14 +1,14 @@
 import 'package:cinch/cinch.dart';
 
-/// API標籤
+/// API Service
 class ApiService {
   const ApiService(this.url);
 
-  /// 空的url
+  /// Empty URL
   const ApiService.emptyUrl() : this('');
 
-  /// 不檢查url
-  const ApiService.uncheckUrl() : this('InitialUrl不檢查');
+  /// Do not check URL
+  const ApiService.uncheckUrl() : this('InitialUrl does not check');
   final String url;
 }
 
@@ -16,46 +16,47 @@ class Parameter {
   const Parameter();
 }
 
+/// HTTP Body
 class Body extends Parameter {
   const Body();
 }
 
-/// Http Query
+/// HTTP Query
 class Query extends Parameter {
   const Query(this.value, {this.keepNull = false});
   final String value;
   final bool keepNull;
 }
 
-/// Http Field 搭配 fromUrlEncoded使用
+/// HTTP Field used with fromUrlEncoded
 class Field extends Parameter {
   const Field(this.value, {this.keepNull = false});
   final String value;
   final bool keepNull;
 }
 
-/// Multipart 資料
+/// Multipart data
 class Part extends Parameter {
   const Part(this.value, {this.keepNull = false});
   final String value;
   final bool keepNull;
 }
 
-/// Multipart 資料 [Map]形式
+/// Multipart data in [Map] format
 class _PartMap extends Parameter {
   const _PartMap();
 }
 
-/// Multipart 資料 [Map]形式
+/// Multipart data in [Map] format
 const _PartMap partMap = _PartMap();
 
-/// 路徑格式化
+/// Path formatting
 class Path extends Parameter {
   const Path(this.value);
   final String value;
 }
 
-/// Http Header
+/// HTTP Header
 class Header extends Parameter {
   const Header(this.value);
   final String value;
@@ -78,35 +79,35 @@ const _Multipart multipart = _Multipart();
 class Http {
   const Http(this.path, {this.validateStatus = const []});
 
-  /// http path.
+  /// HTTP path.
   final String path;
 
   /// `validateStatus` defines whether the request is successful for a given
   /// HTTP response status code.
   ///
-  /// If set this, [Service.validateStatus] will be ignored.
+  /// If set, [Service.validateStatus] will be ignored.
   final List<int> validateStatus;
 }
 
-/// Http Post
+/// HTTP Post
 class Post extends Http {
   const Post(String path, {List<int> validateStatus = const []})
       : super(path, validateStatus: validateStatus);
 }
 
-/// Http Get
+/// HTTP Get
 class Get extends Http {
   const Get(String path, {List<int> validateStatus = const []})
       : super(path, validateStatus: validateStatus);
 }
 
-/// Http Put
+/// HTTP Put
 class Put extends Http {
   const Put(String path, {List<int> validateStatus = const []})
       : super(path, validateStatus: validateStatus);
 }
 
-/// Http Delete
+/// HTTP Delete
 class Delete extends Http {
   const Delete(String path, {List<int> validateStatus = const []})
       : super(path, validateStatus: validateStatus);

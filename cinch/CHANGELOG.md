@@ -1,8 +1,11 @@
 # Cinch changelog
 
-## 4.2.0-dev.1
+## 5.0.0-dev.1
 
-- Add Body.
+- Add `Body` annotation to allow API body to accept JSON objects.
+- Update dependencies:
+  - `dio: ^5.8.0+1`
+  - `meta: ^1.16.0`
 
 ## 4.1.1
 
