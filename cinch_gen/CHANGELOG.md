@@ -1,11 +1,11 @@
 # cinch_gen changelog
 
-## 5.0.0-dev.1
+## 5.0.0
 
 - Updated package versions:
   - `analyzer: ">=6.9.0 <8.0.0"`
   - `build: ^2.4.2`
-  - `cinch: ^5.0.0-dev.1`
+  - `cinch: ^5.0.0`
   - `source_gen: ^2.0.0`
   - `dio: ^5.8.0+1`
 

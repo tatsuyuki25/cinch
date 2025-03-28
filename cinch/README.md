@@ -6,10 +6,10 @@
 
 ```yaml
 dependencies:
-  cinch: ^5.0.0-dev.1
+  cinch: ^5.0.0
 
 dev_dependencies:
-  cinch_gen: ^5.0.0-dev.1
+  cinch_gen: ^5.0.0
 ```
 
 ### Migration
@@ -185,6 +185,46 @@ void test() {
         return _$test(token);
       }
     }
+```
+
+## Body
+
+```dart
+@ApiService('https://test.com/')
+class TestApi extends _$TestApi {
+  TestApi() : super();
+
+  @Post('api/test')
+  Future<Response> test(@Body() TestData body) async {
+    return _$test(body);
+  }
+}
+
+class TestData {
+  final String key1;
+  final int key2;
+  final bool key3;
+
+  TestData({
+    required this.key1,
+    required this.key2,
+    required this.key3,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'key1': key1,
+        'key2': key2,
+        'key3': key3,
+      };
+}
+
+void test() {
+  service.test(TestData(
+    key1: 'value1',
+    key2: 123,
+    key3: true,
+  ));
+}
 ```
 
 ## License
