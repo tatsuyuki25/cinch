@@ -12,11 +12,11 @@ environment:
 
 dependency_overrides:
   cinch:
-    path: ../cinch
+    path: ../packages/cinch
 
 dev_dependencies:
   lints: ^2.1.0
   test: ^1.24.2
   build_runner: ^2.4.2
   cinch_gen:
-    path: ../cinch_gen
+    path: ../packages/cinch_gen
