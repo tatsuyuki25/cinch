@@ -145,8 +145,9 @@ abstract class Service implements ApiUrlMixin {
       validateStatus = (status) => method.validateStatus.contains(status);
     }
     return Options(
-      contentType:
-          _hasFormUrlEncoded(config) ? Headers.formUrlEncodedContentType : null,
+      contentType: _hasFormUrlEncoded(config)
+          ? Headers.formUrlEncodedContentType
+          : Headers.jsonContentType,
       headers: headers,
       validateStatus: validateStatus,
     );

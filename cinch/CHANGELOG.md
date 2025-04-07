@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 5.0.1
+
+- Add Default content-type: `application/json`.
+
 ## 5.0.0
 
 - Add `Body` annotation to allow API body to accept JSON objects.
