@@ -1,4 +1,4 @@
 # melos_managed_dependency_overrides: cinch
 dependency_overrides:
   cinch:
-    path: ..\\cinch
+    path: ../cinch

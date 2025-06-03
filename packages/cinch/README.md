@@ -6,7 +6,7 @@
 
 ```yaml
 dependencies:
-  cinch: ^5.0.1
+  cinch: ^5.0.2
 
 dev_dependencies:
   cinch_gen: ^5.0.0

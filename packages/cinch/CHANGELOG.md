@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 5.0.2
+
+- remove @visibleForTesting on dio.
+
 ## 5.0.1
 
 - Add Default content-type: `application/json`.

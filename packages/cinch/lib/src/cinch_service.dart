@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
 
 import 'cinch_annotations.dart';
 import 'utils.dart';
@@ -35,7 +34,6 @@ abstract class Service implements ApiUrlMixin {
   /// By default, adds the header `content-encoding: gzip`
   ///
   /// [ResponseType] is set to [ResponseType.json] by default
-  @visibleForTesting
   late Dio dio;
 
   /// URL
