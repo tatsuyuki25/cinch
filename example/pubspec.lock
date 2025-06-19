@@ -124,7 +124,7 @@ packages:
       path: "../packages/cinch"
       relative: true
     source: path
-    version: "5.0.1"
+    version: "5.0.2"
   cinch_gen:
     dependency: "direct dev"
     description:

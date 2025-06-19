@@ -3,17 +3,22 @@ import 'package:dio/dio.dart';
 import 'cinch_annotations.dart';
 import 'utils.dart';
 
-/// Implemented via build_runner
+/// A service class that is implemented via build_runner code generation.
 ///
-/// Http request service
+/// This abstract class provides HTTP request functionality and serves as a base
+/// for generated service classes.
 abstract class Service implements ApiUrlMixin {
-  /// [baseUrl] URL
+  /// Creates a new service instance with the specified base URL and timeout configurations.
   ///
-  /// [connectTimeout] default 5 seconds.
+  /// [baseUrl] The base URL for all HTTP requests.
   ///
-  /// [receiveTimeout] default 10 seconds.
+  /// [connectTimeout] The timeout duration for establishing connections (default: 5 seconds).
   ///
-  /// [sendTimeout] default 10 seconds.
+  /// [receiveTimeout] The timeout duration for receiving responses (default: 10 seconds).
+  ///
+  /// [sendTimeout] The timeout duration for sending requests (default: 10 seconds).
+  ///
+  /// [validateStatus] Optional custom status code validation function.
   Service(this.baseUrl,
       {this.connectTimeout = const Duration(seconds: 5),
       this.receiveTimeout = const Duration(seconds: 10),
@@ -29,51 +34,59 @@ abstract class Service implements ApiUrlMixin {
         responseType: ResponseType.json));
   }
 
-  /// The dio object
+  /// The Dio HTTP client instance used for making requests.
   ///
-  /// By default, adds the header `content-encoding: gzip`
-  ///
-  /// [ResponseType] is set to [ResponseType.json] by default
+  /// This instance is pre-configured with gzip compression support via the
+  /// `content-encoding: gzip` header and has its response type set to JSON by default.
   late Dio dio;
 
-  /// URL
+  /// The base URL for all HTTP requests made by this service.
   final String baseUrl;
 
-  /// Connection timeout
+  /// The maximum duration allowed for establishing a connection to the server.
   final Duration connectTimeout;
 
-  /// Receive timeout
+  /// The maximum duration allowed for receiving a response from the server.
   final Duration receiveTimeout;
 
-  /// Send timeout
+  /// The maximum duration allowed for sending a request to the server.
   final Duration sendTimeout;
 
-  /// `validateStatus` defines whether the request is successful for a given
-  /// HTTP response status code. If `validateStatus` returns `true`,
-  /// the request will be perceived as successful; otherwise, it will be considered failed.
+  /// A custom function that defines whether an HTTP response status code
+  /// should be considered successful. If this function returns `true`,
+  /// the request will be perceived as successful; otherwise, it will be
+  /// considered failed.
   final ValidateStatus? validateStatus;
 
-  /// Dio interceptors
+  /// Gets the list of Dio interceptors that can be used to modify requests
+  /// and responses globally.
   Interceptors get interceptors => dio.interceptors;
 
-  /// Dio httpClientAdapter
+  /// Gets or sets the HTTP client adapter used by Dio for making actual
+  /// HTTP requests.
   HttpClientAdapter get httpClientAdapter => dio.httpClientAdapter;
   set httpClientAdapter(HttpClientAdapter adapter) =>
       dio.httpClientAdapter = adapter;
 
-  /// Dio transformer
+  /// Gets or sets the transformer used by Dio for converting request and
+  /// response data.
   Transformer get transformer => dio.transformer;
   set transformer(Transformer transformer) => dio.transformer = transformer;
 
   @override
   String get url => '';
 
-  /// Change the base URL
+  /// Updates the base URL for all subsequent HTTP requests.
+  ///
+  /// [url] The new base URL to use.
   void setBaseUrl(String url) {
     dio.options.baseUrl = url;
   }
 
-  /// Get the initial URL
+  /// Determines the initial URL to use for HTTP requests.
+  ///
+  /// Returns the [baseUrl] if it's not empty, otherwise returns the [url]
+  /// from the ApiUrlMixin. Throws an exception if neither is set.
   String _getInitialUrl() {
     if (baseUrl.isNotEmpty) {
       return baseUrl;
@@ -83,13 +96,16 @@ abstract class Service implements ApiUrlMixin {
     throw Exception('URL not set!');
   }
 
-  /// Send an API request
+  /// Sends an HTTP request based on the provided configuration and parameters.
   ///
-  /// [config] Function's metadata
+  /// [config] A list containing the function's metadata including HTTP method,
+  /// content type, and other configuration options.
   ///
-  /// [params] Function's parameters and their metadata
+  /// [params] A list of tuples containing the function's parameters and their
+  /// associated metadata (e.g., Path, Query, Field, etc.).
   ///
-  /// Returns [Future]
+  /// Returns a [Future] that resolves to a Dio [Response] containing the
+  /// server's response data.
   Future<Response<dynamic>> request(
       List<dynamic> config, List<(dynamic, dynamic)> params) async {
     final method = _parseHttpMethod(config);
@@ -123,19 +139,33 @@ abstract class Service implements ApiUrlMixin {
     throw Exception('Unsupported HTTP Method: $method');
   }
 
-  /// Checks if the content type is application/x-www-form-urlencoded
+  /// Checks whether the configuration specifies `application/x-www-form-urlencoded`
+  /// as the content type.
+  ///
+  /// [config] The configuration list to check.
+  ///
+  /// Returns `true` if form URL encoding is specified, `false` otherwise.
   bool _hasFormUrlEncoded(List<dynamic> config) {
     return config.any((dynamic c) => c == formUrlEncoded);
   }
 
-  /// Checks if the content type is `Multipart`
+  /// Checks whether the configuration specifies `multipart/form-data`
+  /// as the content type.
+  ///
+  /// [config] The configuration list to check.
+  ///
+  /// Returns `true` if multipart encoding is specified, `false` otherwise.
   bool _hasMultipart(List<dynamic> config) {
     return config.any((dynamic c) => c == multipart);
   }
 
-  /// Generates dio [Options] based on [config]
+  /// Creates Dio request options based on the provided configuration.
   ///
-  /// Returns [Options]
+  /// [config] The configuration list containing content type and other options.
+  /// [method] The HTTP method containing validation status codes.
+  /// [headers] Additional headers to include in the request.
+  ///
+  /// Returns a configured [Options] object for the Dio request.
   Options _getOptions(
       List<dynamic> config, Http method, Map<String, dynamic> headers) {
     ValidateStatus? validateStatus;
@@ -151,9 +181,13 @@ abstract class Service implements ApiUrlMixin {
     );
   }
 
-  /// Parses the HTTP method from [config]
+  /// Extracts and validates the HTTP method from the configuration list.
   ///
-  /// Returns [Http]
+  /// [config] The configuration list that should contain exactly one HTTP method.
+  ///
+  /// Returns the [Http] method found in the configuration.
+  ///
+  /// Throws an [Exception] if no HTTP method is found or if multiple methods are specified.
   Http _parseHttpMethod(List<dynamic> config) {
     final http = config.whereType<Http>();
     if (http.length > 1) {
@@ -165,7 +199,17 @@ abstract class Service implements ApiUrlMixin {
     return http.first;
   }
 
-  /// Validates if the `method` metadata is correctly set
+  /// Validates that the configuration and parameters are consistent and correct.
+  ///
+  /// This method ensures that:
+  /// - Field and Part annotations are not used together
+  /// - FormUrlEncoded and Multipart annotations are not used together
+  /// - Part annotations are only used with Multipart content type
+  ///
+  /// [config] The configuration list to validate.
+  /// [params] The parameter list to validate.
+  ///
+  /// Throws an [Exception] if any validation rules are violated.
   void _verifiedConfig(List<dynamic> config, List<(dynamic, dynamic)> params) {
     final hasField = params.any((p) => p.$1 is Field);
     final hasFormUrlEncoded = _hasFormUrlEncoded(config);
@@ -183,9 +227,21 @@ abstract class Service implements ApiUrlMixin {
     }
   }
 
-  /// Parses path, query string, and post data
+  /// Parses the method configuration and parameters to extract request components.
   ///
-  /// Returns path, headers, query string, post data
+  /// This method processes the HTTP method, configuration, and parameters to build
+  /// the final request URL path, headers, query parameters, and request body data.
+  ///
+  /// [method] The HTTP method configuration.
+  /// [config] The request configuration list.
+  /// [params] The parameter list with their metadata.
+  ///
+  /// Returns a tuple containing:
+  /// - String: The processed URL path
+  /// - Map<String, dynamic>: Request headers
+  /// - Map<String, dynamic>: Query parameters
+  /// - Map<String, dynamic>: Form/multipart data
+  /// - dynamic: Raw request body (for non-form requests)
   (
     String,
     Map<String, dynamic>,
@@ -213,10 +269,15 @@ abstract class Service implements ApiUrlMixin {
     return (path, headers, query, data, body);
   }
 
-  /// Parses [pair] path
-  /// [path] Path
+  /// Processes path parameters and replaces placeholders in the URL path.
   ///
-  /// Returns path
+  /// [path] The URL path template containing placeholders like `{id}`.
+  /// [pair] A tuple containing parameter metadata and its value.
+  ///
+  /// Returns the processed path with placeholders replaced by actual values.
+  ///
+  /// Throws an [Exception] if the path parameter is not a String or if the
+  /// placeholder is not found in the path template.
   String _parsePath(String path, (dynamic, dynamic) pair) {
     final dynamic metadata = pair.$1;
     if (metadata is Path) {
@@ -232,6 +293,10 @@ abstract class Service implements ApiUrlMixin {
     return path;
   }
 
+  /// Processes header parameters and adds them to the headers map.
+  ///
+  /// [headers] The map to store processed headers.
+  /// [pair] A tuple containing parameter metadata and its value.
   void _parseHeader(Map<String, dynamic> headers, (dynamic, dynamic) pair) {
     final dynamic metadata = pair.$1;
     if (metadata is Header) {
@@ -239,9 +304,14 @@ abstract class Service implements ApiUrlMixin {
     }
   }
 
-  /// Parses [pair] query string
+  /// Processes query parameters and adds them to the query parameters map.
   ///
-  /// [query] Query string collection
+  /// This method handles both simple query parameters and array parameters
+  /// (indicated by the `[]` suffix). It respects the `keepNull` setting
+  /// to determine whether null values should be included.
+  ///
+  /// [query] The map to store processed query parameters.
+  /// [pair] A tuple containing parameter metadata and its value.
   void _parseQuery(Map<String, dynamic> query, (dynamic, dynamic) pair) {
     final dynamic metadata = pair.$1;
     if (metadata is Query) {
@@ -261,9 +331,14 @@ abstract class Service implements ApiUrlMixin {
     }
   }
 
-  /// Parses [pair] field
+  /// Processes form data parameters for both regular forms and multipart forms.
   ///
-  /// [query] Field collection
+  /// This method handles Field, Part, and PartMap annotations. It processes
+  /// array parameters (indicated by the `[]` suffix) and respects the
+  /// `keepNull` setting for optional parameters.
+  ///
+  /// [form] The map to store processed form data.
+  /// [pair] A tuple containing parameter metadata and its value.
   void _parseFormData(Map<String, dynamic> form, (dynamic, dynamic) pair) {
     final dynamic metadata = pair.$1;
     if (metadata is Field || metadata is Part) {
@@ -285,6 +360,13 @@ abstract class Service implements ApiUrlMixin {
     }
   }
 
+  /// Processes body parameters for requests that send raw data.
+  ///
+  /// [data] The current data map (unused in this context).
+  /// [pair] A tuple containing parameter metadata and its value.
+  ///
+  /// Returns the processed body data if the parameter is annotated with @Body,
+  /// otherwise returns null.
   dynamic _parseBody(dynamic data, (dynamic, dynamic) pair) {
     final dynamic metadata = pair.$1;
     if (metadata is Body) {
@@ -292,9 +374,15 @@ abstract class Service implements ApiUrlMixin {
     }
   }
 
-  /// Parses field data format
+  /// Converts data to an appropriate format for HTTP transmission.
   ///
-  /// Returns the parsed data
+  /// This method handles various data types and converts complex objects
+  /// to JSON format when necessary. It preserves primitive types, multipart
+  /// files, and null values as-is.
+  ///
+  /// [data] The data to be processed.
+  ///
+  /// Returns the processed data in a format suitable for HTTP transmission.
   dynamic _getData(dynamic data) {
     if (data is num ||
         data is String ||

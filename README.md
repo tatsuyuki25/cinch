@@ -1,8 +1,23 @@
-# cinch
+# Cinch
 
 [![Pub](https://img.shields.io/pub/v/cinch.svg?style=flat-square)](https://pub.dartlang.org/packages/cinch)
 
-## Usage
+A powerful HTTP client library for Dart/Flutter that uses code generation to create type-safe API clients with minimal boilerplate code.
+
+## Features
+
+- 🚀 **Code Generation**: Automatically generates HTTP client code using build_runner
+- 🔧 **Type Safety**: Full type safety with compile-time validation
+- 📝 **Multiple Content Types**: Support for JSON, form data, and multipart uploads
+- 🛡️ **Custom Validation**: Flexible HTTP status code validation
+- 🌐 **Dynamic URLs**: Multiple ways to configure base URLs
+- 📊 **Rich Annotations**: Comprehensive set of annotations for different use cases
+
+## Quick Start
+
+### Installation
+
+Add the following dependencies to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
@@ -10,162 +25,255 @@ dependencies:
 
 dev_dependencies:
   cinch_gen: ^5.0.0
+  build_runner: ^2.0.0
 ```
 
-## Example
+### Basic Usage
 
-- `test.dart`
+1. **Create your API service** (`test.dart`):
 
-```dart
+    ```dart
     import 'package:cinch/cinch.dart';
     part 'test.cinch.dart';
-    @ApiService('https://test.com/')
+
+    @ApiService('https://api.example.com/')
     class TestApi extends _$TestApi {
       TestApi() : super();
 
-      @Get('api/test1')
-      Future<Response> test(@Query('t1') int t1) async {
-        return _$test(t1);
+      @Get('users/{id}')
+      Future<Response> getUser(@Path('id') String userId) async {
+        return _$getUser(userId);
+      }
+
+      @Get('users')
+      Future<Response> getUsers(@Query('page') int page) async {
+        return _$getUsers(page);
       }
     }
-```
+    ```
 
-### Build
+2. **Generate the code**:
 
-- terminal run `dart run build_runner build`
+    Run the following command in your terminal:
 
-## Support Http Method
+    ```bash
+    dart run build_runner build
+    ```
 
-- POST
-- GET
-- PUT
-- DELETE
+3. **Use your API**:
 
-## application/x-www-form-urlencoded
+    ```dart
+    final api = TestApi();
+    final response = await api.getUser('123');
+    final users = await api.getUsers(1);
+    ```
+
+## Supported HTTP Methods
+
+Cinch supports all major HTTP methods:
+
+- **GET** - Retrieve data
+- **POST** - Create new resources
+- **PUT** - Update existing resources
+- **DELETE** - Remove resources
+
+## Key Features
+
+### Form URL Encoded Requests
+
+For `application/x-www-form-urlencoded` content type:
 
 ```dart
+@ApiService('https://api.example.com/')
+class AuthApi extends _$AuthApi {
   @formUrlEncoded
-  @Post('api/test')
-  Future<WebGlobalJson<Login>> test(@Field('t1') String t1) async {
-    return _$test(t1);
-  }
-```
-
-## Path
-
-```dart
-  @formUrlEncoded
-  @Post('api/test/{path}')
-  Future<WebGlobalJson<Login>> test(@Path('path') String path) async {
-    return _$test(path);
-  }
-```
-
-## URL
-
-```dart
-import 'package:cinch/cinch.dart';
-part 'test.cinch.dart';
-
-class Web extends ApiService {
-  const Web() : super("https://test.com/");
-}
-
-@Web()
-class TestApi extends _$TestApi {
-  TestApi() : super();
-  @Get('api/test1')
-  Future<Response> test(@Query('t1') int t1) async {
-    return _$test(t1);
+  @Post('auth/login')
+  Future<Response<LoginResponse>> login(
+    @Field('username') String username,
+    @Field('password') String password,
+  ) async {
+    return _$login(username, password);
   }
 }
 ```
 
-Or
+### Path Parameters
+
+Use path parameters for dynamic URLs:
+
+```dart
+@ApiService('https://api.example.com/')
+class UserApi extends _$UserApi {
+  @Get('users/{userId}/posts/{postId}')
+  Future<Response> getUserPost(
+    @Path('userId') String userId,
+    @Path('postId') String postId,
+  ) async {
+    return _$getUserPost(userId, postId);
+  }
+}
+```
+
+### Dynamic URL Configuration
+
+#### Method 1: Custom ApiService Class
 
 ```dart
 import 'package:cinch/cinch.dart';
-part 'test.cinch.dart';
+part 'api.cinch.dart';
 
-class Web with ApiUrlMixin {
-  @override
-  String get url => 'https://test.com/';
+class ProductionApi extends ApiService {
+  const ProductionApi() : super("https://api.production.com/");
+}
+
+@ProductionApi()
+class UserApi extends _$UserApi {
+  UserApi() : super();
   
+  @Get('users')
+  Future<Response> getUsers() async {
+    return _$getUsers();
+  }
+}
+```
+
+#### Method 2: ApiUrlMixin
+
+```dart
+import 'package:cinch/cinch.dart';
+part 'api.cinch.dart';
+
+class ApiConfig with ApiUrlMixin {
+  @override
+  String get url => 'https://api.example.com/';
 }
 
 @ApiService.emptyUrl()
-class TestApi extends _$TestApi with Web {
-  TestApi() : super();
-  @Get('api/test1')
-  Future<Response> test(@Query('t1') int t1) async {
-    return _$test(t1);
+class UserApi extends _$UserApi with ApiConfig {
+  UserApi() : super();
+  
+  @Get('users')
+  Future<Response> getUsers() async {
+    return _$getUsers();
   }
 }
 ```
 
-## Multipart
+### File Upload (Multipart)
+
+#### Single File Upload
 
 ```dart
-@ApiService('http://localhost:8080/')
-class TestService extends _$TestService {
+@ApiService('https://api.example.com/')
+class FileApi extends _$FileApi {
   @Post('upload')
   @multipart
-  Future<Response> upload(@Part('file') MultipartFile file) {
-    return _$upload(file);
+  Future<Response> uploadFile(@Part('file') MultipartFile file) {
+    return _$uploadFile(file);
   }
 }
 
-void test() {
-  service.upload(MultipartFile.fromFileSync('/path/file.txt', filename: '上傳名稱.txt'));
-  service.upload(MultipartFile.fromBytes(bytes, filename: '上傳名稱.txt'));
+// Usage
+void uploadExample() {
+  final api = FileApi();
+  
+  // From file path
+  api.uploadFile(MultipartFile.fromFileSync(
+    '/path/to/file.txt', 
+    filename: 'document.txt'
+  ));
+  
+  // From bytes
+  api.uploadFile(MultipartFile.fromBytes(
+    bytes, 
+    filename: 'document.txt'
+  ));
 }
 ```
 
-- Or use `partMap`
+#### Multiple File Upload with PartMap
 
 ```dart
-@ApiService('http://localhost:8080/')
-class TestService extends _$TestService {
-  @Post('multiUpload')
+@ApiService('https://api.example.com/')
+class FileApi extends _$FileApi {
+  @Post('multi-upload')
   @multipart
-  Future<Response> multiUpload(@Part('flag') int flag,
-  @partMap Map<String, MultipartFile> file) {
-    return _$multiUpload(flag, file);
+  Future<Response> multiUpload(
+    @Part('description') String description,
+    @partMap Map<String, MultipartFile> files,
+  ) {
+    return _$multiUpload(description, files);
   }
 }
 
-void test() {
-  service.multiUpload(88, {
-    "file0": MultipartFile.fromFileSync(
-        '/Downloads/Resume.docx', filename: 'test0.docx'),
-    "file1": MultipartFile.fromFileSync(
-        '/Downloads/Resume.docx', filename: 'test1.docx')
+// Usage
+void multiUploadExample() {
+  final api = FileApi();
+  
+  api.multiUpload('My files', {
+    "file1": MultipartFile.fromFileSync('/path/file1.txt', filename: 'doc1.txt'),
+    "file2": MultipartFile.fromFileSync('/path/file2.txt', filename: 'doc2.txt'),
   });
   
-  service.multiUpload(99, {
+  // Dynamic file list
+  api.multiUpload('Batch upload', {
     for (var i = 0; i < 5; i++)
       "file$i": MultipartFile.fromFileSync(
-          '/Downloads/Resume.docx', filename: 'test$i.docx'),
+        '/path/file$i.txt', 
+        filename: 'document$i.txt'
+      ),
   });
 }
 ```
 
-## ValidateStatus
+### Custom Status Code Validation
+
+Control which HTTP status codes should be considered successful:
 
 ```dart
-    import 'package:cinch/cinch.dart';
-    part 'test.cinch.dart';
-    @ApiService('https://test.com/')
-    class TestApi extends _$TestApi {
-      TestApi() : super(validateStatus: (status) => status == 404);
+@ApiService('https://api.example.com/')
+class CustomApi extends _$CustomApi {
+  // Service-level validation
+  CustomApi() : super(validateStatus: (status) => status == 404);
 
-      /// If set validateStatus in method, constructor validateStatus will be ignored.
-      @Get('api/test1', validateStatus: [403])
-      Future<Response> test(@Query('t1') int t1) async {
-        return _$test(t1);
-      }
-    }
+  // Method-level validation (overrides service-level)
+  @Get('restricted', validateStatus: [403, 200])
+  Future<Response> getRestricted() async {
+    return _$getRestricted();
+  }
+}
 ```
+
+## Best Practices
+
+1. **Organize your APIs**: Group related endpoints into separate service classes
+2. **Use meaningful names**: Make your method and parameter names descriptive
+3. **Handle errors**: Always wrap API calls in try-catch blocks
+4. **Type safety**: Define response models for better type safety
+5. **Documentation**: Add comments to your API methods for better maintainability
+
+## Error Handling
+
+```dart
+try {
+  final response = await api.getUser('123');
+  // Handle successful response
+} on DioException catch (e) {
+  // Handle Dio-specific errors
+  if (e.response?.statusCode == 404) {
+    print('User not found');
+  } else {
+    print('API Error: ${e.message}');
+  }
+} catch (e) {
+  // Handle other errors
+  print('Unexpected error: $e');
+}
+```
+
+## Documentation
+
+For complete documentation and advanced features, visit the [package documentation](packages/cinch/README.md).
 
 ## License
 
