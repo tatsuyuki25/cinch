@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 5.0.3
+
+- Optimize comments.
+
 ## 5.0.2
 
 - remove @visibleForTesting on dio.
