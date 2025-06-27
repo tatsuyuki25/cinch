@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'example2_service.dart';
@@ -23,7 +24,7 @@ class _$Example2Service extends Service {
     ], [
       (const Query('type'), type)
     ]).then((dynamic response) => List<Example>.from(
-        response.data.map((json) => Example.fromJson(json))));
+        (response.data as List).map((j) => Example.fromJson(j))));
   }
 
   Future<Response> _$upload(MultipartFile file) {
@@ -43,11 +44,5 @@ class _$Example2Service extends Service {
       (const Part('flag'), flag),
       (partMap, file)
     ]).then((dynamic response) => Response.fromJson(response.data));
-  }
-
-  Future<Global<List<String>>> _$generic() {
-    return request(<dynamic>[const Post('generic')], []).then(
-        (dynamic response) => Global<List<String>>.fromNestedGenericJson(
-            response.data, [List, String]));
   }
 }

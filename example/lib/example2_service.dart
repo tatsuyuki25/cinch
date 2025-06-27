@@ -28,9 +28,6 @@ class Example2Service extends _$Example2Service {
       @Part('flag') int flag, @partMap Map<String, MultipartFile> file) {
     return _$multiUpload(flag, file);
   }
-
-  @Post('generic')
-  Future<Global<List<String>>> generic() => _$generic();
 }
 
 class Example {
@@ -51,9 +48,4 @@ class Response {
   String toString() {
     return 'retCode: $retCode, errMsg: $errMsg';
   }
-}
-
-class Global<T> {
-  Global.fromNestedGenericJson(Map<String, dynamic> json, List<Type> types) {}
-  T? data;
 }

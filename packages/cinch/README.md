@@ -13,6 +13,87 @@ A powerful HTTP client library for Dart/Flutter that uses code generation to cre
 - 🌐 **Dynamic URLs**: Multiple ways to configure base URLs
 - 📊 **Rich Annotations**: Comprehensive set of annotations for different use cases
 
+---
+
+## 🚀 Migration Guide to v6.0.0
+
+Version 6.0.0 introduces a significant **breaking change** in how generic types are deserialized. The new implementation aligns with the `genericArgumentFactories` pattern used by `freezed` and `json_serializable`, removing the old `fromNestedGenericJson` method.
+
+### What You Need to Do
+
+If you use custom generic classes for your API responses (e.g., `BaseResponse<T>`), you **must** update them to be compatible with the new generator.
+
+**1. Update Your Generic Model:**
+
+Modify your generic class to include a `fromJson` factory that accepts a `T Function(Object?) fromJsonT` argument. This function is responsible for deserializing the nested generic type `T`.
+
+**Before (Old Way):**
+
+```dart
+// This approach is no longer supported.
+class BaseResponse<T> {
+  final T data;
+  BaseResponse(this.data);
+
+  factory BaseResponse.fromNestedGenericJson(Map<String, dynamic> json, List<Type> types) {
+    // ... old logic ...
+  }
+}
+```
+
+**After (New Way with `freezed`):**
+
+We strongly recommend using `freezed` to generate your data classes. It handles the `genericArgumentFactories` pattern automatically.
+
+```dart
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'base_response.freezed.dart';
+part 'base_response.g.dart';
+
+@Freezed(genericArgumentFactories: true)
+sealed class BaseResponse<T> with _$BaseResponse<T> {
+  const factory BaseResponse({
+    required T data,
+    // Add other fields like message, code, etc.
+  }) = _BaseResponse;
+
+  factory BaseResponse.fromJson(
+    Map<String, dynamic> json,
+    T Function(Object?) fromJsonT,
+  ) =>
+      _$BaseResponseFromJson(json, fromJsonT);
+}
+```
+
+**2. Update Your `pubspec.yaml`:**
+
+Make sure your dependencies are updated to the latest version.
+
+```yaml
+dependencies:
+  cinch: ^6.0.0
+
+dev_dependencies:
+  cinch_gen: ^6.0.0
+  build_runner: ^2.0.0
+  # Add freezed and json_serializable if you use them
+  freezed: <latest_version>
+  json_serializable: <latest_version>
+```
+
+**3. Regenerate Your Code:**
+
+After updating your models and dependencies, run the build runner to regenerate the Cinch client code.
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+By following these steps, your project will be aligned with the new, more robust deserialization mechanism.
+
+---
+
 ## Quick Start
 
 ### Installation
@@ -21,10 +102,10 @@ Add the following dependencies to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cinch: ^5.0.2
+  cinch: ^6.0.0
 
 dev_dependencies:
-  cinch_gen: ^5.0.0
+  cinch_gen: ^6.0.0
   build_runner: ^2.0.0
 ```
 
@@ -67,16 +148,6 @@ dev_dependencies:
     final response = await api.getUser('123');
     final users = await api.getUsers(1);
     ```
-
-## Migration Guide
-
-### From 3.X.X to 4.0.0
-
-After updating your dependencies, run the code generator:
-
-```bash
-dart run build_runner build
-```
 
 ## Supported HTTP Methods
 

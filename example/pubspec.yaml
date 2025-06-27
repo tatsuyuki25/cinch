@@ -6,15 +6,17 @@ version: 1.0.0
 environment:
   sdk: '>=3.0.0 <4.0.0'
 
-# dependencies:
-#   cinch:
-#     path: ../cinch
+dependencies:
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
 
 dependency_overrides:
   cinch:
     path: ../packages/cinch
 
 dev_dependencies:
+  freezed: ^3.0.6
+  json_serializable: ^6.8.0
   lints: ^2.1.0
   test: ^1.24.2
   build_runner: ^2.4.2

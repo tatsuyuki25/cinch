@@ -1,5 +1,12 @@
 # Cinch changelog
 
+## 6.0.0
+
+- **BREAKING CHANGE**: The deserialization of generic types has been completely revamped to align with the `genericArgumentFactories` pattern, standard in packages like `freezed` and `json_serializable`.
+- **REMOVED**: The `fromNestedGenericJson` approach for deserialization is no longer supported.
+- **FEATURE**: The code generator now produces calls to `.fromJson(jsonData, fromJsonT)` for generic types, enabling seamless integration with `freezed`.
+- **ACTION REQUIRED**: Users must update their custom generic response models to provide a `fromJson` factory that accepts a type converter function (e.g., `T Function(Object?) fromJsonT`). See the migration guide in the README for detailed instructions.
+
 ## 5.0.3
 
 - Optimize comments.

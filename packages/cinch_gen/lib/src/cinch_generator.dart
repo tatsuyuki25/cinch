@@ -130,29 +130,6 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     return false;
   }
 
-  /// 取得嵌套泛型的type 字串
-  List<String> _getNestedGenerics(DartType type) {
-    final nested = <String>[];
-    for (var t in _getGenericTypes(type)) {
-      if (_hasGenerics(t)) {
-        nested.add('${t.element?.displayName}');
-        nested.addAll(_getNestedGenerics(t));
-      } else {
-        nested.add('${t.nonStarString()}');
-      }
-    }
-    return nested;
-  }
-
-  /// [type]是否為嵌套泛型
-  bool _hasNestedGeneric(DartType type) {
-    if (_hasGenerics(type)) {
-      final types = _getGenericTypes(type);
-      return types.any((t) => _hasGenerics(t));
-    }
-    return false;
-  }
-
   /// [element]是否有標annotation
   bool _hasCinchAnnotation(MethodElement element) {
     final metadata = element.metadata.where((m) {
@@ -187,16 +164,64 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
     _writeMethod(element);
     _write.write('{');
     _write.write('return request(<dynamic>$config, $parameters)');
-    if (_hasNestedGeneric(returnType)) {
-      _write.write('.then((dynamic response) => ${returnType.nonStarString()}.'
-          'fromNestedGenericJson(response.data, ${_getNestedGenerics(returnType)}));');
-    } else if (returnType.isDartCoreList) {
-      _writeListReturn(returnType);
-    } else {
-      _write.write(
-          '.then((dynamic response) => ${returnType.nonStarString()}.fromJson(response.data));');
-    }
+    final fromJsonExpression =
+        _buildFromJsonExpression('response.data', returnType);
+    _write.write('.then((dynamic response) => $fromJsonExpression);');
     _write.write('}');
+  }
+
+  /// [type]是否為基礎類別
+  bool _isPrimitiveType(DartType type) {
+    return type.isDartCoreString ||
+        type.isDartCoreInt ||
+        type.isDartCoreDouble ||
+        type.isDartCoreBool ||
+        type.isDartCoreNum ||
+        type is DynamicType;
+  }
+
+  /// 建立fromJson的表達式
+  String _buildFromJsonExpression(String jsonDataAccessor, DartType type) {
+    final typeString = type.nonStarString();
+    if (_isPrimitiveType(type)) {
+      return '$jsonDataAccessor as $typeString';
+    }
+
+    if (!_hasGenerics(type)) {
+      return '$typeString.fromJson($jsonDataAccessor)';
+    }
+
+    final genericTypes = _getGenericTypes(type).toList();
+    if (type.isDartCoreList) {
+      final innerType = genericTypes.first;
+      final innerFromJson = _buildFromJsonExpression('j', innerType);
+      return '$typeString.from(($jsonDataAccessor as List).map((j) => $innerFromJson))';
+    }
+
+    final factories = genericTypes.map(_buildFromJsonFactory).join(', ');
+    return '$typeString.fromJson($jsonDataAccessor, $factories)';
+  }
+
+  /// 建立fromJson的工廠方法
+  String _buildFromJsonFactory(DartType type) {
+    final typeString = type.nonStarString();
+    if (_isPrimitiveType(type)) {
+      return '(json) => json as $typeString';
+    }
+
+    if (!_hasGenerics(type)) {
+      return '$typeString.fromJson';
+    }
+
+    final genericTypes = _getGenericTypes(type).toList();
+    if (type.isDartCoreList) {
+      final innerType = genericTypes.first;
+      final innerFromJson = _buildFromJsonExpression('j', innerType);
+      return '(json) => $typeString.from((json as List).map((j) => $innerFromJson))';
+    }
+
+    final factories = genericTypes.map(_buildFromJsonFactory).join(', ');
+    return '(json) => $typeString.fromJson(json, $factories)';
   }
 
   /// 寫入method 開頭
@@ -217,29 +242,6 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       return '$prefix${p.type.nonStarString()} ${p.name}';
     }).join(','));
     _write.write(')');
-  }
-
-  void _writeListReturn(DartType returnType) {
-    final genericType = _getGenericTypes(returnType);
-    if (genericType.isNotEmpty) {
-      final clazz = genericType.first.element;
-      if (clazz != null && clazz is ClassElement) {
-        log.warning(
-            'class getNamedConstructor: ${clazz.getNamedConstructor('fromJson')}');
-        final type = genericType.first.nonStarString();
-        if (clazz.getNamedConstructor('fromJson') != null) {
-          _write.write(
-              '.then((dynamic response) => ${returnType.nonStarString()}.from(response.data.map((json)=> $type.fromJson(json))));');
-          return;
-        } else {
-          _write.write(
-              '.then((dynamic response) => ${returnType.nonStarString()}.from(response.data));');
-          return;
-        }
-      }
-    }
-    _write.write(
-        '.then((dynamic response) => ${returnType.nonStarString()}.fromJson(response.data));');
   }
 
   /// 取得標籤
