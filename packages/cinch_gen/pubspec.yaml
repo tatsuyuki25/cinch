@@ -5,7 +5,7 @@ repository: https://github.com/tatsuyuki25/cinch
 resolution: workspace
 
 environment:
-  sdk: '>=3.5.0 <4.0.0'
+  sdk: '>=3.6.0 <4.0.0'
 
 dependencies:
   # 不使用`0.38.3`，有BUG
@@ -18,5 +18,4 @@ dependencies:
 
 dev_dependencies:
   source_gen_test: ^1.1.1
-  melos: ^6.3.3
   test: ^1.25.5
