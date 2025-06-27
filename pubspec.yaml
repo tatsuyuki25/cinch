@@ -1,7 +1,11 @@
 name: cinch_workspace
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
+  sdk: ">=3.5.0 <4.0.0"
 
 dev_dependencies:
-  melos: ^6.3.2
+  melos: ^6.3.3
+
+workspace:
+  - packages/cinch
+  - packages/cinch_gen
