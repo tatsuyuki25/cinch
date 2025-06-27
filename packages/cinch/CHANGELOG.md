@@ -1,5 +1,10 @@
 # Cinch changelog
 
+## 6.0.1
+
+- Remove meta dependencies.
+- Fix documentation.
+
 ## 6.0.0
 
 - **BREAKING CHANGE**: The deserialization of generic types has been completely revamped to align with the `genericArgumentFactories` pattern, standard in packages like `freezed` and `json_serializable`.

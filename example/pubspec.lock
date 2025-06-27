@@ -119,7 +119,7 @@ packages:
       path: "../packages/cinch"
       relative: true
     source: path
-    version: "6.0.0"
+    version: "6.0.1"
   cinch_gen:
     dependency: "direct dev"
     description:

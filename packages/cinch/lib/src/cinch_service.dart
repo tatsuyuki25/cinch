@@ -238,9 +238,9 @@ abstract class Service implements ApiUrlMixin {
   ///
   /// Returns a tuple containing:
   /// - String: The processed URL path
-  /// - Map<String, dynamic>: Request headers
-  /// - Map<String, dynamic>: Query parameters
-  /// - Map<String, dynamic>: Form/multipart data
+  /// - Map&lt;String, dynamic&gt;: Request headers
+  /// - Map&lt;String, dynamic&gt;: Query parameters
+  /// - Map&lt;String, dynamic&gt;: Form/multipart data
   /// - dynamic: Raw request body (for non-form requests)
   (
     String,
