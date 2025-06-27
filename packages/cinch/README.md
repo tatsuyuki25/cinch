@@ -334,7 +334,6 @@ class CustomApi extends _$CustomApi {
   CustomApi() : super(validateStatus: (status) => status == 404);
 
   // This method will only accept 403 as valid, ignoring the service-level validation
-  @Get('restricted')
   @Get('api/restricted', validateStatus: [403, 200])
   Future<Response> getRestricted() async {
     return _$getRestricted();
