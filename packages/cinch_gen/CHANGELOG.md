@@ -1,5 +1,11 @@
 # cinch_gen changelog
 
+## 6.2.0
+
+- Updated package versions:
+  - `build: ^3.0.0`
+  - `source_gen: ^3.0.0`
+
 ## 6.0.0
 
 - **BREAKING CHANGE**: The code generator has been completely rewritten to support the `genericArgumentFactories` pattern for deserializing generic types.

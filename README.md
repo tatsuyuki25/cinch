@@ -75,8 +75,8 @@ dependencies:
   cinch: ^6.0.1
 
 dev_dependencies:
-  cinch_gen: ^6.0.0
-  build_runner: ^2.0.0
+  cinch_gen: ^6.2.0
+  build_runner: ^3.0.0
   # Add freezed and json_serializable if you use them
   freezed: <latest_version>
   json_serializable: <latest_version>
