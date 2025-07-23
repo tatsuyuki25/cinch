@@ -1,6 +1,6 @@
 # cinch_gen changelog
 
-## 6.2.0
+## 6.1.0
 
 - Updated package versions:
   - `build: ^3.0.0`
