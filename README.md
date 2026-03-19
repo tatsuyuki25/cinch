@@ -72,7 +72,7 @@ Make sure your dependencies are updated to the latest version.
 
 ```yaml
 dependencies:
-  cinch: ^6.0.1
+  cinch: ^6.1.0
 
 dev_dependencies:
   cinch_gen: ^6.2.0

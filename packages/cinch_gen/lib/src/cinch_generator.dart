@@ -1,5 +1,5 @@
 import 'package:analyzer/dart/constant/value.dart';
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:cinch/cinch.dart';
@@ -12,31 +12,31 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   final _write = Write();
 
   /// 檢查[Http]type
-  final _httpChecker = const TypeChecker.fromRuntime(Http);
+  final _httpChecker = const TypeChecker.typeNamed(Http, inPackage: 'cinch');
 
   /// 檢查[Parameter]type
-  final _parameterChecker = const TypeChecker.fromRuntime(Parameter);
+  final _parameterChecker = const TypeChecker.typeNamed(Parameter, inPackage: 'cinch');
 
   /// 檢查[Response] type
-  final _dioChecker = const TypeChecker.fromRuntime(Response);
+  final _dioChecker = const TypeChecker.typeNamed(Response, inPackage: 'dio');
 
   /// 檢查[MultipartFile] type
-  final _multipartFileChecker = const TypeChecker.fromRuntime(MultipartFile);
+  final _multipartFileChecker = const TypeChecker.typeNamed(MultipartFile, inPackage: 'dio');
 
   String? _prefix;
 
   @override
   dynamic generateForAnnotatedElement(
-      Element2 element, ConstantReader annotation, BuildStep buildStep) {
-    if (element is ClassElement2) {
-      if (element.methods2.isEmpty) {
+      Element element, ConstantReader annotation, BuildStep buildStep) {
+    if (element is ClassElement) {
+      if (element.methods.isEmpty) {
         return null;
       }
       _write.clear();
       _checkPrefix(element);
       _write.write("""
-    class _\$${element.name3} extends ${_getPrefix()}Service {
-      _\$${element.name3}({Duration connectTimeout = const Duration(seconds: 5), 
+    class _\$${element.name} extends ${_getPrefix()}Service {
+      _\$${element.name}({Duration connectTimeout = const Duration(seconds: 5), 
       Duration receiveTimeout = const Duration(seconds: 10),
       Duration sendTimeout = const Duration(seconds: 10),
       ${_getPrefix()}ValidateStatus? validateStatus}):
@@ -49,19 +49,19 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       return _write.toString();
     }
     throw InvalidGenerationSourceError(
-        'transform fail ${element.name3}, please check ${element.name3} is `class`');
+        'transform fail ${element.name}, please check ${element.name} is `class`');
   }
 
-  void _checkPrefix(ClassElement2 element) {
+  void _checkPrefix(ClassElement element) {
     _prefix = null;
-    final compilationUnit = element.library2.firstFragment;
-    final imports = compilationUnit.libraryImports2;
+    final compilationUnit = element.library.firstFragment;
+    final imports = compilationUnit.libraryImports;
     for (var i = 0; i < imports.length; i++) {
-      final name = imports[i].importedLibrary2?.name3;
+      final name = imports[i].importedLibrary?.name;
       if (name == 'cinch') {
-        final p = imports[i].prefix2;
+        final p = imports[i].prefix;
         if (p != null) {
-          _prefix = p.element.name3;
+          _prefix = p.element.name;
         }
         break;
       }
@@ -93,15 +93,15 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   /// 從[element] 解析是否為 cinch method
   ///
   /// 只解析return type 為[Future]的method
-  void _parseMethod(ClassElement2 element) {
+  void _parseMethod(ClassElement element) {
     final methods =
-        element.methods2.where((m) => m.returnType.isDartAsyncFuture);
+        element.methods.where((m) => m.returnType.isDartAsyncFuture);
     if (methods.isEmpty) {
       return;
     }
     for (var m in methods) {
       if (!_hasCinchAnnotation(m)) {
-        log.warning('Method ${m.name3} not tag Http method');
+        log.warning('Method ${m.name} not tag Http method');
         continue;
       }
       final genericType = _getGenericTypes(m.returnType).first;
@@ -123,16 +123,16 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
 
   /// [type]是否為泛型
   bool _hasGenerics(DartType type) {
-    final element = type.element3;
-    if (element is ClassElement2) {
-      return element.typeParameters2.isNotEmpty;
+    final element = type.element;
+    if (element is ClassElement) {
+      return element.typeParameters.isNotEmpty;
     }
     return false;
   }
 
   /// [element]是否有標annotation
-  bool _hasCinchAnnotation(MethodElement2 element) {
-    final metadata = element.metadata2.annotations.where((m) {
+  bool _hasCinchAnnotation(MethodElement element) {
+    final metadata = element.metadata.annotations.where((m) {
       final type = m.computeConstantValue()?.type;
       if (type != null) {
         return _httpChecker.isSuperTypeOf(type);
@@ -146,7 +146,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   /// 寫入無須轉換的程式碼
-  void _writeDynamic(MethodElement2 element) {
+  void _writeDynamic(MethodElement element) {
     final config = _getAnnotations(element);
     final parameters = _getParameters(element);
     _write.write('Future<Response> ');
@@ -157,7 +157,7 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   /// 根據[returnType] 轉換資料
-  void _writeNormal(MethodElement2 element, DartType returnType) {
+  void _writeNormal(MethodElement element, DartType returnType) {
     final config = _getAnnotations(element);
     final parameters = _getParameters(element);
     _write.write('${element.returnType.nonStarString()} ');
@@ -225,12 +225,12 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
   }
 
   /// 寫入method 開頭
-  void _writeMethod(MethodElement2 element) {
-    _write.write('_\$${element.name3}(');
+  void _writeMethod(MethodElement element) {
+    _write.write('_\$${element.name}(');
     _write.write(element.formalParameters
-        .where((p) => p.metadata2.annotations.length == 1)
+        .where((p) => p.metadata.annotations.length == 1)
         .where((p) {
-      final type = p.metadata2.annotations[0].computeConstantValue()?.type;
+      final type = p.metadata.annotations[0].computeConstantValue()?.type;
       if (type != null) {
         return _parameterChecker.isSuperTypeOf(type);
       }
@@ -240,42 +240,42 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       if (_multipartFileChecker.isExactlyType(p.type)) {
         prefix = _getPrefix();
       }
-      return '$prefix${p.type.nonStarString()} ${p.name3}';
+      return '$prefix${p.type.nonStarString()} ${p.name}';
     }).join(','));
     _write.write(')');
   }
 
   /// 取得標籤
-  List<String> _getAnnotations(MethodElement2 element) {
-    return element.metadata2.annotations.map((m) {
-      if (m.element2 is ConstructorElement2) {
+  List<String> _getAnnotations(MethodElement element) {
+    return element.metadata.annotations.map((m) {
+      if (m.element is ConstructorElement) {
         return 'const ${m.toSource().substring(1)}';
       }
-      return m.toSource().substring(1);
+      return m.toSource().substring(1);  // 常數註解：去掉 @，得到可作為表達式的識別符
     }).toList();
   }
 
   /// 取得參數資料
-  List<String> _getParameters(MethodElement2 element) {
+  List<String> _getParameters(MethodElement element) {
     final parameters = element.formalParameters
-        .where((p) => p.metadata2.annotations.length == 1)
+        .where((p) => p.metadata.annotations.length == 1)
         .where((p) {
-      final type = p.metadata2.annotations[0].computeConstantValue()?.type;
+      final type = p.metadata.annotations[0].computeConstantValue()?.type;
       if (type != null) {
         return _parameterChecker.isSuperTypeOf(type);
       }
       return false;
     });
     return parameters.map((p) {
-      final element = p.metadata2.annotations[0].element2;
+      final element = p.metadata.annotations[0].element;
       String firstValue;
-      if (element is ConstructorElement2) {
+      if (element is ConstructorElement) {
         firstValue =
-            'const ${p.metadata2.annotations[0].toSource().substring(1)}';
+            'const ${p.metadata.annotations[0].toSource().substring(1)}';
       } else {
-        firstValue = p.metadata2.annotations[0].toSource().substring(1);
+        firstValue = p.metadata.annotations[0].toSource().substring(1);
       }
-      return '($firstValue, ${p.name3})';
+      return '($firstValue, ${p.name})';
     }).toList();
   }
 }

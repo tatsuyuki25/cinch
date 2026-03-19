@@ -72,11 +72,11 @@ Make sure your dependencies are updated to the latest version.
 
 ```yaml
 dependencies:
-  cinch: ^6.0.1
+  cinch: ^6.1.0
 
 dev_dependencies:
-  cinch_gen: ^6.0.0
-  build_runner: ^2.0.0
+  cinch_gen: ^6.2.0
+  build_runner: <latest_version>
   # Add freezed and json_serializable if you use them
   freezed: <latest_version>
   json_serializable: <latest_version>
@@ -102,11 +102,11 @@ Add the following dependencies to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cinch: ^6.0.0
+  cinch: ^6.1.0
 
 dev_dependencies:
-  cinch_gen: ^6.0.0
-  build_runner: ^2.0.0
+  cinch_gen: ^6.2.0
+  build_runner: <latest_version>
 ```
 
 ### Basic Usage
