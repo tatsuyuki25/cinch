@@ -1,5 +1,14 @@
 # cinch_gen changelog
 
+## 6.2.0
+
+- Migrate to analyzer 9.0 and source_gen 4.x APIs.
+- Fix FormatterException when using `@multipart` or `@formUrlEncoded` annotations.
+- Updated package versions:
+  - `analyzer: ">=9.0.0 <11.0.0"`
+  - `build: ^4.0.4`
+  - `source_gen: ^4.2.1`
+
 ## 6.1.0
 
 - Updated package versions:

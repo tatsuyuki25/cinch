@@ -72,7 +72,7 @@ Make sure your dependencies are updated to the latest version.
 
 ```yaml
 dependencies:
-  cinch: ^6.1.0
+  cinch: ^6.1.1
 
 dev_dependencies:
   cinch_gen: ^6.2.0
@@ -102,7 +102,7 @@ Add the following dependencies to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cinch: ^6.1.0
+  cinch: ^6.1.1
 
 dev_dependencies:
   cinch_gen: ^6.2.0

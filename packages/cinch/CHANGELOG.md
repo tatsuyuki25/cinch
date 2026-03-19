@@ -1,5 +1,10 @@
 # Cinch changelog
 
+## 6.1.1
+
+- Fix FormatterException when using `@multipart` or `@formUrlEncoded` annotations.
+- Migrate to analyzer 9.0 and source_gen 4.x APIs.
+
 ## 6.0.1
 
 - Remove meta dependencies.
