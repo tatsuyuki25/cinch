@@ -131,6 +131,10 @@ abstract class Service implements ApiUrlMixin {
       // ignore: implicit_dynamic_method
       return dio.put<dynamic>(path,
           options: options, data: body ?? data, queryParameters: query);
+    } else if (method is Patch) {
+      // ignore: implicit_dynamic_method
+      return dio.patch<dynamic>(path,
+          options: options, data: body ?? data, queryParameters: query);
     } else if (method is Delete) {
       // ignore: implicit_dynamic_method
       return dio.delete<dynamic>(path,

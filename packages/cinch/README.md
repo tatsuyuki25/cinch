@@ -72,11 +72,11 @@ Make sure your dependencies are updated to the latest version.
 
 ```yaml
 dependencies:
-  cinch: ^6.1.1
+  cinch: ^6.2.0
 
 dev_dependencies:
-  cinch_gen: ^6.2.0
-  build_runner: <latest_version>
+  cinch_gen: ^6.3.0
+  build_runner: ^2.17.1
   # Add freezed and json_serializable if you use them
   freezed: <latest_version>
   json_serializable: <latest_version>
@@ -102,11 +102,11 @@ Add the following dependencies to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cinch: ^6.1.1
+  cinch: ^6.2.0
 
 dev_dependencies:
-  cinch_gen: ^6.2.0
-  build_runner: <latest_version>
+  cinch_gen: ^6.3.0
+  build_runner: ^2.17.1
 ```
 
 ### Basic Usage
@@ -156,6 +156,7 @@ Cinch supports all major HTTP methods:
 - **GET** - Retrieve data
 - **POST** - Create new resources
 - **PUT** - Update existing resources
+- **PATCH** - Partially update existing resources
 - **DELETE** - Remove resources
 
 ## Advanced Features

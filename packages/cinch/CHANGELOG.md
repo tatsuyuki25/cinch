@@ -1,5 +1,9 @@
 # Cinch changelog
 
+## 6.2.0
+
+- Add `@Patch` annotation for HTTP PATCH requests. It behaves like `@Put` and does not support multipart.
+
 ## 6.1.1
 
 - Fix FormatterException when using `@multipart` or `@formUrlEncoded` annotations.

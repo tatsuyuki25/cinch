@@ -1,5 +1,14 @@
 # cinch_gen changelog
 
+## 6.3.0
+
+- Support the new `@Patch` annotation from `cinch` 6.2.0. No generator changes were needed.
+- Require `cinch: ^6.2.0`.
+- Updated package versions:
+  - `analyzer: ">=9.0.0 <15.0.0"`
+  - `build: ">=4.0.4 <6.0.0"`
+  - `source_gen: ^4.3.1`
+
 ## 6.2.0
 
 - Migrate to analyzer 9.0 and source_gen 4.x APIs.
