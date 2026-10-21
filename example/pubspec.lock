@@ -111,14 +111,14 @@ packages:
       path: "../packages/cinch"
       relative: true
     source: path
-    version: "6.1.1"
+    version: "6.2.0"
   cinch_gen:
     dependency: "direct dev"
     description:
       path: "../packages/cinch_gen"
       relative: true
     source: path
-    version: "6.2.0"
+    version: "6.3.0"
   cli_config:
     dependency: transitive
     description:
