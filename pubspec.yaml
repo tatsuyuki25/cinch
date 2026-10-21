@@ -4,7 +4,7 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dev_dependencies:
-  melos: ^7.4.1
+  melos: ^8.9.0
 
 workspace:
   - packages/cinch
