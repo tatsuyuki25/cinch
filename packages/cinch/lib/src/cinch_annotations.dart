@@ -247,6 +247,20 @@ class Put extends Http {
       : super(path, validateStatus: validateStatus);
 }
 
+/// An annotation for HTTP PATCH requests.
+///
+/// PATCH requests are typically used for partially updating existing
+/// resources, sending only the fields that change.
+class Patch extends Http {
+  /// Creates a PATCH request annotation.
+  ///
+  /// [path] The endpoint path for this PATCH request.
+  /// [validateStatus] A list of HTTP status codes that should be considered
+  /// successful for this request. Defaults to an empty list.
+  const Patch(String path, {List<int> validateStatus = const []})
+      : super(path, validateStatus: validateStatus);
+}
+
 /// An annotation for HTTP DELETE requests.
 ///
 /// DELETE requests are used for removing resources from the server.
