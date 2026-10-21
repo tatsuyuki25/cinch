@@ -22,6 +22,13 @@ class _$TestService extends Service {
     ).then((dynamic response) => Response.fromJson(response.data));
   }
 
+  Future<Response> _$patchUser(String id, String name) {
+    return request(
+      <dynamic>[const Patch('users/{id}')],
+      [(const Path('id'), id), (const Field('name'), name)],
+    ).then((dynamic response) => Response.fromJson(response.data));
+  }
+
   Future<Response> _$multiUpload(int flag, Map<String, MultipartFile> file) {
     return request(
       <dynamic>[const Post('multiUpload'), multipart],
@@ -35,6 +42,12 @@ class TestService {
   @Post('upload')
   @multipart
   Future<Response> upload(@Part('file') MultipartFile file) async {
+    return Future<Response>.value(Response.fromJson({}));
+  }
+
+  @Patch('users/{id}')
+  Future<Response> patchUser(
+      @Path('id') String id, @Field('name') String name) async {
     return Future<Response>.value(Response.fromJson({}));
   }
 
