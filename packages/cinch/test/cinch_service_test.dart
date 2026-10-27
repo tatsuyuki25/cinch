@@ -59,6 +59,16 @@ class _TestService extends Service {
           const <(dynamic, dynamic)>[]);
 }
 
+/// Mirrors the constructor shape emitted by cinch_gen (super parameters).
+class _SuperParamService extends Service {
+  _SuperParamService({
+    super.connectTimeout,
+    super.receiveTimeout,
+    super.sendTimeout,
+    super.validateStatus,
+  }) : super('http://localhost:8080/');
+}
+
 void main() {
   late _RecordingAdapter adapter;
   late _TestService service;
@@ -115,5 +125,31 @@ void main() {
 
     expect(adapter.last.method, 'PUT');
     expect(adapter.last.path, 'users/7');
+  });
+
+  group('super parameters', () {
+    test('forwarded values reach dio options', () {
+      bool validate(int? status) => status == 418;
+      final service = _SuperParamService(
+        connectTimeout: const Duration(seconds: 1),
+        receiveTimeout: const Duration(seconds: 2),
+        sendTimeout: const Duration(seconds: 3),
+        validateStatus: validate,
+      );
+
+      expect(service.dio.options.connectTimeout, const Duration(seconds: 1));
+      expect(service.dio.options.receiveTimeout, const Duration(seconds: 2));
+      expect(service.dio.options.sendTimeout, const Duration(seconds: 3));
+      expect(service.dio.options.validateStatus, same(validate));
+    });
+
+    test('omitted values fall back to Service defaults', () {
+      final service = _SuperParamService();
+
+      expect(service.dio.options.connectTimeout, const Duration(seconds: 5));
+      expect(service.dio.options.receiveTimeout, const Duration(seconds: 10));
+      expect(service.dio.options.sendTimeout, const Duration(seconds: 10));
+      expect(service.validateStatus, isNull);
+    });
   });
 }

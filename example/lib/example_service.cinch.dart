@@ -9,17 +9,15 @@ part of 'example_service.dart';
 
 class _$ExampleService extends gg.Service {
   _$ExampleService({
-    Duration connectTimeout = const Duration(seconds: 5),
-    Duration receiveTimeout = const Duration(seconds: 10),
-    Duration sendTimeout = const Duration(seconds: 10),
-    gg.ValidateStatus? validateStatus,
-  }) : super(
-         'https://test.com/api',
-         connectTimeout: connectTimeout,
-         receiveTimeout: receiveTimeout,
-         sendTimeout: sendTimeout,
-         validateStatus: validateStatus,
-       );
+    // ignore: unused_element_parameter
+    super.connectTimeout,
+    // ignore: unused_element_parameter
+    super.receiveTimeout,
+    // ignore: unused_element_parameter
+    super.sendTimeout,
+    // ignore: unused_element_parameter
+    super.validateStatus,
+  }) : super('https://test.com/api');
   Future<List<Example>> _$getArea(String? type) {
     return request(
       <dynamic>[const gg.Get('json/area-yb2.json')],

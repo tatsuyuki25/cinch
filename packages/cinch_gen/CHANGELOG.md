@@ -1,5 +1,9 @@
 # cinch_gen changelog
 
+## 6.3.1
+
+- Generated service constructors now use super parameters (`super.connectTimeout`, `super.receiveTimeout`, `super.sendTimeout`, `super.validateStatus`), fixing the `use_super_parameters` lint warning in generated code. Runtime behavior is unchanged.
+
 ## 6.3.0
 
 - Support the new `@Patch` annotation from `cinch` 6.2.0. No generator changes were needed.

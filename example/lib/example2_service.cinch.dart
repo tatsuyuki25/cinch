@@ -9,17 +9,15 @@ part of 'example2_service.dart';
 
 class _$Example2Service extends Service {
   _$Example2Service({
-    Duration connectTimeout = const Duration(seconds: 5),
-    Duration receiveTimeout = const Duration(seconds: 10),
-    Duration sendTimeout = const Duration(seconds: 10),
-    ValidateStatus? validateStatus,
-  }) : super(
-         'https://test.com/api',
-         connectTimeout: connectTimeout,
-         receiveTimeout: receiveTimeout,
-         sendTimeout: sendTimeout,
-         validateStatus: validateStatus,
-       );
+    // ignore: unused_element_parameter
+    super.connectTimeout,
+    // ignore: unused_element_parameter
+    super.receiveTimeout,
+    // ignore: unused_element_parameter
+    super.sendTimeout,
+    // ignore: unused_element_parameter
+    super.validateStatus,
+  }) : super('https://test.com/api');
   Future<List<Example>> _$getArea(String? type) {
     return request(
       <dynamic>[const Get('json/area-yb2.json')],

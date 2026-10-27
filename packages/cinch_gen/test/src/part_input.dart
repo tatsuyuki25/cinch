@@ -4,17 +4,15 @@ import 'package:source_gen_test/annotations.dart';
 @ShouldGenerate(r'''
 class _$TestService extends Service {
   _$TestService({
-    Duration connectTimeout = const Duration(seconds: 5),
-    Duration receiveTimeout = const Duration(seconds: 10),
-    Duration sendTimeout = const Duration(seconds: 10),
-    ValidateStatus? validateStatus,
-  }) : super(
-         'http://localhost:8080/',
-         connectTimeout: connectTimeout,
-         receiveTimeout: receiveTimeout,
-         sendTimeout: sendTimeout,
-         validateStatus: validateStatus,
-       );
+    // ignore: unused_element_parameter
+    super.connectTimeout,
+    // ignore: unused_element_parameter
+    super.receiveTimeout,
+    // ignore: unused_element_parameter
+    super.sendTimeout,
+    // ignore: unused_element_parameter
+    super.validateStatus,
+  }) : super('http://localhost:8080/');
   Future<Response> _$upload(MultipartFile file) {
     return request(
       <dynamic>[const Post('upload'), multipart],

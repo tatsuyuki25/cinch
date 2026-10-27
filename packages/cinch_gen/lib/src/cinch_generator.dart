@@ -36,13 +36,16 @@ class CinchGenerator extends GeneratorForAnnotation<ApiService> {
       _checkPrefix(element);
       _write.write("""
     class _\$${element.name} extends ${_getPrefix()}Service {
-      _\$${element.name}({Duration connectTimeout = const Duration(seconds: 5), 
-      Duration receiveTimeout = const Duration(seconds: 10),
-      Duration sendTimeout = const Duration(seconds: 10),
-      ${_getPrefix()}ValidateStatus? validateStatus}):
-      super('${_getField(annotation.objectValue, 'url')?.toStringValue()}', 
-      connectTimeout: connectTimeout, receiveTimeout: receiveTimeout,
-      sendTimeout: sendTimeout, validateStatus: validateStatus);
+      _\$${element.name}({
+      // ignore: unused_element_parameter
+      super.connectTimeout,
+      // ignore: unused_element_parameter
+      super.receiveTimeout,
+      // ignore: unused_element_parameter
+      super.sendTimeout,
+      // ignore: unused_element_parameter
+      super.validateStatus}):
+      super('${_getField(annotation.objectValue, 'url')?.toStringValue()}');
     """);
       _parseMethod(element);
       _write.write('}');
